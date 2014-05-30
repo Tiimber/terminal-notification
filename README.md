@@ -96,9 +96,13 @@ Some explanations for each part:
 **GRACETIME** - *OPTIONAL* - will only allow this notification to be triggered once during this period of time. Time is written in milliseconds. Default value is 500.
 
 **NOTIFICATION** - *REQUIRED* - This is the actual contents of the Notification. What follows on this line is the different fields for the notification:
+
 - **TITLE** - The title to display in the notification
+
 - **SUBTITLE** - The subtitle to display in the notification
+
 - **MESSAGE** - The text to display in the notification
+
 - **SOUND** - The sound to play when the notification is shown (available sounds listed below)
 - **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug).
 
