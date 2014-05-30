@@ -168,7 +168,7 @@ Future plans
 ------------
 
 - Fix so that groups isn't needed in patterns
-- Figure out why groups isn't working
+- Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
 - More configuration options, eg. choose which configuration should apply to what command
 - Windows notifications
