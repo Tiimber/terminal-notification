@@ -5,8 +5,9 @@
     whoami
     cd Documents
     ls -l
-    sleep 1
+    sleep 2
     pwd
+    sleep 5
 [/COMMANDS]
 
 # CONF1

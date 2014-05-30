@@ -105,9 +105,11 @@ def parseConfigurationFile(configurationFile):
 def run(configuration):
     mergedCommands = ' ; '.join(configuration.commands)
     process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
+    print mergedCommands
     accumulatedLines = []
     while True:
         nextline = process.stdout.readline()
+        print nextline
         if nextline == '' and process.poll() is not None:
             configuration.analyzeQuit()
             break
