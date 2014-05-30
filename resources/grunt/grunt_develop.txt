@@ -10,6 +10,7 @@
     [PATTERN](TOTAL: ([0-9]+) FAILED)
     [GRACETIME]3000
     [HISTORYPATTERN]PhantomJS\s*[0-9\.]+\s?\(Mac OS X\):?\s*([\w\d\'\"\-\s]+?)FAILED.*?\[NL\]\s*(.*?)at
+#    [NOTIFICATION][TITLE]Develop - Failed test[MESSAGE]$H1 - $H2[SOUND]NoNo[GROUP]develop
     [NOTIFICATION][TITLE]Develop - Failed test[MESSAGE]$H1 - $H2[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:TESTERROR]
 
@@ -17,6 +18,7 @@
 [CONFIGURATION:LINTERROR]
     [PATTERN]Linting (.*?)...\s*ERROR
     [GRACETIME]3000
+#    [NOTIFICATION][TITLE]Develop[MESSAGE]Lint error: $1[SOUND]NoNo[GROUP]develop
     [NOTIFICATION][TITLE]Develop[MESSAGE]Lint error: $1[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:LINTERROR]
 
@@ -24,11 +26,13 @@
 [CONFIGURATION:SUCCESS]
     [PATTERN](TOTAL: ([0-9]+) SUCCESS)
     [GRACETIME]3000
+#    [NOTIFICATION][TITLE]Develop[MESSAGE]Build successful: $1[SOUND]Mhm[GROUP]develop
     [NOTIFICATION][TITLE]Develop[MESSAGE]Build successful: $1[SOUND]Ping[GROUP]develop
 [/CONFIGURATION:SUCCESS]
 
 # Terminated configuration
 [CONFIGURATION:{QUIT}]
+#    [NOTIFICATION][TITLE]Develop[MESSAGE]Develop have shut down[SOUND]NoNo[GROUP]develop
     [NOTIFICATION][TITLE]Develop[MESSAGE]Develop have shut down[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:{QUIT}]
 

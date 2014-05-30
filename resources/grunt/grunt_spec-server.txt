@@ -9,6 +9,7 @@
 [CONFIGURATION:ERROR]
     [PATTERN](ERROR|DISCONNECTED)
     [GRACETIME]3000
+#    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server $1[SOUND]NoNo[GROUP]specserver
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server $1[SOUND]Basso[GROUP]specserver
 [/CONFIGURATION:ERROR]
 
@@ -16,11 +17,13 @@
 [CONFIGURATION:SUCCESS]
     [PATTERN]INFO(.*?):(.*?)Connected on socket
     [GRACETIME]3000
+#    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Started successfully[SOUND]Mhm[GROUP]specserver
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Started successfully[SOUND]Ping[GROUP]specserver
 [/CONFIGURATION:SUCCESS]
 
 # Terminated configuration
 [CONFIGURATION:{QUIT}]
+#    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server has shut down[SOUND]NoNo[GROUP]specserver
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server has shut down[SOUND]Basso[GROUP]specserver
 [/CONFIGURATION:{QUIT}]
 
