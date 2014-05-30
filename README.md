@@ -43,11 +43,18 @@ Usage
 **Run Custom Terminal Notification**
 
 Enter the folder of the project in a terminal, then run
+
 ```
 python Notifier.py --config resources/example_setup.txt
 ```
 
 This will run with the included example, which is just as stated, an example configuration.
+
+To run with a lot of debug outputting:
+
+```
+python Notifier.py --config resources/example_setup.txt --debug True
+```
 
 Configuration
 -------------
