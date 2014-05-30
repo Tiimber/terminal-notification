@@ -91,7 +91,18 @@ Some explanations for each part:
 
 **PATTERN** - *REQUIRED* - is followed by a regexp pattern. It **MUST** contain at least one capturing group (known bug). This pattern will match only on a line by line basis.
 
-**HISTORYPATTERN** - *OPTIONAL* - just as above a regexp pattern. However this is only used towards the history output (since last match),  
+**HISTORYPATTERN** - *OPTIONAL* - just as above a regexp pattern. However this is only used towards the history output (since last match), and is only used for adding additional capturing groups for the notification.
+
+**GRACETIME** - *OPTIONAL* - will only allow this notification to be triggered once during this period of time. Time is written in milliseconds. Default value is 500.
+
+**NOTIFICATION** - *REQUIRED* - This is the actual contents of the Notification. What follows on this line is the different fields for the notification:
+- **TITLE** - The title to display in the notification
+- **SUBTITLE** - The subtitle to display in the notification
+- **MESSAGE** - The text to display in the notification
+- **SOUND** - The sound to play when the notification is shown (available sounds listed below)
+- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug).
+
+All of the NOTIFICATION fields can use values from the capturing groups in both PATTERN and HISTORYPATTERN. First group from PATTERN is written as **$1** and the first group from HISTORYPATTERN is written as **$H1**. 
 
 ---
 
@@ -104,6 +115,12 @@ There is also one other special CONFIGURATION:
 ```
 
 This is simply put a special configuration which only triggers when all commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for this one.
+
+Sounds
+------
+
+For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application.
+
 
 Future plans
 ------------
