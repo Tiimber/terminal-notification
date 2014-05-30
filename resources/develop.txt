@@ -9,21 +9,21 @@
 [CONFIGURATION:TESTERROR]
     [PATTERN](TOTAL: ([0-9]+) FAILED)
     [GRACETIME]3000
-    [NOTIFICATION][TITLE]Develop[MESSAGE]Test(s) failed\n$1[SOUND]Basso[GROUP]develop
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Test(s) failed: $1[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:TESTERROR]
 
 # Lint error configuration
 [CONFIGURATION:LINTERROR]
     [PATTERN]Linting (.*?)...\s*ERROR
     [GRACETIME]3000
-    [NOTIFICATION][TITLE]Develop[MESSAGE]Lint error:\n$1[SOUND]Basso[GROUP]develop
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Lint error: $1[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:LINTERROR]
 
 # Successful configuration
 [CONFIGURATION:SUCCESS]
     [PATTERN](TOTAL: ([0-9]+) SUCCESS)
     [GRACETIME]3000
-    [NOTIFICATION][TITLE]Develop[MESSAGE]Build successful\n$1[SOUND]Ping[GROUP]develop
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Build successful: $1[SOUND]Ping[GROUP]develop
 [/CONFIGURATION:SUCCESS]
 
 # Terminated configuration
