@@ -22,8 +22,9 @@ class Configuration:
                 if debug:
                     print '[DEBUG] {QUIT} configuration found, will display notification if exists...'
                 groups = []
+                historyGroups = []
                 notification = config['notification'] if 'notification' in config else None
-                self.sendNotification(notification, groups, debug)
+                self.sendNotification(notification, groups, historyGroups, debug)
 
     def analyze(self, line, accumulated=None, debug=False):
         line = self.stripColoring(line)
@@ -32,14 +33,18 @@ class Configuration:
         for config in self.configs:
             if config['name'] != '{QUIT}':
                 pattern = config['pattern'] if 'pattern' in config else None
+                historyPattern = config['historyPattern'] if 'historyPattern' in config else None
                 if pattern is not None:
                     groups = re.findall(pattern, line)
+                    historyGroups = []
+                    if historyPattern is not None and accumulated is not None:
+                        historyGroups = re.findall(historyPattern, '[NL]'.join(accumulated))
                     if groups is not None and len(groups) > 0:
                         if debug:
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
                         if 'lastTrigger' not in config or self.hasGraceTimePassed(config['lastTrigger'], config['graceTime']):
                             notification = config['notification'] if 'notification' in config else None
-                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], debug)
+                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], [historyGroups] if isinstance(historyGroups, basestring) else (historyGroups[0] if len(historyGroups) > 1 else []), debug)
                             config['lastTrigger'] = int(time.time() * 1000)
                             return True
                         else:
@@ -47,8 +52,9 @@ class Configuration:
                                 print '[DEBUG] Gracetime haven\'t passed yet - will not triggering notification'
         return False
 
-    def sendNotification(self, notification, groups, debug=False):
+    def sendNotification(self, notification, groups, historyGroups, debug=False):
         groups = [groups] if isinstance(groups, basestring) else groups
+        historyGroups = [historyGroups] if isinstance(historyGroups, basestring) else historyGroups
         if notification is not None:
             if debug:
                 print '[DEBUG] Notification found: '
@@ -62,6 +68,13 @@ class Configuration:
                         number = int(match)
                         if len(groups) > number-1:
                             replaceValue = groups[number-1]
+                            value = value.replace('$'+str(number), replaceValue)
+                historyMatches = re.findall('\$H([0-9]+)', value)
+                if historyMatches is not None:
+                    for match in historyMatches:
+                        number = int(match)
+                        if len(historyGroups) > number-1:
+                            replaceValue = historyGroups[number-1]
                             value = value.replace('$'+str(number), replaceValue)
                 if debug:
                     print '[DEBUG] value='+value

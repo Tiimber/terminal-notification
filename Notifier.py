@@ -36,6 +36,8 @@ def parseConfigurationContents(contents):
         elif isConfig:
             if line.startswith('[PATTERN]'):
                 configData['pattern'] = line[len('[PATTERN]'):]
+            if line.startswith('[HISTORYPATTERN]'):
+                configData['historyPattern'] = line[len('[HISTORYPATTERN]'):]
             elif line.startswith('[GRACETIME]'):
                 gracetime = int(line[len('[GRACETIME]'):])
                 configData['graceTime'] = gracetime
