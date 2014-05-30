@@ -37,9 +37,10 @@ class Configuration:
                 if pattern is not None:
                     groups = re.findall(pattern, line)
                     historyGroups = []
-                    if historyPattern is not None and accumulated is not None:
-                        historyGroups = re.findall(historyPattern, '[NL]'.join(accumulated))
                     if groups is not None and len(groups) > 0:
+                        if historyPattern is not None and accumulated is not None:
+                            accumulatedOneLine = self.stripColoring('[NL]'.join(accumulated))
+                            historyGroups = re.findall(historyPattern, accumulatedOneLine)
                         if debug:
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
                         if 'lastTrigger' not in config or self.hasGraceTimePassed(config['lastTrigger'], config['graceTime']):
@@ -75,7 +76,7 @@ class Configuration:
                         number = int(match)
                         if len(historyGroups) > number-1:
                             replaceValue = historyGroups[number-1]
-                            value = value.replace('$'+str(number), replaceValue)
+                            value = value.replace('$H'+str(number), replaceValue)
                 if debug:
                     print '[DEBUG] value='+value
                 notification[key] = value

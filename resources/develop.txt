@@ -9,7 +9,7 @@
 [CONFIGURATION:TESTERROR]
     [PATTERN](TOTAL: ([0-9]+) FAILED)
     [GRACETIME]3000
-    [HISTORYPATTERN]\[NL\]PhantomJS.*?\(Mac OS X\)(.*?)FAILED\[NL\](\s*?.*?)at
+    [HISTORYPATTERN]PhantomJS\s*[0-9\.]+\s?\(Mac OS X\):?\s*([\w\d\'\"\-\s]+?)FAILED.*?\[NL\]\s*(.*?)at
     [NOTIFICATION][TITLE]Develop - Failed test[MESSAGE]$H1 - $H2[SOUND]Basso[GROUP]develop
 [/CONFIGURATION:TESTERROR]
 
