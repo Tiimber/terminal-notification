@@ -1,3 +1,4 @@
+import random
 import re
 import time
 import OSXNotifier
@@ -44,8 +45,10 @@ class Configuration:
                         if debug:
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
                         if 'lastTrigger' not in config or self.hasGraceTimePassed(config['lastTrigger'], config['graceTime']):
+                            runCount = 0 if 'runCount' not in config else config['runCount']
+                            config['runCount'] = runCount+1
                             notification = config['notification'] if 'notification' in config else None
-                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], [historyGroups] if isinstance(historyGroups, basestring) else (historyGroups[0] if len(historyGroups) > 0 else []), debug)
+                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], [historyGroups] if isinstance(historyGroups, basestring) else (historyGroups[0] if len(historyGroups) > 0 else []), runCount, debug)
                             config['lastTrigger'] = int(time.time() * 1000)
                             return True
                         else:
@@ -53,16 +56,21 @@ class Configuration:
                                 print '[DEBUG] Gracetime haven\'t passed yet - will not triggering notification'
         return False
 
-    def sendNotification(self, notification, groups, historyGroups, debug=False):
+    def sendNotification(self, notification, groups, historyGroups, runCount, debug=False):
         groups = [groups] if isinstance(groups, basestring) else groups
         historyGroups = [historyGroups] if isinstance(historyGroups, basestring) else historyGroups
         if notification is not None:
+            notificationSound = None
+            originalNotificationSound = None
             if debug:
                 print '[DEBUG] Notification found: '
             for key in notification:
                 if debug:
                     print '[DEBUG] key='+key
                 value = notification[key]
+                if key == 'sound':
+                    originalNotificationSound = value
+                    notificationSound = self.getNotificationSound(value, runCount)
                 matches = re.findall('\$([0-9]+)', value)
                 if matches is not None:
                     for match in matches:
@@ -80,9 +88,12 @@ class Configuration:
                 if debug:
                     print '[DEBUG] value='+value
                 notification[key] = value
-        if debug:
-            print '[DEBUG] Pushing notification: '+str(notification)
-        OSXNotifier.notifyObj(notification)
+            if debug:
+                print '[DEBUG] Pushing notification: '+str(notification)
+            notification['sound'] = notificationSound
+            OSXNotifier.notifyObj(notification)
+            notification['sound'] = originalNotificationSound
+
 
     def stripColoring(self, line):
         matches = re.findall('\[[0-9]+\w', line)
@@ -96,3 +107,15 @@ class Configuration:
     def hasGraceTimePassed(self, lastTrigger, graceTime):
         currentTime = int(time.time() * 1000)
         return currentTime - graceTime >= lastTrigger
+
+    def getNotificationSound(self, sound, runCount):
+        if sound is not None:
+            if sound.startswith('{cycle}'):
+                soundList = sound[len('{cycle}'):].split(',')
+                if runCount >= len(soundList):
+                    runCount = runCount % len(soundList)
+                sound = soundList[runCount]
+            elif sound.startswith('{random}'):
+                soundList = sound[len('{random}'):].split(',')
+                sound = soundList[random.randint(0, len(soundList)-1)]
+        return sound

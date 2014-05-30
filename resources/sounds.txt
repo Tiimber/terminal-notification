@@ -1,0 +1,10 @@
+[COMMANDS]
+     cd
+     for((i=1;i<=14;i+=1)); do echo "play sound" ; sleep 2; done
+[/COMMANDS]
+
+[CONFIGURATION:SOUND]
+    [PATTERN](play sound)
+    [NOTIFICATION][TITLE]Sound #$1[MESSAGE]Cycling through sounds[SOUND]{cycle}Basso,Blow,Bottle,Frog,Funk,Glass,Hero,Morse,Ping,Pop,Purr,Sosumi,Submarine,Tink
+#    [NOTIFICATION][TITLE]Sound #$1[MESSAGE]Cycling through sounds[SOUND]{random}Basso,Blow,Bottle,Frog,Funk,Glass,Hero,Morse,Ping,Pop,Purr,Sosumi,Submarine,Tink
+[/CONFIGURATION:SOUND]

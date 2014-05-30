@@ -56,6 +56,12 @@ To run with a lot of debug outputting:
 python Notifier.py --config resources/example_setup.txt --debug True
 ```
 
+If you desire to not mirror the standard console output, run with the mute option:
+
+```
+python Notifier.py --config resources/example_setup.txt --mute True
+```
+
 Configuration
 -------------
 
@@ -110,8 +116,16 @@ Some explanations for each part:
 
 - **MESSAGE** - The text to display in the notification
 
-- **SOUND** - The sound to play when the notification is shown (available sounds listed below)
 - **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug).
+
+- **SOUND** - The sound to play when the notification is shown (available sounds listed below) 
+
+If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
+
+```
+[SOUND]{cycle}Basso,Blow
+[SOUND]{random}Frog,Sosumi
+```
 
 All of the NOTIFICATION fields can use values from the capturing groups in both PATTERN and HISTORYPATTERN. First group from PATTERN is written as **$1** and the first group from HISTORYPATTERN is written as **$H1**. 
 
