@@ -13,7 +13,7 @@
 
 # Successful configuration
 [CONFIGURATION:SUCCESS]
-    [PATTERN]INFO (.*?): Connected on socket
+    [PATTERN]INFO\s*(.*?):\s*Connected on socket
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Started successfully[SOUND]Ping[GROUP]specserver
 [/CONFIGURATION:SUCCESS]
 
