@@ -25,6 +25,7 @@ class Configuration:
                 self.sendNotification(notification, groups, debug)
 
     def analyze(self, line, accumulated=None, debug=False):
+        line = self.stripColoring(line)
         if debug:
             print '[DEBUG] Check if line is triggering a notification: "'+line+'"'
         for config in self.configs:
@@ -62,3 +63,12 @@ class Configuration:
         if debug:
             print '[DEBUG] Pushing notification: '+str(notification)
         OSXNotifier.notifyObj(notification)
+
+    def stripColoring(self, line):
+        matches = re.findall('\[[0-9]+\w', line)
+        if matches is not None and isinstance(matches, basestring):
+            matches = [matches]
+        if matches is not None and len(matches) > 0:
+            for match in matches:
+                line = line.replace(match, '')
+        return line
