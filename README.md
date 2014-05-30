@@ -34,8 +34,15 @@ First you need to clone this project. If you haven't already, visit [Project hom
 **Install terminal-notifier**
 
 ```
-sudo gem install terminal-notifier
+[sudo] gem install terminal-notifier
 ```
+
+or if you prefer to install using brew
+
+```
+brew install terminal-notifier
+```
+
 
 Usage
 -----
