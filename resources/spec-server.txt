@@ -19,6 +19,6 @@
 
 # Terminated configuration
 [CONFIGURATION:{QUIT}]
-    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server have shut down[SOUND]Basso[GROUP]specserver
+    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server has shut down[SOUND]Basso[GROUP]specserver
 [/CONFIGURATION:{QUIT}]
 

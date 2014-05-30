@@ -102,19 +102,19 @@ def parseConfigurationFile(configurationFile):
         exit(0)
 
 
-def run(configuration):
+def run(configuration, debug):
     mergedCommands = ' ; '.join(configuration.commands)
     process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
     print mergedCommands
     accumulatedLines = []
     while True:
-        nextline = process.stdout.readline()
+        nextline = process.stdout.readline().replace('\n', '')
         print nextline
         if nextline == '' and process.poll() is not None:
-            configuration.analyzeQuit()
+            configuration.analyzeQuit(debug)
             break
         else:
-            notificationSend = configuration.analyze(nextline, accumulatedLines)
+            notificationSend = configuration.analyze(nextline, accumulatedLines, debug)
             if notificationSend:
                 accumulatedLines = []
             else:
@@ -125,5 +125,6 @@ def run(configuration):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
+    parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
-    run(parseConfigurationFile(args['config']))
+    run(parseConfigurationFile(args['config']), args['debug'])
