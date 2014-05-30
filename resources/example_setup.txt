@@ -7,6 +7,10 @@
     ls -l
     sleep 2
     pwd
+    sleep 1
+    pwd
+    sleep 2
+    pwd
     sleep 5
 [/COMMANDS]
 
@@ -19,6 +23,7 @@
 # CONF2
 [CONFIGURATION:CONF2]
     [PATTERN]/Users/([\w\d_\-\.].*?)/Documents
+    [GRACETIME]2500
     [NOTIFICATION][TITLE]$1[SUBTITLE]is your username[MESSAGE]How did I know[SOUND]Ping[GROUP]notify2
 [/CONFIGURATION:CONF2]
 

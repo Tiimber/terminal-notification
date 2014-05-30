@@ -1,4 +1,5 @@
 import re
+import time
 import OSXNotifier
 
 
@@ -36,9 +37,14 @@ class Configuration:
                     if groups is not None and len(groups) > 0:
                         if debug:
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
-                        notification = config['notification'] if 'notification' in config else None
-                        self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], debug)
-                        return True
+                        if 'lastTrigger' not in config or self.hasGraceTimePassed(config['lastTrigger'], config['graceTime']):
+                            notification = config['notification'] if 'notification' in config else None
+                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], debug)
+                            config['lastTrigger'] = int(time.time() * 1000)
+                            return True
+                        else:
+                            if debug:
+                                print '[DEBUG] Gracetime haven\'t passed yet - will not triggering notification'
         return False
 
     def sendNotification(self, notification, groups, debug=False):
@@ -72,3 +78,7 @@ class Configuration:
             for match in matches:
                 line = line.replace(match, '')
         return line
+
+    def hasGraceTimePassed(self, lastTrigger, graceTime):
+        currentTime = int(time.time() * 1000)
+        return currentTime - graceTime >= lastTrigger

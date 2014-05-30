@@ -8,12 +8,14 @@
 # Error configuration
 [CONFIGURATION:ERROR]
     [PATTERN](ERROR|DISCONNECTED)
+    [GRACETIME]3000
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server $1[SOUND]Basso[GROUP]specserver
 [/CONFIGURATION:ERROR]
 
 # Successful configuration
 [CONFIGURATION:SUCCESS]
     [PATTERN]INFO(.*?):(.*?)Connected on socket
+    [GRACETIME]3000
     [NOTIFICATION][TITLE]Spec Server[MESSAGE]Started successfully[SOUND]Ping[GROUP]specserver
 [/CONFIGURATION:SUCCESS]
 

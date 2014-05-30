@@ -2,6 +2,7 @@ import argparse
 import extra_functions
 import configuration
 from subprocess import Popen, PIPE, STDOUT
+import signal
 
 
 def parseConfigurationContents(contents):
@@ -25,7 +26,7 @@ def parseConfigurationContents(contents):
             continue
         elif line.startswith('[CONFIGURATION:'):
             isConfig = True
-            configData = {'name': line[len('[CONFIGURATION:'):-1]}
+            configData = {'name': line[len('[CONFIGURATION:'):-1], 'graceTime': 500}
             continue
         elif line.startswith('[/CONFIGURATION:'):
             returnConfiguration.addConfig(configData)
@@ -35,61 +36,26 @@ def parseConfigurationContents(contents):
         elif isConfig:
             if line.startswith('[PATTERN]'):
                 configData['pattern'] = line[len('[PATTERN]'):]
+            elif line.startswith('[GRACETIME]'):
+                gracetime = int(line[len('[GRACETIME]'):])
+                configData['graceTime'] = gracetime
             elif line.startswith('[NOTIFICATION]'):
                 line = line[len('[NOTIFICATION]'):]
                 configData['notification'] = {}
                 while len(line) > 0:
                     # Just do this by extracting what's in the brackets instead
-                    if line.startswith('[TITLE]'):
-                        line = line[len('[TITLE]'):]
-                        title = line
-                        nextParamStart = title.find('[')
+                    if line.startswith('['):
+                        notificationName = line[1:line.find(']')]
+                        notificationNameLower = notificationName.lower()
+                        line = line[len('['+notificationName+']'):]
+                        value = line
+                        nextParamStart = value.find('[')
                         if nextParamStart != -1:
-                            title = title[0:nextParamStart]
+                            value = value[0:nextParamStart]
                             line = line[nextParamStart:]
                         else:
                             line = ''
-                        configData['notification']['title'] = title
-                    elif line.startswith('[SUBTITLE]'):
-                        line = line[len('[SUBTITLE]'):]
-                        subtitle = line
-                        nextParamStart = subtitle.find('[')
-                        if nextParamStart != -1:
-                            subtitle = subtitle[0:nextParamStart]
-                            line = line[nextParamStart:]
-                        else:
-                            line = ''
-                        configData['notification']['subtitle'] = subtitle
-                    elif line.startswith('[MESSAGE]'):
-                        line = line[len('[MESSAGE]'):]
-                        message = line
-                        nextParamStart = message.find('[')
-                        if nextParamStart != -1:
-                            message = message[0:nextParamStart]
-                            line = line[nextParamStart:]
-                        else:
-                            line = ''
-                        configData['notification']['message'] = message
-                    elif line.startswith('[SOUND]'):
-                        line = line[len('[SOUND]'):]
-                        sound = line
-                        nextParamStart = sound.find('[')
-                        if nextParamStart != -1:
-                            sound = sound[0:nextParamStart]
-                            line = line[nextParamStart:]
-                        else:
-                            line = ''
-                        configData['notification']['sound'] = sound
-                    elif line.startswith('[GROUP]'):
-                        line = line[len('[GROUP]'):]
-                        group = line
-                        nextParamStart = group.find('[')
-                        if nextParamStart != -1:
-                            group = group[0:nextParamStart]
-                            line = line[nextParamStart:]
-                        else:
-                            line = ''
-                        configData['notification']['group'] = group
+                        configData['notification'][notificationNameLower] = value
 
     return returnConfiguration
 
@@ -121,8 +87,12 @@ def run(configuration, debug):
                 accumulatedLines.append(nextline)
     pass
 
+def userExited(signum, frame):
+    print 'User terminated script'
+    exit(0)
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, userExited)
     parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
