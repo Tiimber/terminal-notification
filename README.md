@@ -1,5 +1,5 @@
-Custom Terminal Notifier
-========================
+Terminal Notification
+=====================
 
 [**Project home**] [1]
 
@@ -10,7 +10,7 @@ All notifications are sent out using Mac OS Notification Center, and you can spe
 - What pattern to listen for in the output
 - Configure title, subtitle and message (including using above mentioned regexp variables)
 - Choose what sound to play with the message
-- Set a max frequency of messages of each type
+- Set a max frequency for messages of each type
 - Send notifications on termination
 
 Project requirements:
@@ -40,7 +40,7 @@ sudo gem install terminal-notifier
 Usage
 -----
 
-**Run Custom Terminal Notifier**
+**Run Custom Terminal Notification**
 
 Enter the folder of the project in a terminal, then run
 ```
@@ -123,7 +123,22 @@ This is simply put a special configuration which only triggers when all commands
 Sounds
 ------
 
-For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application.
+For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application. The list of my computer is as follows:
+
+- Basso
+- Blow
+- Bottle
+- Frog
+- Funk
+- Glass
+- Hero
+- Morse
+- Ping
+- Pop
+- Purr
+- Sosumi
+- Submarine
+- Tink
 
 
 Future plans

@@ -32,27 +32,3 @@ def notify(title=None, subtitle=None, message=None, sound=None, group=None, remo
         params.append(r)
 
     os.system('terminal-notifier {}'.format(' '.join(params)))
-
-# notify(
-# title    = 'A Real Notification',
-#     subtitle = 'with python',
-#     message  = 'Hello, this is me, notifying you!',
-#     sound    = 'Basso',
-#     group    = 'ID'
-# )
-
-## Sounds
-#  Basso
-#  Blow
-#  Bottle
-#  Frog
-#  Funk
-#  Glass
-#  Hero
-#  Morse
-#  Ping
-#  Pop
-#  Purr
-#  Sosumi
-#  Submarine
-#  Tink
