@@ -140,6 +140,8 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 - Submarine
 - Tink
 
+It's possible to add your own sounds to this setup, follow [this guide] [3] to add your own.
+
 
 Future plans
 ------------
@@ -159,3 +161,4 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 
 [1]:https://bitbucket.org/rtapper/terminalnotifier
 [2]:https://github.com/alloy/terminal-notifier
+[3]:https://bitbucket.org/rtapper/terminalnotifier/src/c02e5a25960fdbc873370511c8b7d136e00f5c89/resources/sounds/README.md?at=master
