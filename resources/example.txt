@@ -1,0 +1,15 @@
+[COMMANDS]
+    pwd
+    cd
+    echo "Name:`whoami`:"
+    echo "Hello world"
+    date
+    sleep 5
+[/COMMANDS]
+
+[CONFIGURATION:HELLOWORLD]
+    [PATTERN](Hello world)
+    [HISTORYPATTERN]Name:(.*?):
+    [GRACETIME]1000
+    [NOTIFICATION][TITLE]$H1[SUBTITLE]$1[MESSAGE]This triggers when Hello world is outputted[SOUND]Glass[GROUP]group1
+[/CONFIGURATION:HELLOWORLD]

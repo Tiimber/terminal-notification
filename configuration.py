@@ -45,7 +45,7 @@ class Configuration:
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
                         if 'lastTrigger' not in config or self.hasGraceTimePassed(config['lastTrigger'], config['graceTime']):
                             notification = config['notification'] if 'notification' in config else None
-                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], [historyGroups] if isinstance(historyGroups, basestring) else (historyGroups[0] if len(historyGroups) > 1 else []), debug)
+                            self.sendNotification(notification, [groups] if isinstance(groups, basestring) else groups[0], [historyGroups] if isinstance(historyGroups, basestring) else (historyGroups[0] if len(historyGroups) > 0 else []), debug)
                             config['lastTrigger'] = int(time.time() * 1000)
                             return True
                         else:

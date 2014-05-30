@@ -1,0 +1,125 @@
+Custom Terminal Notifier
+========================
+
+[**Project home**] [1]
+
+This project aims to be a highly configurable notification handler for any terminal commands in Mac OS X (10.8+).
+
+All notifications are sent out using Mac OS Notification Center, and you can specify quite a few things:
+
+- What pattern to listen for in the output
+- Configure title, subtitle and message (including using above mentioned regexp variables)
+- Choose what sound to play with the message
+- Set a max frequency of messages of each type
+- Send notifications on termination
+
+Project requirements:
+
+- Mac OS X (10.8 or later)
+- Python 2.7
+- [terminal-notifier] [2] (Installation instructions are included in this file)
+
+Version
+-------
+
+1.0
+
+Installation
+------------
+
+**Clone**
+
+First you need to clone this project. If you havent already, visit [Project home] [1] and follow instructions for how to clone the project.
+
+**Install terminal-notifier**
+
+```
+sudo gem install terminal-notifier
+```
+
+Usage
+-----
+
+**Run Custom Terminal Notifier**
+
+Enter the folder of the project in a terminal, then run
+```
+python Notifier.py --config resources/example_setup.txt
+```
+
+This will run with the included example, which is just as stated, an example configuration.
+
+Configuration
+-------------
+
+There are two major types of blocks that can be configured:
+
+- COMMANDS
+- CONFIGURATION:
+
+---
+
+COMMANDS is simply a list of terminal commands to trigger in sequence in the Terminal. Inside of this block, simply write a list of commands, one command per line, eg:
+
+```
+[COMMANDS]
+    pwd
+    cd
+    echo "Name:`whoami`:"
+    echo "Hello world"
+    date
+    sleep 5
+[/COMMANDS]
+```
+
+if many COMMANDS-blocks are entered, the last one will be used.
+
+---
+
+CONFIGURATION: takes a name directly after the colon (still unused, but is planned for). This one have a bit more complex setup, so let's start by looking at an example:
+
+```
+[CONFIGURATION:HELLOWORLD]
+    [PATTERN](Hello world)
+    [HISTORYPATTERN]Name:(.*?):
+    [GRACETIME]1000
+    [NOTIFICATION][TITLE]$H1[SUBTITLE]$1[MESSAGE]This triggers when Hello world is outputted[SOUND]Glass[GROUP]group1
+[/CONFIGURATION:HELLOWORLD]
+```
+
+Some explanations for each part:
+
+**PATTERN** - *REQUIRED* - is followed by a regexp pattern. It **MUST** contain at least one capturing group (known bug). This pattern will match only on a line by line basis.
+
+**HISTORYPATTERN** - *OPTIONAL* - just as above a regexp pattern. However this is only used towards the history output (since last match),  
+
+---
+
+There is also one other special CONFIGURATION:
+
+```
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]QUIT[MESSAGE]All commands have terminated[SOUND]Basso[GROUP]group1
+[/CONFIGURATION:{QUIT}]
+```
+
+This is simply put a special configuration which only triggers when all commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for this one.
+
+Future plans
+------------
+
+- Fix so that groups isn't needed in patterns
+- Figure out why groups isn't working
+- Figure out if it's possible to configure how long time to show notifications
+- More configuration options, eg. choose which configuration should apply to what command
+- Windows notifications
+- Linux notifications(?)
+
+License
+-------
+
+Do whatever you want with the sources, fork it out, put it on a golden chip, totally break it... or develop cool features and give them to me.
+
+
+[1]:https://bitbucket.org/rtapper/terminalnotifier
+[2]:https://github.com/alloy/terminal-notifier
