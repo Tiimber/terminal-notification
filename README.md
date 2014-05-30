@@ -29,7 +29,7 @@ Installation
 
 **Clone**
 
-First you need to clone this project. If you havent already, visit [Project home] [1] and follow instructions for how to clone the project.
+First you need to clone this project. If you haven't already, visit [Project home] [1] and follow instructions for how to clone the project.
 
 **Install terminal-notifier**
 
