@@ -1,0 +1,27 @@
+# First some command line instructions
+[COMMANDS]
+    cd
+    pwd
+    whoami
+    cd Documents
+    ls -l
+    sleep 1
+    pwd
+[/COMMANDS]
+
+# CONF1
+[CONFIGURATION:CONF1]
+    [PATTERN]tota(l)\s([0-9]+)
+    [NOTIFICATION][TITLE]Notification[SUBTITLE]Detected[MESSAGE]Tota$1 $2[SOUND]Basso[GROUP]notify1
+[/CONFIGURATION:CONF1]
+
+# CONF2
+[CONFIGURATION:CONF2]
+    [PATTERN]/Users/([\w\d_\-\.].*?)/Documents
+    [NOTIFICATION][TITLE]$1[SUBTITLE]is your username[MESSAGE]How did I know[SOUND]Ping[GROUP]notify2
+[/CONFIGURATION:CONF2]
+
+# Terminated configuration
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]QUIT[MESSAGE]Shut down[SOUND]Glass[GROUP]notify3
+[/CONFIGURATION:{QUIT}]

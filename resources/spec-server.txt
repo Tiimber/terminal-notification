@@ -1,0 +1,24 @@
+# First some command line instructions
+[COMMANDS]
+    cd
+    cd WilliamHillRefactored/williamhill-core/src/main/cogwheels/
+    grunt spec-server
+[/COMMANDS]
+
+# Error configuration
+[CONFIGURATION:ERROR]
+    [PATTERN](ERROR|DISCONNECTED)
+    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server $1[SOUND]Basso[GROUP]specserver
+[/CONFIGURATION:ERROR]
+
+# Successful configuration
+[CONFIGURATION:SUCCESS]
+    [PATTERN]INFO (.*?): Connected on socket
+    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Started successfully[SOUND]Ping[GROUP]specserver
+[/CONFIGURATION:SUCCESS]
+
+# Terminated configuration
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]Spec Server[MESSAGE]Spec Server have shut down[SOUND]Basso[GROUP]specserver
+[/CONFIGURATION:{QUIT}]
+

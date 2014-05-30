@@ -1,0 +1,30 @@
+# First some command line instructions
+[COMMANDS]
+    cd
+    cd WilliamHillRefactored/williamhill-core/src/main/cogwheels/
+    grunt develop
+[/COMMANDS]
+
+# BDD Test Error configuration
+[CONFIGURATION:TESTERROR]
+    [PATTERN](TOTAL: ([0-9]+) FAILED)
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Test(s) failed\n$1[SOUND]Basso[GROUP]develop
+[/CONFIGURATION:TESTERROR]
+
+# Lint error configuration
+[CONFIGURATION:LINTERROR]
+    [PATTERN]Linting (.*?)...\s*ERROR
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Lint error:\n$1[SOUND]Basso[GROUP]develop
+[/CONFIGURATION:LINTERROR]
+
+# Successful configuration
+[CONFIGURATION:SUCCESS]
+    [PATTERN](TOTAL: ([0-9]+) SUCCESS)
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Build successful\n$1[SOUND]Ping[GROUP]develop
+[/CONFIGURATION:SUCCESS]
+
+# Terminated configuration
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]Develop[MESSAGE]Develop have shut down[SOUND]Basso[GROUP]develop
+[/CONFIGURATION:{QUIT}]
+
