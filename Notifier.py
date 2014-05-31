@@ -5,8 +5,8 @@ from subprocess import Popen, PIPE, STDOUT
 import signal
 
 
-def parseConfigurationContents(contents):
-    returnConfiguration = configuration.Configuration()
+def parseConfigurationContents(contents, debug):
+    returnConfiguration = configuration.Configuration(debug)
     lines = contents.split('\n')
     isCommands = False
     isConfig = False
@@ -61,10 +61,10 @@ def parseConfigurationContents(contents):
 
     return returnConfiguration
 
-def parseConfigurationFile(configurationFile):
+def parseConfigurationFile(configurationFile, debug):
     if extra_functions.ExtraFileMethods.DoesFileExist(configurationFile):
         contents = extra_functions.ExtraFileMethods.GetFileContents(configurationFile)
-        configuration = parseConfigurationContents(contents)
+        configuration = parseConfigurationContents(contents, debug)
         return configuration
     else:
         exit(0)
@@ -101,4 +101,4 @@ if __name__ == "__main__":
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
-    run(parseConfigurationFile(args['config']), args['debug'], args['mute'])
+    run(parseConfigurationFile(args['config'], args['debug']), args['debug'], args['mute'])

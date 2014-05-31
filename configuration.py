@@ -2,12 +2,16 @@ import random
 import re
 import time
 import OSXNotifier
+import sys, os, platform
 
 
 class Configuration:
-    def __init__(self):
+    def __init__(self, debug):
         self.commands = []
         self.configs = []
+        self.platform = {'osname': os.name, 'osuname': os.uname(), 'sysplatform': sys.platform, 'platformplatform': platform.platform(), 'platformsystem': platform.system(), 'platformrelease': platform.release(), 'platformversion': platform.version(), 'platformmacver': platform.mac_ver()}
+        if debug:
+            print '[DEBUG] platform information: '+str(self.platform)
 
     def addConfig(self, config):
         self.configs.append(config)
