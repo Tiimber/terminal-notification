@@ -231,6 +231,7 @@ Future plans
 - Keep debug and mute status in a helper class
 
 **Mac OS X**
+
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
 
