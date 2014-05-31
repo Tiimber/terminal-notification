@@ -1,6 +1,8 @@
+import subprocess
 import random
 import re
 import time
+import LinuxNotifier
 import OSXNotifier
 import sys, os, platform
 
@@ -95,7 +97,12 @@ class Configuration:
             if debug:
                 print '[DEBUG] Pushing notification: '+str(notification)
             notification['sound'] = notificationSound
-            OSXNotifier.notifyObj(notification)
+            if self.isMac_10_8_plus(debug):
+                OSXNotifier.notifyObj(notification)
+            elif self.isLinux_with_notify_send(debug):
+                LinuxNotifier.notifyObj(notification)
+            else:
+                self.outputNotificationUnsupported()
             notification['sound'] = originalNotificationSound
 
 
@@ -123,3 +130,52 @@ class Configuration:
                 soundList = sound[len('{random}'):].split(',')
                 sound = soundList[random.randint(0, len(soundList)-1)]
         return sound
+
+    def outputNotificationUnsupported(self):
+        print 'Your operating system is unsupported for outputting notifications at the moment'
+        exit(0)
+
+    def isMac_10_8_plus(self, debug):
+        isMac = self.isMac(debug)
+        if isMac:
+            macVersion = self.platform['platformmacver'][0]
+            macVersionSplit = macVersion.split('.')
+            isMacVersionOk = (len(macVersionSplit) >= 2 and int(macVersionSplit[0]) == 10 and int(macVersionSplit[1]) >= 8) or (len(macVersionSplit) >= 1 and int(macVersionSplit[0]) > 10)
+            if debug:
+                print '[DEBUG] Mac version "'+macVersion+'" is 10.8 or later > '+str(isMacVersionOk)
+            if isMacVersionOk:
+                return True
+        return False
+
+    def isMac(self, debug):
+        platform_system = self.platform['platformsystem']
+        platform_mac_ver = self.platform['platformmacver'][0]
+        isSystemMac = platform_system.lower() == 'darwin' and len(platform_mac_ver) > 0
+        if debug:
+            print '[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(isSystemMac)
+        return isSystemMac
+
+    def isLinux_with_notify_send(self, debug):
+        isLinux = self.isLinux(debug)
+        if isLinux:
+            # Check if the command is actually there
+            notifySendAvailable = True
+            try:
+                subprocess.call(['notify-send', '--version'])
+                if debug:
+                    print '[DEBUG] Checking if notify-send is available on system > True'
+            except OSError:
+                notifySendAvailable = False
+                if debug:
+                    print '[DEBUG] Checking if notify-send is available on system > False'
+            if notifySendAvailable:
+                return True
+        return False
+
+    def isLinux(self, debug):
+        platform_system = self.platform['platformsystem']
+        isSystemLinux = platform_system.lower() == 'linux'
+        if debug:
+            print '[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(isSystemLinux)
+        return isSystemLinux
+
