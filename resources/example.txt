@@ -1,4 +1,5 @@
 [COMMANDS]
+    sleep 3
     pwd
     cd
     echo "Name:`whoami`:"
@@ -13,3 +14,11 @@
     [GRACETIME]1000
     [NOTIFICATION][TITLE]$H1[SUBTITLE]$1[MESSAGE]This triggers when Hello world is outputted[SOUND]Glass[GROUP]group1
 [/CONFIGURATION:HELLOWORLD]
+
+[CONFIGURATION:{STARTUP}]
+    [NOTIFICATION][TITLE]Starting[MESSAGE]This triggers on startup[SOUND]Pop[GROUP]group1
+[/CONFIGURATION:{STARTUP}]
+
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]Exiting[MESSAGE]This triggers on termination[SOUND]Hero[GROUP]group1
+[/CONFIGURATION:{QUIT}]

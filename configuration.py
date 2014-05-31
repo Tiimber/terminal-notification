@@ -24,10 +24,19 @@ class Configuration:
     def analyzeQuit(self, debug=False):
         if debug:
             print '[DEBUG] Application is exiting, checking if there is a {QUIT} configuration...'
+        self.analyzeSpecial('QUIT', debug)
+
+    def analyzeStartup(self, debug=False):
+        if debug:
+            print '[DEBUG] Application is starting up, checking if there is a {STARTUP} configuration...'
+        self.analyzeSpecial('STARTUP', debug)
+
+    def analyzeSpecial(self, action, debug=False):
+        actionLabel = '{' + action + '}'
         for config in self.configs:
-            if config['name'] == '{QUIT}':
+            if config['name'] == actionLabel:
                 if debug:
-                    print '[DEBUG] {QUIT} configuration found, will display notification if exists...'
+                    print '[DEBUG] '+actionLabel+' configuration found, will display notification if exists...'
                 groups = []
                 historyGroups = []
                 notification = config['notification'] if 'notification' in config else None
@@ -38,7 +47,7 @@ class Configuration:
         if debug:
             print '[DEBUG] Check if line is triggering a notification: "'+line+'"'
         for config in self.configs:
-            if config['name'] != '{QUIT}':
+            if config['name'] != '{QUIT}' and config['name'] != '{STARTUP}':
                 pattern = config['pattern'] if 'pattern' in config else None
                 historyPattern = config['historyPattern'] if 'historyPattern' in config else None
                 if pattern is not None:

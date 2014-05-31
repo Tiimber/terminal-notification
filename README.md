@@ -181,15 +181,19 @@ All of the NOTIFICATION fields can use values from the capturing groups in both 
 
 ---
 
-There is also one other special CONFIGURATION:
+There is also two more special CONFIGURATION:
 
 ```
+[CONFIGURATION:{STARTUP}]
+    [NOTIFICATION][TITLE]START[MESSAGE]Application has started[SOUND]Pop
+[/CONFIGURATION:{STARTUP}]
+
 [CONFIGURATION:{QUIT}]
-    [NOTIFICATION][TITLE]QUIT[MESSAGE]All commands have terminated[SOUND]Basso[GROUP]group1
+    [NOTIFICATION][TITLE]QUIT[MESSAGE]All commands have terminated[SOUND]Basso
 [/CONFIGURATION:{QUIT}]
 ```
 
-This is simply put a special configuration which only triggers when all commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for this one.
+These are simply put special configurations which only triggers before the commands are started and after commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for this one.
 
 Sounds
 ------
@@ -226,7 +230,6 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Also have a {STARTUP} configuration
 - Extract methods (eg. configuration.py has a lot of methods not really related to configurations)
 - Keep debug and mute status in a helper class
 

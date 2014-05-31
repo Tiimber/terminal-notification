@@ -71,6 +71,7 @@ def parseConfigurationFile(configurationFile, debug):
 
 
 def run(configuration, debug, mute):
+    configuration.analyzeStartup(debug)
     mergedCommands = ' ; '.join(configuration.commands)
     process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
     print mergedCommands
