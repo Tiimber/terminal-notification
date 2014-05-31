@@ -194,8 +194,8 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 ---
 
 # Differences with notify-send
-time-parameter only for Linux
-sound, group, not for Linux
-subtitle and title merged as title for Linux
+time-parameter only for Linux - but not that stable
 Linux issues with queueing notifications
-Linux sound support if aplay is in there (standard ALSA lib)
+sound special for Linux
+group not for Linux
+subtitle and title merged as title for Linux
