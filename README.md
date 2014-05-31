@@ -3,6 +3,9 @@ Terminal Notification
 
 [**Project home**] [1]
 
+Mac OS X
+--------
+
 This project aims to be a highly configurable notification handler for any terminal commands in Mac OS X (10.8+).
 
 All notifications are sent out using Mac OS Notification Center, and you can specify quite a few things:
@@ -19,10 +22,29 @@ Project requirements:
 - Python 2.7
 - [terminal-notifier] [2] (Installation instructions are included in this file)
 
+Linux
+-----
+
+It also supports most Linux flavours, where notify-send and the ALSA drivers are installed (bundled with many distributions).
+
+All notifications will be sent out using notify-send, and you can specify the following:
+
+- What pattern to listen for in the output
+- Configure title and message (including using above mentioned regexp variables)
+- Choose what sound to play with the message
+- Set a max frequency for messages of each type
+- Send notifications on termination
+
+Project requirements:
+
+- Linux system with notify-send and aplay installed
+- Python 2.7
+
+
 Version
 -------
 
-1.0
+1.1
 
 Installation
 ------------
@@ -30,6 +52,10 @@ Installation
 **Clone**
 
 First you need to clone this project. If you haven't already, visit [Project home] [1] and follow instructions for how to clone the project.
+
+---
+
+*For Mac OS X*
 
 **Install terminal-notifier**
 
@@ -43,6 +69,17 @@ or if you prefer to install using brew
 brew install terminal-notifier
 ```
 
+---
+
+*For Linux*
+
+If notify-send isn't installed, install it with your favourite package manager, eg:
+
+```
+sudo apt-get install notify-osd
+```
+
+If you are lacking aplay in your system, I can't really help you. What I know is that it's bundled with ALSA sound card drivers. So google it, and if you figure it out, send instructions to me and I will add them. I haven't used a flavour of Linux that don't bundle it yet.
 
 Usage
 -----
@@ -119,13 +156,15 @@ Some explanations for each part:
 
 - **TITLE** - The title to display in the notification
 
-- **SUBTITLE** - The subtitle to display in the notification
+- **SUBTITLE** - The subtitle to display in the notification - *MAC ONLY* - If entered in a Linux system, it will be appended to the title
 
 - **MESSAGE** - The text to display in the notification
 
-- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug).
+- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - *MAC ONLY* - Will not work at all for Linux
 
-- **SOUND** - The sound to play when the notification is shown (available sounds listed below) 
+- **TIME** - *LINUX ONLY* - If entered, the notification will be requested to be removed after this amount of milliseconds
+
+- **SOUND** - The sound to play when the notification is shown. Available sounds for Mac OS X is listed below. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path
 
 If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
 
@@ -175,11 +214,12 @@ Future plans
 ------------
 
 - Fix so that groups isn't needed in patterns
-- Figure out why group ID isn't working for the notifications
-- Figure out if it's possible to configure how long time to show notifications
+- Figure out why group ID isn't working for the notifications *Mac OS*
+- Figure out if it's possible to configure how long time to show notifications *Mac OS X*
+- Try to see if queueing issues for notifications can be fixed *Linux*
+- Try to see if time of showing notifications can be fixed *Linux*
 - More configuration options, eg. choose which configuration should apply to what command
 - Windows notifications
-- Linux notifications(?)
 
 License
 -------
@@ -190,12 +230,3 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [1]:https://bitbucket.org/rtapper/terminalnotifier
 [2]:https://github.com/alloy/terminal-notifier
 [3]:https://bitbucket.org/rtapper/terminalnotifier/src/c02e5a25960fdbc873370511c8b7d136e00f5c89/resources/sounds/mac/README.md?at=master
-
----
-
-# Differences with notify-send
-time-parameter only for Linux - but not that stable
-Linux issues with queueing notifications
-sound special for Linux
-group not for Linux
-subtitle and title merged as title for Linux
