@@ -12,7 +12,12 @@ class Configuration:
     def __init__(self):
         self.commands = []
         self.configs = []
-        self.platform = {'osname': os.name, 'osuname': os.uname(), 'sysplatform': sys.platform, 'platformplatform': platform.platform(), 'platformsystem': platform.system(), 'platformrelease': platform.release(), 'platformversion': platform.version(), 'platformmacver': platform.mac_ver()}
+        os_uname = None
+        try:
+            os_uname = os.uname()
+        except AttributeError:
+            os_uname = None
+        self.platform = {'osname': os.name, 'osuname': os_uname, 'sysplatform': sys.platform, 'platformplatform': platform.platform(), 'platformsystem': platform.system(), 'platformrelease': platform.release(), 'platformversion': platform.version(), 'platformmacver': platform.mac_ver()}
         if Global.GlobalParams.isDebug():
             print '[DEBUG] platform information: '+str(self.platform)
 
