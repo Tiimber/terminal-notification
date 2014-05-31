@@ -100,6 +100,15 @@ class Configuration:
             if self.isMac_10_8_plus(debug):
                 OSXNotifier.notifyObj(notification)
             elif self.isLinux_with_notify_send(debug):
+                if notificationSound is not None:
+                    # Check if system supports aplay
+                    aplaySupported = self.supportCommand(['aplay', '--version'], debug)
+                    if debug:
+                        if not aplaySupported:
+                            print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                        else:
+                            self.runCommand(['aplay', notificationSound])
+                            print '[DEBUG] Will try and play sound "'+notificationSound+'" through aplay'
                 LinuxNotifier.notifyObj(notification)
             else:
                 self.outputNotificationUnsupported()
@@ -159,15 +168,7 @@ class Configuration:
         isLinux = self.isLinux(debug)
         if isLinux:
             # Check if the command is actually there
-            notifySendAvailable = True
-            try:
-                subprocess.call(['notify-send', '--version'])
-                if debug:
-                    print '[DEBUG] Checking if notify-send is available on system > True'
-            except OSError:
-                notifySendAvailable = False
-                if debug:
-                    print '[DEBUG] Checking if notify-send is available on system > False'
+            notifySendAvailable = self.supportCommand(['notify-send', '--version'], debug)
             if notifySendAvailable:
                 return True
         return False
@@ -179,3 +180,18 @@ class Configuration:
             print '[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(isSystemLinux)
         return isSystemLinux
 
+    def supportCommand(self, command, debug):
+        supported = True
+        commandName = command if isinstance(command, basestring) else command[0]
+        try:
+            self.runCommand(command)
+            if debug:
+                print '[DEBUG] Checking if '+commandName+' is available on system > True'
+        except OSError:
+            supported = False
+            if debug:
+                print '[DEBUG] Checking if '+commandName+' is available on system > False'
+        return supported
+
+    def runCommand(self, command):
+        subprocess.call(command)
