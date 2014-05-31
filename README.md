@@ -3,6 +3,8 @@ Terminal Notification
 
 [**Project home**] [1]
 
+*Currently supporting Mac OS X 10.8+ and most Linux variants*
+
 Mac OS X
 --------
 
@@ -20,12 +22,12 @@ Project requirements:
 
 - Mac OS X (10.8 or later)
 - Python 2.7
-- [terminal-notifier] [2] (Installation instructions are included in this file)
+- [terminal-notifier] [2] (Installation instructions are included below)
 
 Linux
 -----
 
-It also supports most Linux flavours, where notify-send and the ALSA drivers are installed (bundled with many distributions).
+This project also supports most Linux flavours, where notify-send and the ALSA drivers are installed (bundled with many distributions).
 
 All notifications will be sent out using notify-send, and you can specify the following:
 
