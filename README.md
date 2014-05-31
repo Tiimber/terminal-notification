@@ -197,3 +197,4 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 time-parameter only for Linux
 sound, group, not for Linux
 subtitle and title merged as title for Linux
+Linux issues with queueing notifications
