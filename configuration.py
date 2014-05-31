@@ -107,7 +107,7 @@ class Configuration:
                         if not aplaySupported:
                             print '[DEBUG] Playing sounds together with the notification is not supported in your system'
                         else:
-                            self.runCommand(['aplay', notificationSound])
+                            self.runCommandAsync(['aplay', notificationSound])
                             print '[DEBUG] Will try and play sound "'+notificationSound+'" through aplay'
                 LinuxNotifier.notifyObj(notification)
             else:
@@ -195,3 +195,6 @@ class Configuration:
 
     def runCommand(self, command):
         subprocess.call(command)
+
+    def runCommandAsync(self, command):
+        subprocess.Popen(command)
