@@ -3,10 +3,11 @@ import extra_functions
 import configuration
 from subprocess import Popen, PIPE, STDOUT
 import signal
+import Global
 
 
-def parseConfigurationContents(contents, debug):
-    returnConfiguration = configuration.Configuration(debug)
+def parseConfigurationContents(contents):
+    returnConfiguration = configuration.Configuration()
     lines = contents.split('\n')
     isCommands = False
     isConfig = False
@@ -61,30 +62,31 @@ def parseConfigurationContents(contents, debug):
 
     return returnConfiguration
 
-def parseConfigurationFile(configurationFile, debug):
+def parseConfigurationFile(configurationFile):
     if extra_functions.ExtraFileMethods.DoesFileExist(configurationFile):
         contents = extra_functions.ExtraFileMethods.GetFileContents(configurationFile)
-        configuration = parseConfigurationContents(contents, debug)
+        configuration = parseConfigurationContents(contents)
         return configuration
     else:
         exit(0)
 
 
-def run(configuration, debug, mute):
-    configuration.analyzeStartup(debug)
+def run(configuration):
+    configuration.analyzeStartup()
     mergedCommands = ' ; '.join(configuration.commands)
     process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-    print mergedCommands
+    if Global.GlobalParams.isDebug():
+        print '[DEBUG] Commands: '+mergedCommands
     accumulatedLines = []
     while True:
         nextline = process.stdout.readline().replace('\n', '')
-        if not mute:
+        if not Global.GlobalParams.isMute():
             print nextline
         if nextline == '' and process.poll() is not None:
-            configuration.analyzeQuit(debug)
+            configuration.analyzeQuit()
             break
         else:
-            notificationSend = configuration.analyze(nextline, accumulatedLines, debug)
+            notificationSend = configuration.analyze(nextline, accumulatedLines)
             if notificationSend:
                 accumulatedLines = []
             else:
@@ -102,4 +104,6 @@ if __name__ == "__main__":
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
-    run(parseConfigurationFile(args['config'], args['debug']), args['debug'], args['mute'])
+    Global.GlobalParams.setDebug(args['debug'])
+    Global.GlobalParams.setMute(args['mute'])
+    run(parseConfigurationFile(args['config']))
