@@ -83,6 +83,8 @@ sudo apt-get install notify-osd
 
 If you are lacking aplay in your system, I can't really help you. What I know is that it's bundled with ALSA sound card drivers. So google it, and if you figure it out, send instructions to me and I will add them. I haven't used a flavour of Linux that don't bundle it yet.
 
+---
+
 Usage
 -----
 
@@ -164,9 +166,9 @@ Some explanations for each part:
 
 - **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - *MAC ONLY* - Will not work at all for Linux
 
-- **TIME** - *LINUX ONLY* - If entered, the notification will be requested to be removed after this amount of milliseconds
+- **TIME** - If entered, the notification will be requested to be removed after this amount of milliseconds - *LINUX ONLY* - Will be ignored for Mac OS X
 
-- **SOUND** - The sound to play when the notification is shown. Available sounds for Mac OS X is listed below. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path
+- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path
 
 If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
 
@@ -192,6 +194,8 @@ This is simply put a special configuration which only triggers when all commands
 Sounds
 ------
 
+**Mac OS X**
+
 For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application. The list of my computer is as follows:
 
 - Basso
@@ -211,6 +215,9 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 
 It's possible to add your own sounds to this setup, follow [this guide] [3] to add your own.
 
+**Linux**
+
+For the NOTIFICATION > SOUND, these sounds should be sounds that can play with aplay (all bundled with this project should work). They are entered with the relative or full path to the file.
 
 Future plans
 ------------
@@ -221,6 +228,9 @@ Future plans
 - Try to see if queueing issues for notifications can be fixed *Linux*
 - Try to see if time of showing notifications can be fixed *Linux*
 - More configuration options, eg. choose which configuration should apply to what command
+- Also have a {STARTUP} configuration
+- Extract methods (eg. configuration.py has a lot of methods not really related to configurations)
+- Keep debug and mute status in a helper class
 - Windows notifications
 
 License
