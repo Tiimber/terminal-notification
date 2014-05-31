@@ -223,10 +223,10 @@ Future plans
 ------------
 
 - Fix so that groups isn't needed in patterns
-- Figure out why group ID isn't working for the notifications *Mac OS*
-- Figure out if it's possible to configure how long time to show notifications *Mac OS X*
-- Try to see if queueing issues for notifications can be fixed *Linux*
-- Try to see if time of showing notifications can be fixed *Linux*
+- Figure out why group ID isn't working for the notifications - *Mac OS*
+- Figure out if it's possible to configure how long time to show notifications - *Mac OS X*
+- Try to see if queueing issues for notifications can be fixed - *Linux*
+- Try to see if time of showing notifications can be fixed - *Linux*
 - More configuration options, eg. choose which configuration should apply to what command
 - Also have a {STARTUP} configuration
 - Extract methods (eg. configuration.py has a lot of methods not really related to configurations)
