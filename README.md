@@ -222,16 +222,26 @@ For the NOTIFICATION > SOUND, these sounds should be sounds that can play with a
 Future plans
 ------------
 
+**General**
+
 - Fix so that groups isn't needed in patterns
-- Figure out why group ID isn't working for the notifications - *Mac OS*
-- Figure out if it's possible to configure how long time to show notifications - *Mac OS X*
-- Try to see if queueing issues for notifications can be fixed - *Linux*
-- Try to see if time of showing notifications can be fixed - *Linux*
 - More configuration options, eg. choose which configuration should apply to what command
 - Also have a {STARTUP} configuration
 - Extract methods (eg. configuration.py has a lot of methods not really related to configurations)
 - Keep debug and mute status in a helper class
-- Windows notifications
+
+**Mac OS X**
+- Figure out why group ID isn't working for the notifications
+- Figure out if it's possible to configure how long time to show notifications
+
+**Linux**
+
+- Try to see if queueing issues for notifications can be fixed
+- Try to see if time of showing notifications can be fixed
+
+**Windows**
+
+- Implement Windows notifications
 
 License
 -------
