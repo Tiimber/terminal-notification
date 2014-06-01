@@ -136,7 +136,13 @@ If sounder.exe isn't installed, download it [here] [6]. You will also need to ad
 
 Download and install Growl for [Windows] [3], [Mac] [4] or [Linux] [5]
 
-Download and install GNTP for your system. This is the most complex one. If you are having troubles doing this, for Windows the suggested solution is to do the following:
+Download and install GNTP for your system, instructions based on system.
+
+---
+
+*For Windows*
+
+If you are having troubles doing this, for Windows the suggested solution is to do the following:
 
 - Run this in a terminal (it will install pip):
 
@@ -145,11 +151,26 @@ python -c "exec('try: from urllib2 import urlopen \nexcept: from urllib.request 
 ```
 
 - Add pip to your path (environment variable). It will be put in a subfolder to Python itself. Search for pip.exe among your files to find it.
-- Run pip to install gntp
+
+---
+
+*For Linux*
+
+Use your package manager to install pip, eg:
+
+```
+sudo apt-get install python-pip
+```
+
+--- 
+
+Now we just need to install gntp through pip:
 
 ```
 pip install gntp
 ```
+
+You will need to run this command as administrator, for Linux it means prefixing the command with sudo and for Windows by opening the command prompt as Administrator.
 
 ---
 
@@ -349,7 +370,8 @@ Reservations
 Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations is:
 
 - Mac OS X 10.9.3 with Notification Center
-- Ubuntu 14.04 LTS with notify-send and aplay
+- Ubuntu 14.04 with notify-send and aplay
+- Ubuntu 14.04 with Growl and aplay
 - Windows 7 with notifu and sounder.exe
 - Windows 7 with Growl, GNTP and sounder.exe
 
