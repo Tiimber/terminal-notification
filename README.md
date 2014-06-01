@@ -93,7 +93,7 @@ Usage
 Enter the folder of the project in a terminal, then run
 
 ```
-python Notifier.py --config resources/example_setup.txt
+python notifier.py --config resources/example_setup.txt
 ```
 
 This will run with the included example, which is just as stated, an example configuration.
@@ -101,13 +101,13 @@ This will run with the included example, which is just as stated, an example con
 To run with a lot of debug outputting:
 
 ```
-python Notifier.py --config resources/example_setup.txt --debug True
+python notifier.py --config resources/example_setup.txt --debug True
 ```
 
 If you desire to not mirror the standard console output, run with the mute option:
 
 ```
-python Notifier.py --config resources/example_setup.txt --mute True
+python notifier.py --config resources/example_setup.txt --mute True
 ```
 
 Configuration
