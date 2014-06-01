@@ -74,7 +74,7 @@ def parse_configuration_file(configuration_file):
 
 def run(parsed_configuration):
     parsed_configuration.analyze_startup()
-    merged_commands = ' ; '.join(parsed_configuration.commands)
+    merged_commands = glob.Platform.getCommandLineMergeForPlatform().join(parsed_configuration.commands)
     process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
     if glob.GlobalParams.is_debug():
         print '[DEBUG] Commands: '+merged_commands

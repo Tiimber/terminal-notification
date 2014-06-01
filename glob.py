@@ -88,3 +88,10 @@ class Platform():
         if GlobalParams.is_debug():
             print '[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows)
         return is_system_windows
+
+    @staticmethod
+    def getCommandLineMergeForPlatform():
+        if Platform.is_windows():
+            return ' && '
+        else:
+            return ' ; '
