@@ -1,12 +1,12 @@
 import os
 
-def notifyObj(notifyObject):
-    title = notifyObject['title'] if 'title' in notifyObject else None
-    subtitle = notifyObject['subtitle'] if 'subtitle' in notifyObject else None
-    message = notifyObject['message'] if 'message' in notifyObject else None
-    sound = notifyObject['sound'] if 'sound' in notifyObject else None
-    group = notifyObject['group'] if 'group' in notifyObject else None
-    remove = notifyObject['remove'] if 'remove' in notifyObject else None
+def notify_obj(notify_object):
+    title = notify_object['title'] if 'title' in notify_object else None
+    subtitle = notify_object['subtitle'] if 'subtitle' in notify_object else None
+    message = notify_object['message'] if 'message' in notify_object else None
+    sound = notify_object['sound'] if 'sound' in notify_object else None
+    group = notify_object['group'] if 'group' in notify_object else None
+    remove = notify_object['remove'] if 'remove' in notify_object else None
     notify(title=title, subtitle=subtitle, message=message, sound=sound, group=group, remove=remove)
 
 

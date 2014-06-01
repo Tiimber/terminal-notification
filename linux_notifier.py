@@ -1,14 +1,14 @@
 import os
 
-def notifyObj(notifyObject):
-    title = notifyObject['title'] if 'title' in notifyObject else None
-    subtitle = notifyObject['subtitle'] if 'subtitle' in notifyObject else None
+def notify_obj(notify_object):
+    title = notify_object['title'] if 'title' in notify_object else None
+    subtitle = notify_object['subtitle'] if 'subtitle' in notify_object else None
     if title is not None and subtitle is not None:
         title = title + ' / ' + subtitle
     elif subtitle is not None:
         title = subtitle
-    message = notifyObject['message'] if 'message' in notifyObject else None
-    time = notifyObject['time'] if 'time' in notifyObject else None
+    message = notify_object['message'] if 'message' in notify_object else None
+    time = notify_object['time'] if 'time' in notify_object else None
     notify(title=title, message=message, time=time)
 
 

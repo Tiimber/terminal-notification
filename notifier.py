@@ -6,104 +6,106 @@ import signal
 import glob
 
 
-def parseConfigurationContents(contents):
-    returnConfiguration = configuration.Configuration()
+def parse_configuration_contents(contents):
+    return_configuration = configuration.Configuration()
     lines = contents.split('\n')
-    isCommands = False
-    isConfig = False
-    configData = None
+    is_commands = False
+    is_config = False
+    config_data = None
     for line in lines:
         line = line.strip()
         if line is None or line[0:1] == '#':
             continue
         elif line.startswith('[COMMANDS]'):
-            isCommands = True
+            is_commands = True
             continue
         elif line.startswith('[/COMMANDS]'):
-            isCommands = False
+            is_commands = False
             continue
-        elif isCommands:
-            returnConfiguration.addCommand(line)
+        elif is_commands:
+            return_configuration.add_command(line)
             continue
         elif line.startswith('[CONFIGURATION:'):
-            isConfig = True
-            configData = {'name': line[len('[CONFIGURATION:'):-1], 'graceTime': 500}
+            is_config = True
+            config_data = {'name': line[len('[CONFIGURATION:'):-1], 'graceTime': 500}
             continue
         elif line.startswith('[/CONFIGURATION:'):
-            returnConfiguration.addConfig(configData)
-            isConfig = False
-            configData = None
+            return_configuration.add_config(config_data)
+            is_config = False
+            config_data = None
             continue
-        elif isConfig:
+        elif is_config:
             if line.startswith('[PATTERN]'):
-                configData['pattern'] = line[len('[PATTERN]'):]
+                config_data['pattern'] = line[len('[PATTERN]'):]
             if line.startswith('[HISTORYPATTERN]'):
-                configData['historyPattern'] = line[len('[HISTORYPATTERN]'):]
+                config_data['historyPattern'] = line[len('[HISTORYPATTERN]'):]
             elif line.startswith('[GRACETIME]'):
                 gracetime = int(line[len('[GRACETIME]'):])
-                configData['graceTime'] = gracetime
+                config_data['graceTime'] = gracetime
             elif line.startswith('[NOTIFICATION]'):
                 line = line[len('[NOTIFICATION]'):]
-                configData['notification'] = {}
+                config_data['notification'] = {}
                 while len(line) > 0:
                     # Just do this by extracting what's in the brackets instead
                     if line.startswith('['):
-                        notificationName = line[1:line.find(']')]
-                        notificationNameLower = notificationName.lower()
-                        line = line[len('['+notificationName+']'):]
+                        notification_name = line[1:line.find(']')]
+                        notification_name_lower = notification_name.lower()
+                        line = line[len('['+notification_name+']'):]
                         value = line
-                        nextParamStart = value.find('[')
-                        if nextParamStart != -1:
-                            value = value[0:nextParamStart]
-                            line = line[nextParamStart:]
+                        next_param_start = value.find('[')
+                        if next_param_start != -1:
+                            value = value[0:next_param_start]
+                            line = line[next_param_start:]
                         else:
                             line = ''
-                        configData['notification'][notificationNameLower] = value
+                        config_data['notification'][notification_name_lower] = value
 
-    return returnConfiguration
+    return return_configuration
 
-def parseConfigurationFile(configurationFile):
-    if extra_functions.ExtraFileMethods.DoesFileExist(configurationFile):
-        contents = extra_functions.ExtraFileMethods.GetFileContents(configurationFile)
-        configuration = parseConfigurationContents(contents)
-        return configuration
+
+def parse_configuration_file(configuration_file):
+    if extra_functions.ExtraFileMethods.does_file_exist(configuration_file):
+        contents = extra_functions.ExtraFileMethods.get_file_contents(configuration_file)
+        parsed_configuration = parse_configuration_contents(contents)
+        return parsed_configuration
     else:
         exit(0)
 
 
-def run(configuration):
-    configuration.analyzeStartup()
-    mergedCommands = ' ; '.join(configuration.commands)
-    process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-    if glob.GlobalParams.isDebug():
-        print '[DEBUG] Commands: '+mergedCommands
-    accumulatedLines = []
+def run(parsed_configuration):
+    parsed_configuration.analyze_startup()
+    merged_commands = ' ; '.join(parsed_configuration.commands)
+    process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
+    if glob.GlobalParams.is_debug():
+        print '[DEBUG] Commands: '+merged_commands
+    accumulated_lines = []
     while True:
         nextline = process.stdout.readline().replace('\n', '')
-        if not glob.GlobalParams.isMute():
+        if not glob.GlobalParams.is_mute():
             print nextline
         if nextline == '' and process.poll() is not None:
-            configuration.analyzeQuit()
+            parsed_configuration.analyze_quit()
             break
         else:
-            notificationSend = configuration.analyze(nextline, accumulatedLines)
-            if notificationSend:
-                accumulatedLines = []
+            notification_sent = parsed_configuration.analyze(nextline, accumulated_lines)
+            if notification_sent:
+                accumulated_lines = []
             else:
-                accumulatedLines.append(nextline)
+                accumulated_lines.append(nextline)
     pass
 
-def userExited(signum, frame):
+
+def user_exited(signum, frame):
     print 'User terminated script'
     exit(0)
 
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, userExited)
+    signal.signal(signal.SIGINT, user_exited)
     parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
-    glob.GlobalParams.setDebug(args['debug'])
-    glob.GlobalParams.setMute(args['mute'])
-    run(parseConfigurationFile(args['config']))
+    glob.GlobalParams.set_debug(args['debug'])
+    glob.GlobalParams.set_mute(args['mute'])
+    run(parse_configuration_file(args['config']))

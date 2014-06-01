@@ -3,17 +3,17 @@ class GlobalParams():
     mute = False
 
     @staticmethod
-    def setDebug(debug):
+    def set_debug(debug):
         GlobalParams.debug = debug
 
     @staticmethod
-    def isDebug():
+    def is_debug():
         return GlobalParams.debug
 
     @staticmethod
-    def setMute(mute):
+    def set_mute(mute):
         GlobalParams.mute = mute
 
     @staticmethod
-    def isMute():
+    def is_mute():
         return GlobalParams.mute
