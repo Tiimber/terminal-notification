@@ -150,6 +150,18 @@ If you desire to not mirror the standard console output, run with the mute optio
 python notifier.py --config resources/example_setup.txt --mute
 ```
 
+If you don't want sounds to play (Mac OS X will eg. play a default sound if none is entered):
+
+```
+python notifier.py --config resources/example_setup.txt --no-sound
+```
+
+If you are of the opposite kind you might only want the sounds to play, no notifications *Not in Mac OS X*:
+
+```
+python notifier.py --config resources/example_setup.txt --only-sound
+```
+
 If you would like to force the notifications to use growl, run with this option:
 
 ```
@@ -328,8 +340,3 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [5]:http://growl.info/downloads
 [6]:http://mattn.github.io/growl-for-linux/
 [7]:http://www.elifulkerson.com/projects/commandline-wav-player.php
-
----
-
-- Enable 'no sound' mode
-- Enable 'only sound' mode - Not Mac OS X
