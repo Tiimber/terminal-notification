@@ -120,20 +120,15 @@ class Configuration:
                 if not will_use_growl:
                     print 'ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead'
 
+            # Play sound (Windows / Linux)
+            if notification_sound is not None:
+                Configuration.play_sound(notification_sound)
+
             # If not requested growl or if failed - run default for system
             if not will_use_growl:
                 if glob.Platform.is_mac_10_8_plus():
                     osx_notifier.notify_obj(notification)
                 elif glob.Platform.is_linux_with_notify_send():
-                    if notification_sound is not None:
-                        # Check if system supports aplay
-                        aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
-                        if glob.GlobalParams.is_debug():
-                            if not aplay_supported:
-                                print '[DEBUG] Playing sounds together with the notification is not supported in your system'
-                            else:
-                                extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
-                                print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
                     linux_notifier.notify_obj(notification)
                 elif glob.Platform.is_windows():
                     # TODO - Windows notification through power shell, trigger balloon
@@ -184,3 +179,29 @@ class Configuration:
         else:
             print 'ERROR: Growl isn\'t available on your system. Will try to use standard service instead'
             glob.GlobalParams.set_growl(False)
+
+    @staticmethod
+    def play_sound(notification_sound):
+        if glob.Platform.is_linux():
+            # Check if system supports aplay
+            aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
+            if not aplay_supported:
+                if glob.GlobalParams.is_debug():
+                    print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+            else:
+                extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
+                if glob.GlobalParams.is_debug():
+                    print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
+        elif glob.Platform.is_windows():
+            # Check if system supports sounder
+            sounder_supported = extra_functions.CommandHelper.support_command(['sounder.exe'])
+            if not sounder_supported:
+                if glob.GlobalParams.is_debug():
+                    print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+            else:
+                extra_functions.CommandHelper.run_command_async(['sounder.exe', notification_sound])
+                if glob.GlobalParams.is_debug():
+                    print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
+        elif glob.Platform.is_mac():
+            if glob.GlobalParams.is_debug():
+                print '[DEBUG] Mac will play sound through the standard Sound Effects'

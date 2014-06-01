@@ -41,6 +41,7 @@ Project requirements:
 
 - Linux system with notify-send and aplay installed
 - Python 2.7
+- aplay (for sounds)
 
 
 Version
@@ -230,7 +231,6 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Fix support for growl (override parameter for choosing it over systems default)
 
 **Mac OS X**
 
@@ -255,3 +255,9 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [1]:https://bitbucket.org/rtapper/terminalnotifier
 [2]:https://github.com/alloy/terminal-notifier
 [3]:https://bitbucket.org/rtapper/terminalnotifier/src/c02e5a25960fdbc873370511c8b7d136e00f5c89/resources/sounds/mac/README.md?at=master
+
+---
+
+Growl installation
+pip and GNTP installation
+sounder.exe
