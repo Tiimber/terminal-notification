@@ -115,7 +115,7 @@ Project requirements:
 Version
 -------
 
-1.2
+1.3
 
 Installation
 ------------
