@@ -3,7 +3,11 @@ Terminal Notification
 
 [**Project home**] [1]
 
-*Currently supporting Mac OS X 10.8+, Windows and most Linux variants, or by using Growl on most systems (but requires a bit more manual install)*
+*Currently supporting Mac OS X 10.8+, Windows and most Linux variants with more or less native notifications*
+
+*There is also support for older systems or additional ones by using Growl (but this normally requires a bit more manual install)*
+
+---
 
 When used, notifications will be displayed like this:
 
