@@ -220,5 +220,16 @@ class Configuration:
                     if glob.GlobalParams.is_debug():
                         print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
             elif glob.Platform.is_mac():
-                if glob.GlobalParams.is_debug():
+                if glob.GlobalParams.prefer_growl():
+                    if glob.GlobalParams.is_debug():
+                        # Check if system supports afplay
+                        afplay_supported = extra_functions.CommandHelper.support_command(['afplay', '--help'])
+                        if not afplay_supported:
+                            if glob.GlobalParams.is_debug():
+                                print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                        else:
+                            extra_functions.CommandHelper.run_command_async(['afplay', notification_sound])
+                            if glob.GlobalParams.is_debug():
+                                print '[DEBUG] Will try and play sound "'+notification_sound+'" through afplay'
+                elif glob.GlobalParams.is_debug():
                     print '[DEBUG] Mac will play sound through the standard Sound Effects'

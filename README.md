@@ -164,13 +164,25 @@ sudo apt-get install python-pip
 
 --- 
 
+*For Mac OS X*
+
+Use easy_install to install pip, it should be bundled with Python:
+
+```
+sudo easy_install pip
+```
+
+---
+
+*For all systems*
+
 Now we just need to install gntp through pip:
 
 ```
 pip install gntp
 ```
 
-You will need to run this command as administrator, for Linux it means prefixing the command with sudo and for Windows by opening the command prompt as Administrator.
+You will need to run this command as administrator, for Mac OS X and Linux it means prefixing the command with sudo and for Windows by opening the command prompt as Administrator.
 
 ---
 
@@ -316,6 +328,8 @@ Sounds
 
 **Mac OS X**
 
+*Note!* - These sounds described here are only for Notification Center. See below for Growl variant.
+
 For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application. The list of my computer is as follows:
 
 - Basso
@@ -335,7 +349,7 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 
 It's possible to add your own sounds to this setup, follow [this guide] (resources/sounds/mac/README.md) to add your own.
 
-**Note!** - If you are using Growl for Mac, there are not yet any support for playing sounds.
+**Note!** - If you are using Growl for Mac, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
 
 **Linux**
 
@@ -352,12 +366,12 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
+- Try and mute much more output (sound playing in external players should be ignored from an terminal output point of view)
 
 **Mac OS X**
 
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
-- Support playing sound through preinstalled afplay
 
 **Linux**
 
