@@ -364,6 +364,7 @@ Future plans
 
 **General**
 
+- Attach screenshots to this README.md
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 - Try and mute much more output (sound playing in external players should be ignored from an terminal output point of view)
