@@ -435,7 +435,7 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
 [7]:http://www.paralint.com/projects/notifu/download.html
 
-<!--
+<!---
     These should be relative and point towards the project, but bitbucket don't support it - will move to GitHub later
 -->
 
