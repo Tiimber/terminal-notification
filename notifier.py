@@ -103,13 +103,15 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, user_exited)
     parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
-    parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
-    parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
+    parser.add_argument('--debug', help='Debug output', required=False, default=False, action='store_true')
+    parser.add_argument('--mute', help='Mute normal output', required=False, default=False, action='store_true')
+    parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
     args = vars(parser.parse_args())
 
     # Set debug and mute params
     glob.GlobalParams.set_debug(args['debug'])
     glob.GlobalParams.set_mute(args['mute'])
+    glob.GlobalParams.set_growl(args['growl'])
 
     # Set platform information
     glob.Platform.set_platform()

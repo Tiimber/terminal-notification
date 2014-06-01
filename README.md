@@ -46,7 +46,7 @@ Project requirements:
 Version
 -------
 
-1.1
+1.2A
 
 Installation
 ------------
@@ -101,13 +101,13 @@ This will run with the included example, which is just as stated, an example con
 To run with a lot of debug outputting:
 
 ```
-python notifier.py --config resources/example_setup.txt --debug True
+python notifier.py --config resources/example_setup.txt --debug
 ```
 
 If you desire to not mirror the standard console output, run with the mute option:
 
 ```
-python notifier.py --config resources/example_setup.txt --mute True
+python notifier.py --config resources/example_setup.txt --mute
 ```
 
 Configuration
@@ -244,7 +244,7 @@ Future plans
 
 **Windows**
 
-- Implement Windows notifications
+- Implement Windows (native) notifications
 
 License
 -------

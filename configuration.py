@@ -2,8 +2,15 @@ import random
 import re
 import extra_functions
 import glob
+import growl_notifier
 import linux_notifier
 import osx_notifier
+
+# GNTP might not be installed
+try:
+    import gntp.notifier
+except ImportError:
+    pass
 
 
 class Configuration:
@@ -25,6 +32,9 @@ class Configuration:
     def analyze_startup(self):
         if glob.GlobalParams.is_debug():
             print '[DEBUG] Application is starting up, checking if there is a {STARTUP} configuration...'
+        # Register growl if it's requested
+        if glob.GlobalParams.prefer_growl():
+            Configuration.init_growl()
         self.analyze_special('STARTUP')
 
     def analyze_special(self, action):
@@ -67,7 +77,7 @@ class Configuration:
                                 print '[DEBUG] Gracetime haven\'t passed yet - will not triggering notification'
         return False
 
-    def send_notification(self, notification, groups, history_groups, runCount):
+    def send_notification(self, notification, groups, history_groups, run_count):
         groups = [groups] if isinstance(groups, basestring) else groups
         history_groups = [history_groups] if isinstance(history_groups, basestring) else history_groups
         if notification is not None:
@@ -81,7 +91,7 @@ class Configuration:
                 value = notification[key]
                 if key == 'sound':
                     original_notification_sound = value
-                    notification_sound = Configuration.get_notification_sound(value, runCount)
+                    notification_sound = Configuration.get_notification_sound(value, run_count)
                 matches = re.findall('\$([0-9]+)', value)
                 if matches is not None:
                     for match in matches:
@@ -102,24 +112,34 @@ class Configuration:
             if glob.GlobalParams.is_debug():
                 print '[DEBUG] Pushing notification: '+str(notification)
             notification['sound'] = notification_sound
-            if glob.Platform.is_mac_10_8_plus():
-                osx_notifier.notify_obj(notification)
-            elif glob.Platform.is_linux_with_notify_send():
-                if notification_sound is not None:
-                    # Check if system supports aplay
-                    aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
-                    if glob.GlobalParams.is_debug():
-                        if not aplay_supported:
-                            print '[DEBUG] Playing sounds together with the notification is not supported in your system'
-                        else:
-                            extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
-                            print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
-                linux_notifier.notify_obj(notification)
-            elif glob.Platform.is_windows():
-                # TODO - Windows GNTP or notification through power shell?!
-                Configuration.output_notification_unsupported()
-            else:
-                Configuration.output_notification_unsupported()
+
+            # Growl ONLY if requested
+            will_use_growl = False
+            if glob.GlobalParams.prefer_growl():
+                will_use_growl = growl_notifier.GrowlNotifier.notify_obj(notification)
+                if not will_use_growl:
+                    print 'ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead'
+
+            # If not requested growl or if failed - run default for system
+            if not will_use_growl:
+                if glob.Platform.is_mac_10_8_plus():
+                    osx_notifier.notify_obj(notification)
+                elif glob.Platform.is_linux_with_notify_send():
+                    if notification_sound is not None:
+                        # Check if system supports aplay
+                        aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
+                        if glob.GlobalParams.is_debug():
+                            if not aplay_supported:
+                                print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                            else:
+                                extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
+                                print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
+                    linux_notifier.notify_obj(notification)
+                elif glob.Platform.is_windows():
+                    # TODO - Windows notification through power shell, trigger balloon
+                    Configuration.output_notification_unsupported()
+                else:
+                    Configuration.output_notification_unsupported()
             notification['sound'] = original_notification_sound
 
     @staticmethod
@@ -139,3 +159,28 @@ class Configuration:
                 sound_list = sound[len('{random}'):].split(',')
                 sound = sound_list[random.randint(0, len(sound_list)-1)]
         return sound
+
+    @staticmethod
+    def module_exists(module_name):
+        try:
+            __import__(module_name)
+        except ImportError:
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def init_growl():
+        will_use_growl = Configuration.module_exists('gntp')
+        if will_use_growl:
+            if glob.GlobalParams.is_debug():
+                print '[DEBUG] User have requested to use Growl for notifications, will try and register application'
+            register_success = growl_notifier.GrowlNotifier.register()
+            if not register_success:
+                print 'ERROR: You requested to use Growl for notification, but Growl failed to instantiate. Will try to use standard service instead'
+                glob.GlobalParams.set_growl(False)
+            elif glob.GlobalParams.is_debug():
+                print '[DEBUG] User have requested to use Growl for notifications, will try and register application'
+        else:
+            print 'ERROR: Growl isn\'t available on your system. Will try to use standard service instead'
+            glob.GlobalParams.set_growl(False)

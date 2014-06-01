@@ -5,6 +5,7 @@ import extra_functions
 class GlobalParams():
     debug = False
     mute = False
+    growl = False
 
     @staticmethod
     def set_debug(debug):
@@ -21,6 +22,14 @@ class GlobalParams():
     @staticmethod
     def is_mute():
         return GlobalParams.mute
+
+    @staticmethod
+    def set_growl(growl):
+        GlobalParams.growl = growl
+
+    @staticmethod
+    def prefer_growl():
+        return GlobalParams.growl
 
 
 class Platform():
