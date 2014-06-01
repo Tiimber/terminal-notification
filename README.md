@@ -3,7 +3,7 @@ Terminal Notification
 
 [**Project home**] [1]
 
-*Currently supporting Mac OS X 10.8+ and most Linux variants, or using Growl (but requires some manual install)*
+*Currently supporting Mac OS X 10.8+ and most Linux variants, or using Growl (but requires a bit more manual install)*
 
 Mac OS X
 --------
@@ -16,7 +16,7 @@ All notifications are sent out using Mac OS Notification Center, and you can spe
 - Configure title, subtitle and message (including using above mentioned regexp variables)
 - Choose what sound to play with the message
 - Set a max frequency for messages of each type
-- Send notifications on termination
+- Send notifications on startup and termination
 
 Project requirements:
 
@@ -35,7 +35,7 @@ All notifications will be sent out using notify-send, and you can specify the fo
 - Configure title and message (including using above mentioned regexp variables)
 - Choose what sound to play with the message
 - Set a max frequency for messages of each type
-- Send notifications on termination
+- Send notifications on startup and termination
 
 Project requirements:
 
@@ -47,6 +47,14 @@ Growl
 -----
 
 With Growl, you get the benefit of being able to see the notifications on all systems that have support for Growl. However there are a few requirements, which may be a bit complex to setup, and it will not end up in as tight integration as the system default implementations. For playing sounds, there is a requirement of an additional external sound player.
+
+All notifications will be sent out over the gntp protocol, and you can specify the following:
+
+- What pattern to listen for in the output
+- Configure title and message (including using above mentioned regexp variables)
+- *Linux and Windows* - Choose what sound to play with the message
+- Set a max frequency for messages of each type
+- Send notifications on startup and termination
 
 Project requirements:
 
