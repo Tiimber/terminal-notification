@@ -133,7 +133,7 @@ class Configuration:
                 if not will_use_growl:
                     print 'ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead'
 
-            # Play sound (Windows / Linux)
+            # Play sound in external sound player
             if notification_sound is not None:
                 Configuration.play_sound(notification['sound'])
 
@@ -141,6 +141,9 @@ class Configuration:
             if not will_use_growl:
                 if not glob.GlobalParams.is_only_sound():
                     if glob.Platform.is_mac_10_8_plus():
+                        # If overridden to play sound externally
+                        if glob.GlobalParams.use_afplay():
+                            notification['sound'] = '{none}'
                         osx_notifier.notify_obj(notification)
                     elif glob.Platform.is_linux_with_notify_send():
                         linux_notifier.notify_obj(notification)
@@ -220,7 +223,7 @@ class Configuration:
                     if glob.GlobalParams.is_debug():
                         print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
             elif glob.Platform.is_mac():
-                if glob.GlobalParams.prefer_growl():
+                if glob.GlobalParams.prefer_growl() or glob.GlobalParams.use_afplay():
                     if glob.GlobalParams.is_debug():
                         # Check if system supports afplay
                         afplay_supported = extra_functions.CommandHelper.support_command(['afplay', '--help'])

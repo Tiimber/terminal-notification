@@ -108,8 +108,8 @@ if __name__ == "__main__":
     parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False, default=False, action='store_true')
     parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False, default=False, action='store_true')
     parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
+    parser.add_argument('--mac-afplay', help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center', required=False, default=False, action='store_true')
     parser.add_argument('--win-sounder', help='If you\'re on Windows and sounder.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
-    parser.add_argument('--win-notifu', help='If you\'re on Windows and notifu.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
     args = vars(parser.parse_args())
 
     # Set debug and mute params
@@ -125,5 +125,9 @@ if __name__ == "__main__":
     # If overriding sounder.exe position
     if 'win_sounder' in args and glob.Platform.is_windows():
         glob.GlobalParams.set_sounder(args['win_sounder'])
+
+    # If overriding to use afplay on a mac
+    if ('mac_afplay' in args and glob.Platform.is_mac()):
+        glob.GlobalParams.set_afplay(args['mac_afplay'])
 
     run(parse_configuration_file(args['config']))

@@ -241,7 +241,7 @@ If you desire to not mirror the standard console output, run with the mute optio
 python notifier.py --config resources/example_setup.txt --mute
 ```
 
-If you don't want sounds to play (Mac OS X will eg. play a default sound if none is entered):
+If you don't want sounds to play (Mac OS X will eg. play a default sound if none is entered in configuration):
 
 ```
 python notifier.py --config resources/example_setup.txt --no-sound
@@ -258,6 +258,16 @@ If you would like to force the notifications to use growl, run with this option:
 ```
 python notifier.py --config resources/example_setup.txt --growl
 ```
+
+*Mac Only*
+
+Even if you're using Notification Center for displaying notifications, you might want to use the external sound player (afplay). Do this by running with this option:
+
+```
+python notifier.py --config resources/example.txt --mac-afplay
+```
+
+Of course, this will mean that you will have to enter the relative or full path to the sound instead of using the shorthands available in the system.
 
 *Windows Only*
 
@@ -358,7 +368,7 @@ Sounds
 
 **Mac OS X**
 
-*Note!* - These sounds described here are only for Notification Center. See below for Growl variant.
+*Note!* - These sounds described here are only for Notification Center and if you haven't set the override flag for --mac-afplay. See below for this override flag and Growl variant of sound play.
 
 For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application. The list of my computer is as follows:
 
@@ -379,7 +389,7 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 
 It's possible to add your own sounds to this setup, follow [this guide] [100] to add your own.
 
-**Note!** - If you are using Growl for Mac, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
+**Note!** - If you are using Growl for Mac or have set the override flag --mac-afplay, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
 
 **Linux**
 
@@ -400,7 +410,6 @@ Future plans
 
 **Mac OS X**
 
-- Override to only use afplay instead of installing the sound to sound effects
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
 

@@ -8,7 +8,8 @@ class GlobalParams():
     growl = False
     only_sound = False
     no_sound = False
-    sounder = None
+    mac_afplay = False
+    win_sounder = None
 
     @staticmethod
     def set_debug(debug):
@@ -51,12 +52,20 @@ class GlobalParams():
         return GlobalParams.no_sound
 
     @staticmethod
+    def set_afplay(afplay):
+        GlobalParams.mac_afplay = afplay
+
+    @staticmethod
+    def use_afplay():
+        return GlobalParams.mac_afplay
+
+    @staticmethod
     def set_sounder(sounder):
-        GlobalParams.sounder = sounder
+        GlobalParams.win_sounder = sounder
 
     @staticmethod
     def get_sounder():
-        return 'sounder.exe' if GlobalParams.sounder is None else GlobalParams.sounder
+        return 'sounder.exe' if GlobalParams.win_sounder is None else GlobalParams.win_sounder
 
 class Platform():
     platform = None
