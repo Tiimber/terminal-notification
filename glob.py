@@ -6,6 +6,7 @@ class GlobalParams():
     debug = False
     mute = False
     growl = False
+    sounder = None
 
     @staticmethod
     def set_debug(debug):
@@ -31,6 +32,13 @@ class GlobalParams():
     def prefer_growl():
         return GlobalParams.growl
 
+    @staticmethod
+    def set_sounder(sounder):
+        GlobalParams.sounder = sounder
+
+    @staticmethod
+    def get_sounder():
+        return 'sounder.exe' if GlobalParams.sounder is None else (GlobalParams.sounder if GlobalParams.sounder.endswith('\\sounder.exe') else GlobalParams.sounder+('sounder.exe' if GlobalParams.sounder.endswith('/') else '\\sounder.exe'))
 
 class Platform():
     platform = None

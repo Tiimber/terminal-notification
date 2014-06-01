@@ -260,4 +260,5 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 
 Growl installation
 pip and GNTP installation
-sounder.exe
+sounder.exe - (put it in execution folder)
+override path of sounder.exe

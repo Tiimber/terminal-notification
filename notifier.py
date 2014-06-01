@@ -106,6 +106,7 @@ if __name__ == "__main__":
     parser.add_argument('--debug', help='Debug output', required=False, default=False, action='store_true')
     parser.add_argument('--mute', help='Mute normal output', required=False, default=False, action='store_true')
     parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
+    parser.add_argument('--win-sounder', help='If you\'re on Windows and sounder.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
     args = vars(parser.parse_args())
 
     # Set debug and mute params
@@ -115,4 +116,9 @@ if __name__ == "__main__":
 
     # Set platform information
     glob.Platform.set_platform()
+
+    # If overriding sounder.exe position
+    if 'win-sounder' in args and glob.Platform.is_windows():
+        glob.GlobalParams.set_sounder(args['win-sounder'])
+
     run(parse_configuration_file(args['config']))

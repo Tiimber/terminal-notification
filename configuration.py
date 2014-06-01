@@ -194,12 +194,12 @@ class Configuration:
                     print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
         elif glob.Platform.is_windows():
             # Check if system supports sounder
-            sounder_supported = extra_functions.CommandHelper.support_command(['sounder.exe'])
+            sounder_supported = extra_functions.CommandHelper.support_command([glob.GlobalParams.get_sounder()])
             if not sounder_supported:
                 if glob.GlobalParams.is_debug():
                     print '[DEBUG] Playing sounds together with the notification is not supported in your system'
             else:
-                extra_functions.CommandHelper.run_command_async(['sounder.exe', notification_sound])
+                extra_functions.CommandHelper.run_command_async([glob.GlobalParams.get_sounder(), notification_sound])
                 if glob.GlobalParams.is_debug():
                     print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
         elif glob.Platform.is_mac():
