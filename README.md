@@ -404,9 +404,9 @@ Future plans
 
 **General**
 
-- Try and mute much more output (sound playing in external players should be ignored from an terminal output point of view)
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
+- Switch out os.system to subprocess: http://stackoverflow.com/a/5597017
 
 **Mac OS X**
 

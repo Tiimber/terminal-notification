@@ -42,11 +42,15 @@ class CommandHelper:
 
     @staticmethod
     def run_command(command):
-        subprocess.call(command)
+        fh = open("NUL","w")
+        subprocess.call(command, stdout=fh, stderr=fh)
+        fh.close()
 
     @staticmethod
     def run_command_async(command):
-        subprocess.Popen(command)
+        fh = open("NUL","w")
+        subprocess.Popen(command, stdout=fh, stderr=fh)
+        fh.close()
 
     @staticmethod
     def strip_coloring(line):
