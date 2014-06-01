@@ -332,4 +332,4 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 ---
 
 - Enable 'no sound' mode
-- Enable 'only sound' mode
+- Enable 'only sound' mode - Not Mac OS X

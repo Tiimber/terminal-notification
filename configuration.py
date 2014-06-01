@@ -114,7 +114,7 @@ class Configuration:
 
             # No sound option?
             notification['sound'] = notification_sound
-            if glob.GlobalParams.no_sound:
+            if glob.GlobalParams.is_no_sound():
                 notification['sound'] = '{none}'
                 if glob.GlobalParams.is_debug():
                     print '[DEBUG] No sound will be played, as --no-sound have been set'
@@ -122,7 +122,12 @@ class Configuration:
             # Growl ONLY if requested
             will_use_growl = False
             if glob.GlobalParams.prefer_growl():
-                will_use_growl = growl_notifier.GrowlNotifier.notify_obj(notification)
+                if not glob.GlobalParams.is_only_sound():
+                    will_use_growl = growl_notifier.GrowlNotifier.notify_obj(notification)
+                else:
+                    will_use_growl = True
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] No notification will be displayed, as --only-sound have been set'
                 if not will_use_growl:
                     print 'ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead'
 
@@ -132,15 +137,19 @@ class Configuration:
 
             # If not requested growl or if failed - run default for system
             if not will_use_growl:
-                if glob.Platform.is_mac_10_8_plus():
-                    osx_notifier.notify_obj(notification)
-                elif glob.Platform.is_linux_with_notify_send():
-                    linux_notifier.notify_obj(notification)
-                elif glob.Platform.is_windows():
-                    # TODO - Windows notification through power shell, trigger balloon
-                    Configuration.output_notification_unsupported()
+                if not glob.GlobalParams.is_only_sound():
+                    if glob.Platform.is_mac_10_8_plus():
+                        osx_notifier.notify_obj(notification)
+                    elif glob.Platform.is_linux_with_notify_send():
+                        linux_notifier.notify_obj(notification)
+                    elif glob.Platform.is_windows():
+                        # TODO - Windows notification through power shell, trigger balloon
+                        Configuration.output_notification_unsupported()
+                    else:
+                        Configuration.output_notification_unsupported()
                 else:
-                    Configuration.output_notification_unsupported()
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] No notification will be displayed, as --only-sound have been set'
             notification['sound'] = original_notification_sound
 
     @staticmethod
