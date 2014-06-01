@@ -9,30 +9,30 @@ When used, notifications will be displayed like this:
 
 Mac OS X - Notification Center:
 
-![Mac OS X Notification Center](resources/screenshots/MacOSXNotificationCenter.png)
+![Mac OS X Notification Center] [101]
 
 Mac OS X - Growl:
 
-![Mac OS X Growl](resources/screenshots/MacOSXGrowl.png)
+![Mac OS X Growl] [102]
 
 Ubuntu 14.04 - notify-send:
 
-![Ubuntu notify-send](resources/screenshots/UbuntuNotifySend.png)
+![Ubuntu notify-send] [103]
 
 
 Ubuntu 14.04 - Growl:
 
-![Ubuntu Growl](resources/screenshots/UbuntuGrowl.png)
+![Ubuntu Growl] [104]
 
 
 Windows 7 - notifu:
 
-![Windows notifu](resources/screenshots/WindowsNotifu.png)
+![Windows notifu] [105]
 
 
 Windows 7 - Growl:
 
-![Windows Growl](resources/screenshots/WindowsGrowl.png)
+![Windows Growl] [106]
 
 
 Mac OS X
@@ -377,7 +377,7 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 - Submarine
 - Tink
 
-It's possible to add your own sounds to this setup, follow [this guide] (resources/sounds/mac/README.md) to add your own.
+It's possible to add your own sounds to this setup, follow [this guide] [100] to add your own.
 
 **Note!** - If you are using Growl for Mac, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
 
@@ -434,3 +434,15 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [5]:http://mattn.github.io/growl-for-linux/
 [6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
 [7]:http://www.paralint.com/projects/notifu/download.html
+
+<!--
+    These should be relative and point towards the project, but bitbucket don't support it - will move to GitHub later
+-->
+
+[100]:https://bitbucket.org/rtapper/terminal-notification/src/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/sounds/mac/README.md?at=master
+[101]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/MacOSXNotificationCenter.png?token=d5fcff323574121090ed2f853d8a7b250118da62
+[102]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/MacOSXGrowl.png?token=35d692100abfb2139cf792eab3b05a8c09fb2325
+[103]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/UbuntuNotifySend.png?token=14d9155dcf6e9fe376605afd24bf1fdbf8fa9c06
+[104]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/UbuntuGrowl.png?token=a73561eec1d941c9199503918bc90425079853f3
+[105]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/WindowsNotifu.png?token=d2df0b09c5b452dda0d37a740b2b7948f626df30
+[106]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/WindowsGrowl.png?token=a1ba8da012d8e0476859a5ef64c9cf757691805c
