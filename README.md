@@ -3,7 +3,7 @@ Terminal Notification
 
 [**Project home**] [1]
 
-*Currently supporting Mac OS X 10.8+ and most Linux variants*
+*Currently supporting Mac OS X 10.8+ and most Linux variants, or using Growl (but requires some manual install)*
 
 Mac OS X
 --------
@@ -39,10 +39,20 @@ All notifications will be sent out using notify-send, and you can specify the fo
 
 Project requirements:
 
-- Linux system with notify-send and aplay installed
+- Linux system with notify-send installed
 - Python 2.7
 - aplay (for sounds)
 
+Growl
+-----
+
+With Growl, you get the benefit of being able to see the notifications on all systems that have support for Growl. However there are a few requirements, which may be a bit complex to setup, and it will not end up in as tight integration as the system default implementations. For playing sounds, there is a requirement of an additional external sound player.
+
+Project requirements:
+
+- System with growl installed
+- pip (python package manager, used for installing GNTP)
+- GNTP installed (python layer for Growl Network Transfer Protocol)
 
 Version
 -------
@@ -86,6 +96,27 @@ If you are lacking aplay in your system, I can't really help you. What I know is
 
 ---
 
+*For Growl implementation*
+
+Download and install Growl for [Windows] [4], [Mac] [5] or [Linux] [6]
+
+Download and install GNTP for your system. This is the most complex one. If you are having troubles doing this, for Windows the suggested solution is to do the following:
+
+- Run this in a terminal (it will install pip):
+
+```
+python -c "exec('try: from urllib2 import urlopen \nexcept: from urllib.request import urlopen');f=urlopen('https://raw.github.com/pypa/pip/master/contrib/get-pip.py').read();exec(f)"
+```
+
+- Add pip to your path (environment variable). It will be put in a subfolder to Python itself. Search for pip.exe among your files to find it.
+- Run pip to install gntp
+
+```
+pip install gntp
+```
+
+---
+
 Usage
 -----
 
@@ -110,6 +141,21 @@ If you desire to not mirror the standard console output, run with the mute optio
 ```
 python notifier.py --config resources/example_setup.txt --mute
 ```
+
+If you would like to force the notifications to use growl, run with this option:
+
+```
+python notifier.py --config resources/example_setup.txt --growl
+```
+
+*Windows Only*
+
+For Windows, there seem to be some issues with sounder.exe not being recognized automatically, even if put on the environment path. To solve this issue, you may enter the full search path to this executable:
+
+```
+python notifier.py --config resources/example_setup.txt --growl --win-sounder C:\\sounder.exe
+```
+
 
 Configuration
 -------------
@@ -161,15 +207,15 @@ Some explanations for each part:
 
 - **TITLE** - The title to display in the notification
 
-- **SUBTITLE** - The subtitle to display in the notification - *MAC ONLY* - If entered in a Linux system, it will be appended to the title
+- **SUBTITLE** - The subtitle to display in the notification - *MAC ONLY* - If entered in a Linux system or when using Growl, it will be appended to the title
 
 - **MESSAGE** - The text to display in the notification
 
-- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - *MAC ONLY* - Will not work at all for Linux
+- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - *MAC ONLY* - Will not work at all for Linux or Growl
 
-- **TIME** - If entered, the notification will be requested to be removed after this amount of milliseconds - *LINUX ONLY* - Will be ignored for Mac OS X
+- **TIME** - If entered, the notification will be requested to be removed after this amount of milliseconds - *LINUX ONLY* - Will be ignored for Mac OS X and Growl
 
-- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path
+- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path. If you're using windows, this application have integrated support with [sounder.exe] [7], and the sounds have to be written with the full path.
 
 If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
 
@@ -220,9 +266,15 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 
 It's possible to add your own sounds to this setup, follow [this guide] [3] to add your own.
 
+**Note!** - If you are using Growl for Mac, there are not yet any support for playing sounds.
+
 **Linux**
 
-For the NOTIFICATION > SOUND, these sounds should be sounds that can play with aplay (all bundled with this project should work). They are entered with the relative or full path to the file.
+For the NOTIFICATION > SOUND, these sounds should be sounds that can play with aplay (all sounds bundled with this project should work). They are entered with the relative or full path to the file.
+
+**Windows**
+
+For the NOTIFICATION > SOUND, these sounds should be sounds that can play with sounder.exe (all sounds bundled with this project should work). They are entered with the relative or full path to the file.
 
 Future plans
 ------------
@@ -231,6 +283,8 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
+- Enable 'no sound' mode
+- Enable 'only sound' mode
 
 **Mac OS X**
 
@@ -255,10 +309,7 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [1]:https://bitbucket.org/rtapper/terminalnotifier
 [2]:https://github.com/alloy/terminal-notifier
 [3]:https://bitbucket.org/rtapper/terminalnotifier/src/c02e5a25960fdbc873370511c8b7d136e00f5c89/resources/sounds/mac/README.md?at=master
-
----
-
-Growl installation
-pip and GNTP installation
-sounder.exe - (put it in execution folder)
-override path of sounder.exe
+[4]:http://www.growlforwindows.com/gfw/default.aspx
+[5]:http://growl.info/downloads
+[6]:http://mattn.github.io/growl-for-linux/
+[7]:http://www.elifulkerson.com/projects/commandline-wav-player.php
