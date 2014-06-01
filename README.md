@@ -9,30 +9,30 @@ When used, notifications will be displayed like this:
 
 Mac OS X - Notification Center:
 
-![Mac OS X Notification Center](./resources/screenshots/MacOSXNotificationCenter.png)
+![Mac OS X Notification Center](resources/screenshots/MacOSXNotificationCenter.png)
 
 Mac OS X - Growl:
 
-![Mac OS X Growl](./resources/screenshots/MacOSXGrowl.png)
+![Mac OS X Growl](resources/screenshots/MacOSXGrowl.png)
 
 Ubuntu 14.04 - notify-send:
 
-![Ubuntu notify-send](./resources/screenshots/UbuntuNotifySend.png)
+![Ubuntu notify-send](resources/screenshots/UbuntuNotifySend.png)
 
 
 Ubuntu 14.04 - Growl:
 
-![Ubuntu Growl](./resources/screenshots/UbuntuGrowl.png)
+![Ubuntu Growl](resources/screenshots/UbuntuGrowl.png)
 
 
 Windows 7 - notifu:
 
-![Windows notifu](./resources/screenshots/WindowsNotifu.png)
+![Windows notifu](resources/screenshots/WindowsNotifu.png)
 
 
 Windows 7 - Growl:
 
-![Windows Growl](./resources/screenshots/WindowsGrowl.png)
+![Windows Growl](resources/screenshots/WindowsGrowl.png)
 
 
 Mac OS X
