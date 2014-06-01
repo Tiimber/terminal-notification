@@ -5,6 +5,36 @@ Terminal Notification
 
 *Currently supporting Mac OS X 10.8+, Windows and most Linux variants, or by using Growl on most systems (but requires a bit more manual install)*
 
+When used, notifications will be displayed like this:
+
+Mac OS X - Notification Center:
+
+![Mac OS X Notification Center](./resources/screenshots/MacOSXNotificationCenter.png)
+
+Mac OS X - Growl:
+
+![Mac OS X Growl](./resources/screenshots/MacOSXGrowl.png)
+
+Ubuntu 14.04 - notify-send:
+
+![Ubuntu notify-send](./resources/screenshots/UbuntuNotifySend.png)
+
+
+Ubuntu 14.04 - Growl:
+
+![Ubuntu Growl](./resources/screenshots/UbuntuGrowl.png)
+
+
+Windows 7 - notifu:
+
+![Windows notifu](./resources/screenshots/WindowsNotifu.png)
+
+
+Windows 7 - Growl:
+
+![Windows Growl](./resources/screenshots/WindowsGrowl.png)
+
+
 Mac OS X
 --------
 
@@ -364,13 +394,13 @@ Future plans
 
 **General**
 
-- Attach screenshots to this README.md
+- Try and mute much more output (sound playing in external players should be ignored from an terminal output point of view)
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Try and mute much more output (sound playing in external players should be ignored from an terminal output point of view)
 
 **Mac OS X**
 
+- Override to only use afplay instead of installing the sound to sound effects
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
 
@@ -385,6 +415,7 @@ Reservations
 Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations is:
 
 - Mac OS X 10.9.3 with Notification Center
+- Mac OS X 10.9.3 with Growl and afplay
 - Ubuntu 14.04 with notify-send and aplay
 - Ubuntu 14.04 with Growl and aplay
 - Windows 7 with notifu and sounder.exe
