@@ -3,7 +3,7 @@ import extra_functions
 import configuration
 from subprocess import Popen, PIPE, STDOUT
 import signal
-import Global
+import global_
 
 
 def parseConfigurationContents(contents):
@@ -75,12 +75,12 @@ def run(configuration):
     configuration.analyzeStartup()
     mergedCommands = ' ; '.join(configuration.commands)
     process = Popen(mergedCommands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-    if Global.GlobalParams.isDebug():
+    if global_.GlobalParams.isDebug():
         print '[DEBUG] Commands: '+mergedCommands
     accumulatedLines = []
     while True:
         nextline = process.stdout.readline().replace('\n', '')
-        if not Global.GlobalParams.isMute():
+        if not global_.GlobalParams.isMute():
             print nextline
         if nextline == '' and process.poll() is not None:
             configuration.analyzeQuit()
@@ -104,6 +104,6 @@ if __name__ == "__main__":
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
-    Global.GlobalParams.setDebug(args['debug'])
-    Global.GlobalParams.setMute(args['mute'])
+    global_.GlobalParams.setDebug(args['debug'])
+    global_.GlobalParams.setMute(args['mute'])
     run(parseConfigurationFile(args['config']))
