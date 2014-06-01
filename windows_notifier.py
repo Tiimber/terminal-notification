@@ -1,3 +1,4 @@
+import glob
 import os
 
 
@@ -28,4 +29,7 @@ def notify(title=None, message=None, time=None):
         t = '/d 3'
         params.append(t)
 
-    os.system('START /MIN /B notifu {}'.format(' '.join(params)))
+    overrideNotifu = glob.GlobalParams.get_notifu()
+    if not (overrideNotifu.startswith('"') and overrideNotifu.endswith('"')):
+        overrideNotifu = '"'+overrideNotifu+'"'
+    os.system('START /MIN /B '+overrideNotifu+' {}'.format(' '.join(params)))

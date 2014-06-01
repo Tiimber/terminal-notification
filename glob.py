@@ -9,6 +9,7 @@ class GlobalParams():
     only_sound = False
     no_sound = False
     sounder = None
+    notifu = None
 
     @staticmethod
     def set_debug(debug):
@@ -57,6 +58,14 @@ class GlobalParams():
     @staticmethod
     def get_sounder():
         return 'sounder.exe' if GlobalParams.sounder is None else GlobalParams.sounder
+
+    @staticmethod
+    def set_notifu(notifu):
+        GlobalParams.notifu = notifu
+
+    @staticmethod
+    def get_notifu():
+        return 'snotifu.exe' if GlobalParams.notifu is None else GlobalParams.notifu
 
 class Platform():
     platform = None
