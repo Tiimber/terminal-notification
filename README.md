@@ -3,7 +3,7 @@ Terminal Notification
 
 [**Project home**] [1]
 
-*Currently supporting Mac OS X 10.8+, Windows and most Linux variants, or using Growl (but requires a bit more manual install)*
+*Currently supporting Mac OS X 10.8+, Windows and most Linux variants, or by using Growl on most systems (but requires a bit more manual install)*
 
 Mac OS X
 --------
@@ -59,9 +59,9 @@ All notifications will be sent out using notifu, and you can specify the followi
 
 Project requirements:
 
-- Windows system with [notifu] [8] installed
+- Windows system with [notifu] [7] installed
 - Python 2.7
-- [sounder.exe] [7] (for sounds)
+- [sounder.exe] [6] (for sounds)
 
 Growl
 -----
@@ -126,15 +126,15 @@ If you are lacking aplay in your system, I can't really help you. What I know is
 
 *For Windows*
 
-If notifu isn't installed, download it [here] [8]. You will also need to add the path of it to your path environment variable.
+If notifu isn't installed, download it [here] [7]. You will also need to add the path of it to your path environment variable.
 
-If sounder.exe isn't installed, download it [here] [7]. You will also need to add the path of it to your path environment variable.
+If sounder.exe isn't installed, download it [here] [6]. You will also need to add the path of it to your path environment variable.
 
 ---
 
 *For Growl implementation*
 
-Download and install Growl for [Windows] [4], [Mac] [5] or [Linux] [6]
+Download and install Growl for [Windows] [3], [Mac] [4] or [Linux] [5]
 
 Download and install GNTP for your system. This is the most complex one. If you are having troubles doing this, for Windows the suggested solution is to do the following:
 
@@ -263,7 +263,7 @@ Some explanations for each part:
 
 - **TIME** - If entered, the notification will be requested to be removed after this amount of milliseconds - *LINUX ONLY* - Will be ignored for Mac OS X and Growl
 
-- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path. If you're using windows, this application have integrated support with [sounder.exe] [7], and the sounds have to be written with the full path.
+- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path. If you're using windows, this application have integrated support with [sounder.exe] [6], and the sounds have to be written with the full path.
 
 If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
 
@@ -312,7 +312,7 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 - Submarine
 - Tink
 
-It's possible to add your own sounds to this setup, follow [this guide] [3] to add your own.
+It's possible to add your own sounds to this setup, follow [this guide] (resources/sounds/mac/README.md) to add your own.
 
 **Note!** - If you are using Growl for Mac, there are not yet any support for playing sounds.
 
@@ -336,6 +336,7 @@ Future plans
 
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
+- Support playing sound through preinstalled afplay
 
 **Linux**
 
@@ -360,9 +361,8 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 
 [1]:https://bitbucket.org/rtapper/terminalnotifier
 [2]:https://github.com/alloy/terminal-notifier
-[3]:https://bitbucket.org/rtapper/terminalnotifier/src/c02e5a25960fdbc873370511c8b7d136e00f5c89/resources/sounds/mac/README.md?at=master
-[4]:http://www.growlforwindows.com/gfw/default.aspx
-[5]:http://growl.info/downloads
-[6]:http://mattn.github.io/growl-for-linux/
-[7]:http://www.elifulkerson.com/projects/commandline-wav-player.php
-[8]:http://www.paralint.com/projects/notifu/download.html
+[3]:http://www.growlforwindows.com/gfw/default.aspx
+[4]:http://growl.info/downloads
+[5]:http://mattn.github.io/growl-for-linux/
+[6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
+[7]:http://www.paralint.com/projects/notifu/download.html
