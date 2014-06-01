@@ -24,5 +24,8 @@ def notify(title=None, message=None, time=None):
     if time is not None:
         t = '/d '+int(time/1000)
         params.append(t)
+    else:
+        t = '/d 3'
+        params.append(t)
 
     os.system('START /MIN /B notifu {}'.format(' '.join(params)))
