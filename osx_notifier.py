@@ -1,5 +1,6 @@
 import os
 
+
 def notify_obj(notify_object):
     title = notify_object['title'] if 'title' in notify_object else None
     subtitle = notify_object['subtitle'] if 'subtitle' in notify_object else None

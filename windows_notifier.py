@@ -16,13 +16,13 @@ def notify_obj(notify_object):
 def notify(title=None, message=None, time=None):
     params = []
     if title is not None:
-        t = '{!r}'.format(title)
+        t = '/p "{!r}"'.format(title)
         params.append(t)
     if message is not None:
-        m = '{!r}'.format(message)
+        m = '/m "{!r}"'.format(message)
         params.append(m)
     if time is not None:
-        t = '-t {!r}'.format(time)
+        t = '/d '+int(time/1000)
         params.append(t)
 
-    os.system('notify-send {}'.format(' '.join(params)))
+    os.system('START /MIN /B notifu {}'.format(' '.join(params)))

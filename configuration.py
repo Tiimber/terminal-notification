@@ -7,6 +7,8 @@ import linux_notifier
 import osx_notifier
 
 # GNTP might not be installed
+import windows_notifier
+
 try:
     import gntp.notifier
 except ImportError:
@@ -143,8 +145,7 @@ class Configuration:
                     elif glob.Platform.is_linux_with_notify_send():
                         linux_notifier.notify_obj(notification)
                     elif glob.Platform.is_windows():
-                        # TODO - Windows notification through power shell, trigger balloon
-                        Configuration.output_notification_unsupported()
+                        windows_notifier.notify_obj(notification)
                     else:
                         Configuration.output_notification_unsupported()
                 else:
