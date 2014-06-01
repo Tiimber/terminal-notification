@@ -128,7 +128,7 @@ class Configuration:
 
             # Play sound (Windows / Linux)
             if notification_sound is not None:
-                Configuration.play_sound(notification_sound)
+                Configuration.play_sound(notification['sound'])
 
             # If not requested growl or if failed - run default for system
             if not will_use_growl:
