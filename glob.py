@@ -6,6 +6,8 @@ class GlobalParams():
     debug = False
     mute = False
     growl = False
+    only_sound = False
+    no_sound = False
     sounder = None
 
     @staticmethod
@@ -31,6 +33,22 @@ class GlobalParams():
     @staticmethod
     def prefer_growl():
         return GlobalParams.growl
+
+    @staticmethod
+    def set_only_sound(only_sound):
+        GlobalParams.only_sound = only_sound
+
+    @staticmethod
+    def is_only_sound():
+        return GlobalParams.only_sound
+
+    @staticmethod
+    def set_no_sound(no_sound):
+        GlobalParams.no_sound = no_sound
+
+    @staticmethod
+    def is_no_sound():
+        return GlobalParams.no_sound
 
     @staticmethod
     def set_sounder(sounder):

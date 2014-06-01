@@ -105,6 +105,8 @@ if __name__ == "__main__":
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
     parser.add_argument('--debug', help='Debug output', required=False, default=False, action='store_true')
     parser.add_argument('--mute', help='Mute normal output', required=False, default=False, action='store_true')
+    parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False, default=False, action='store_true')
+    parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False, default=False, action='store_true')
     parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
     parser.add_argument('--win-sounder', help='If you\'re on Windows and sounder.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
     args = vars(parser.parse_args())
@@ -113,6 +115,8 @@ if __name__ == "__main__":
     glob.GlobalParams.set_debug(args['debug'])
     glob.GlobalParams.set_mute(args['mute'])
     glob.GlobalParams.set_growl(args['growl'])
+    glob.GlobalParams.set_only_sound(args['only_sound'])
+    glob.GlobalParams.set_no_sound(False if args['only_sound'] else args['no_sound'])
 
     # Set platform information
     glob.Platform.set_platform()

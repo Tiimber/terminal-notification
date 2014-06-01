@@ -111,7 +111,13 @@ class Configuration:
                 notification[key] = value
             if glob.GlobalParams.is_debug():
                 print '[DEBUG] Pushing notification: '+str(notification)
+
+            # No sound option?
             notification['sound'] = notification_sound
+            if glob.GlobalParams.no_sound:
+                notification['sound'] = '{none}'
+                if glob.GlobalParams.is_debug():
+                    print '[DEBUG] No sound will be played, as --no-sound have been set'
 
             # Growl ONLY if requested
             will_use_growl = False
@@ -182,26 +188,27 @@ class Configuration:
 
     @staticmethod
     def play_sound(notification_sound):
-        if glob.Platform.is_linux():
-            # Check if system supports aplay
-            aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
-            if not aplay_supported:
+        if notification_sound != '{none}':
+            if glob.Platform.is_linux():
+                # Check if system supports aplay
+                aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
+                if not aplay_supported:
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                else:
+                    extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
+            elif glob.Platform.is_windows():
+                # Check if system supports sounder
+                sounder_supported = extra_functions.CommandHelper.support_command([glob.GlobalParams.get_sounder()])
+                if not sounder_supported:
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                else:
+                    extra_functions.CommandHelper.run_command_async([glob.GlobalParams.get_sounder(), notification_sound])
+                    if glob.GlobalParams.is_debug():
+                        print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
+            elif glob.Platform.is_mac():
                 if glob.GlobalParams.is_debug():
-                    print '[DEBUG] Playing sounds together with the notification is not supported in your system'
-            else:
-                extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
-                if glob.GlobalParams.is_debug():
-                    print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
-        elif glob.Platform.is_windows():
-            # Check if system supports sounder
-            sounder_supported = extra_functions.CommandHelper.support_command([glob.GlobalParams.get_sounder()])
-            if not sounder_supported:
-                if glob.GlobalParams.is_debug():
-                    print '[DEBUG] Playing sounds together with the notification is not supported in your system'
-            else:
-                extra_functions.CommandHelper.run_command_async([glob.GlobalParams.get_sounder(), notification_sound])
-                if glob.GlobalParams.is_debug():
-                    print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
-        elif glob.Platform.is_mac():
-            if glob.GlobalParams.is_debug():
-                print '[DEBUG] Mac will play sound through the standard Sound Effects'
+                    print '[DEBUG] Mac will play sound through the standard Sound Effects'

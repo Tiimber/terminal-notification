@@ -291,8 +291,6 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Enable 'no sound' mode
-- Enable 'only sound' mode
 
 **Mac OS X**
 
@@ -308,6 +306,15 @@ Future plans
 
 - Implement Windows (native) notifications
 
+Reservations
+------------
+
+Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations is:
+
+- Mac OS X 10.9.3 with Notification Centre
+- Ubuntu 14.04 LTS with notify-send and aplay
+- Windows 7 with Growl, GNTP and sounder.exe
+
 License
 -------
 
@@ -321,3 +328,8 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [5]:http://growl.info/downloads
 [6]:http://mattn.github.io/growl-for-linux/
 [7]:http://www.elifulkerson.com/projects/commandline-wav-player.php
+
+---
+
+- Enable 'no sound' mode
+- Enable 'only sound' mode
