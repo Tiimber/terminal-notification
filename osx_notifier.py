@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 
 def notify_obj(notify_object):
@@ -32,4 +32,4 @@ def notify(title=None, subtitle=None, message=None, sound=None, group=None, remo
         r = '-remove {!r}'.format(remove)
         params.append(r)
 
-    os.system('terminal-notifier {}'.format(' '.join(params)))
+    subprocess.Popen('terminal-notifier {}'.format(' '.join(params)), shell=True).wait()

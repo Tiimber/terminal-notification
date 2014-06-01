@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 
 def notify_obj(notify_object):
@@ -25,4 +25,4 @@ def notify(title=None, message=None, time=None):
         t = '-t {!r}'.format(time)
         params.append(t)
 
-    os.system('notify-send {}'.format(' '.join(params)))
+    subprocess.Popen('notify-send {}'.format(' '.join(params)), shell=True).wait()

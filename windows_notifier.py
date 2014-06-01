@@ -1,5 +1,4 @@
-import glob
-import os
+import subprocess
 
 
 def notify_obj(notify_object):
@@ -32,4 +31,4 @@ def notify(title=None, message=None, time=None):
     # Never play sound in notifu
     params.append('/q')
 
-    os.system('START /MIN /B notifu {}'.format(' '.join(params)))
+    subprocess.Popen('START /MIN /B notifu {}'.format(' '.join(params)), shell=True).wait()
