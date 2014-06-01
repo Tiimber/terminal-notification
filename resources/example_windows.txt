@@ -1,7 +1,7 @@
 [COMMANDS]
     chdir
     cd /Users/%username%
-    echo "Name:`whoami`:"
+    echo "Name:%username%:"
     echo "Hello world"
     echo %date%
     timeout 5
