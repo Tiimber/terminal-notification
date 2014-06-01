@@ -118,7 +118,7 @@ if __name__ == "__main__":
     glob.Platform.set_platform()
 
     # If overriding sounder.exe position
-    if 'win-sounder' in args and glob.Platform.is_windows():
-        glob.GlobalParams.set_sounder(args['win-sounder'])
+    if 'win_sounder' in args and glob.Platform.is_windows():
+        glob.GlobalParams.set_sounder(args['win_sounder'])
 
     run(parse_configuration_file(args['config']))
