@@ -25,4 +25,6 @@ def notify(title=None, message=None, time=None):
         t = '-t {!r}'.format(time)
         params.append(t)
 
-    subprocess.Popen('notify-send {}'.format(' '.join(params)), shell=True).wait()
+    fh = open("NUL","w")
+    subprocess.Popen('notify-send {}'.format(' '.join(params)), shell=True, stderr=fh).wait()
+    fh.close()

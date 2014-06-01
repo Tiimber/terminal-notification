@@ -31,4 +31,7 @@ def notify(title=None, message=None, time=None):
     # Never play sound in notifu
     params.append('/q')
 
-    subprocess.Popen('START /MIN /B notifu {}'.format(' '.join(params)), shell=True).wait()
+    # Mute output, since this normally only tells if there was an old notification being removed
+    fh = open("NUL","w")
+    subprocess.Popen('START /MIN /B notifu {}'.format(' '.join(params)), shell=True, stderr=fh).wait()
+    fh.close()

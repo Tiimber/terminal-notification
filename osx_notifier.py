@@ -32,4 +32,7 @@ def notify(title=None, subtitle=None, message=None, sound=None, group=None, remo
         r = '-remove {!r}'.format(remove)
         params.append(r)
 
-    subprocess.Popen('terminal-notifier {}'.format(' '.join(params)), shell=True).wait()
+    # Mute output, since this normally only tells if there was an old notification being removed
+    fh = open("NUL","w")
+    subprocess.Popen('terminal-notifier {}'.format(' '.join(params)), shell=True, stderr=fh).wait()
+    fh.close()
