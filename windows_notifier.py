@@ -23,7 +23,7 @@ def notify(title=None, message=None, time=None):
         m = '/m "{!r}"'.format(message)
         params.append(m)
     if time is not None:
-        time_seconds = time / 1000
+        time_seconds = int(int(time) / 1000)
         t = '/d '+str(time_seconds)
         params.append(t)
     else:
