@@ -231,8 +231,6 @@ Future plans
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 - Fix support for growl (override parameter for choosing it over systems default)
-- Remove unused platform info in configuration
-- Move platform info to own Helper class
 
 **Mac OS X**
 

@@ -4,21 +4,12 @@ import extra_functions
 import glob
 import linux_notifier
 import osx_notifier
-import sys, os, platform
 
 
 class Configuration:
     def __init__(self):
         self.commands = []
         self.configs = []
-        os_uname = None
-        try:
-            os_uname = os.uname()
-        except AttributeError:
-            os_uname = None
-        self.platform = {'osname': os.name, 'osuname': os_uname, 'sysplatform': sys.platform, 'platformplatform': platform.platform(), 'platformsystem': platform.system(), 'platformrelease': platform.release(), 'platformversion': platform.version(), 'platformmacver': platform.mac_ver()}
-        if glob.GlobalParams.is_debug():
-            print '[DEBUG] platform information: '+str(self.platform)
 
     def add_config(self, config):
         self.configs.append(config)
@@ -111,9 +102,9 @@ class Configuration:
             if glob.GlobalParams.is_debug():
                 print '[DEBUG] Pushing notification: '+str(notification)
             notification['sound'] = notification_sound
-            if self.is_mac_10_8_plus():
+            if glob.Platform.is_mac_10_8_plus():
                 osx_notifier.notify_obj(notification)
-            elif self.is_linux_with_notify_send():
+            elif glob.Platform.is_linux_with_notify_send():
                 if notification_sound is not None:
                     # Check if system supports aplay
                     aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
@@ -124,55 +115,12 @@ class Configuration:
                             extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
                             print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
                 linux_notifier.notify_obj(notification)
-            elif self.is_windows():
+            elif glob.Platform.is_windows():
                 # TODO - Windows GNTP or notification through power shell?!
                 Configuration.output_notification_unsupported()
             else:
                 Configuration.output_notification_unsupported()
             notification['sound'] = original_notification_sound
-
-    def is_mac_10_8_plus(self):
-        is_mac = self.is_mac()
-        if is_mac:
-            mac_version = self.platform['platformmacver'][0]
-            mac_version_split = mac_version.split('.')
-            is_mac_version_ok = (len(mac_version_split) >= 2 and int(mac_version_split[0]) == 10 and int(mac_version_split[1]) >= 8) or (len(mac_version_split) >= 1 and int(mac_version_split[0]) > 10)
-            if glob.GlobalParams.is_debug():
-                print '[DEBUG] Mac version "'+mac_version+'" is 10.8 or later > '+str(is_mac_version_ok)
-            if is_mac_version_ok:
-                return True
-        return False
-
-    def is_mac(self):
-        platform_system = self.platform['platformsystem']
-        platform_mac_ver = self.platform['platformmacver'][0]
-        is_system_mac = platform_system.lower() == 'darwin' and len(platform_mac_ver) > 0
-        if glob.GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(is_system_mac)
-        return is_system_mac
-
-    def is_linux_with_notify_send(self):
-        is_linux = self.is_linux()
-        if is_linux:
-            # Check if the command is actually there
-            notify_send_available = extra_functions.CommandHelper.support_command(['notify-send', '--version'])
-            if notify_send_available:
-                return True
-        return False
-
-    def is_linux(self):
-        platform_system = self.platform['platformsystem']
-        is_system_linux = platform_system.lower() == 'linux'
-        if glob.GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(is_system_linux)
-        return is_system_linux
-
-    def is_windows(self):
-        platform_system = self.platform['platformsystem']
-        is_system_windows = platform_system.lower() == 'windows'
-        if glob.GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows)
-        return is_system_windows
 
     @staticmethod
     def output_notification_unsupported():

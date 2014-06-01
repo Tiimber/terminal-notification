@@ -106,6 +106,11 @@ if __name__ == "__main__":
     parser.add_argument('--debug', help='Debug output', required=False, type=bool, default=False)
     parser.add_argument('--mute', help='Mute normal output', required=False, type=bool, default=False)
     args = vars(parser.parse_args())
+
+    # Set debug and mute params
     glob.GlobalParams.set_debug(args['debug'])
     glob.GlobalParams.set_mute(args['mute'])
+
+    # Set platform information
+    glob.Platform.set_platform()
     run(parse_configuration_file(args['config']))
