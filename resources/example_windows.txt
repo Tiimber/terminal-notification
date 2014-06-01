@@ -11,5 +11,5 @@
     [PATTERN](Hello world)
     [HISTORYPATTERN]Name:(.*?):
     [GRACETIME]1000
-    [NOTIFICATION][TITLE]$H1[SUBTITLE]$1[MESSAGE]This triggers when Hello world is outputted[SOUND]resources/sounds/swirl.wav
+    [NOTIFICATION][TITLE]$H1[SUBTITLE]$1[MESSAGE]This triggers when Hello world is outputted[SOUND]resources/sounds/swirl.wav[TIME]4000
 [/CONFIGURATION:HELLOWORLD]

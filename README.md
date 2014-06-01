@@ -3,7 +3,7 @@ Terminal Notification
 
 [**Project home**] [1]
 
-*Currently supporting Mac OS X 10.8+ and most Linux variants, or using Growl (but requires a bit more manual install)*
+*Currently supporting Mac OS X 10.8+, Windows and most Linux variants, or using Growl (but requires a bit more manual install)*
 
 Mac OS X
 --------
@@ -43,6 +43,26 @@ Project requirements:
 - Python 2.7
 - aplay (for sounds)
 
+Windows
+-------
+
+This project also supports Windows, if you have installed notifu on it. For playing sounds, supported application is sounder.exe.
+
+All notifications will be sent out using notifu, and you can specify the following:
+
+- What pattern to listen for in the output
+- Configure title and message (including using above mentioned regexp variables)
+- Choose what sound to play with the message
+- Set a max frequency for messages of each type
+- Send notifications on startup and termination
+- Choose how long the notification can be visible
+
+Project requirements:
+
+- Windows system with [notifu] [8] installed
+- Python 2.7
+- [sounder.exe] [7] (for sounds)
+
 Growl
 -----
 
@@ -65,7 +85,7 @@ Project requirements:
 Version
 -------
 
-1.2A
+1.2
 
 Installation
 ------------
@@ -101,6 +121,14 @@ sudo apt-get install notify-osd
 ```
 
 If you are lacking aplay in your system, I can't really help you. What I know is that it's bundled with ALSA sound card drivers. So google it, and if you figure it out, send instructions to me and I will add them. I haven't used a flavour of Linux that don't bundle it yet.
+
+---
+
+*For Windows*
+
+If notifu isn't installed, download it [here] [8]. You will also need to add the path of it to your path environment variable.
+
+If sounder.exe isn't installed, download it [here] [7]. You will also need to add the path of it to your path environment variable.
 
 ---
 
@@ -248,7 +276,7 @@ All of the NOTIFICATION fields can use values from the capturing groups in both 
 
 ---
 
-There is also two more special CONFIGURATION:
+There is also two more special CONFIGURATIONs:
 
 ```
 [CONFIGURATION:{STARTUP}]
@@ -314,10 +342,6 @@ Future plans
 - Try to see if queueing issues for notifications can be fixed
 - Try to see if time of showing notifications can be fixed
 
-**Windows**
-
-- Implement Windows (native) notifications
-
 Reservations
 ------------
 
@@ -325,6 +349,7 @@ Please note that I've only tested this on a limited set of systems and combinati
 
 - Mac OS X 10.9.3 with Notification Center
 - Ubuntu 14.04 LTS with notify-send and aplay
+- Windows 7 with notifu and sounder.exe
 - Windows 7 with Growl, GNTP and sounder.exe
 
 License
@@ -340,8 +365,4 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [5]:http://growl.info/downloads
 [6]:http://mattn.github.io/growl-for-linux/
 [7]:http://www.elifulkerson.com/projects/commandline-wav-player.php
-
----
-
-notifu
-no-sound in notifu
+[8]:http://www.paralint.com/projects/notifu/download.html
