@@ -126,7 +126,4 @@ if __name__ == "__main__":
     if 'win_sounder' in args and glob.Platform.is_windows():
         glob.GlobalParams.set_sounder(args['win_sounder'])
 
-    if 'win_notifu' in args and glob.Platform.is_windows():
-        glob.GlobalParams.set_notifu(args['win_notifu'])
-
     run(parse_configuration_file(args['config']))

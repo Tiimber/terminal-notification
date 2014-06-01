@@ -344,5 +344,4 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 ---
 
 notifu
-override-param for notifu location
 no-sound in notifu
