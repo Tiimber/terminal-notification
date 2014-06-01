@@ -28,5 +28,7 @@ def notify(title=None, message=None, time=None):
     else:
         t = '/d 3'
         params.append(t)
+    if glob.GlobalParams.no_sound:
+        params.append('/q')
 
     os.system('START /MIN /B notifu {}'.format(' '.join(params)))
