@@ -435,9 +435,7 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
 [7]:http://www.paralint.com/projects/notifu/download.html
 
-<!---
-    These should be relative and point towards the project, but bitbucket don't support it - will move to GitHub later
--->
+[//]: # (These should be relative and point towards the project, but bitbucket don't support it - will move to GitHub later)
 
 [100]:https://bitbucket.org/rtapper/terminal-notification/src/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/sounds/mac/README.md?at=master
 [101]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/MacOSXNotificationCenter.png?token=d5fcff323574121090ed2f853d8a7b250118da62
