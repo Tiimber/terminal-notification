@@ -38,7 +38,7 @@ class GlobalParams():
 
     @staticmethod
     def get_sounder():
-        return 'sounder.exe' if GlobalParams.sounder is None else (GlobalParams.sounder if GlobalParams.sounder.endswith('\\sounder.exe') else GlobalParams.sounder+('sounder.exe' if GlobalParams.sounder.endswith('/') else '\\sounder.exe'))
+        return 'sounder.exe' if GlobalParams.sounder is None else GlobalParams.sounder
 
 class Platform():
     platform = None
