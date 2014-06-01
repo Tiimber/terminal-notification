@@ -1,7 +1,6 @@
-import subprocess
 import random
 import re
-import time
+import extra_functions
 import glob
 import linux_notifier
 import osx_notifier
@@ -49,7 +48,7 @@ class Configuration:
                 self.send_notification(notification, groups, history_groups, 0)
 
     def analyze(self, line, accumulated=None):
-        line = self.strip_coloring(line)
+        line = extra_functions.CommandHelper.strip_coloring(line)
         if glob.GlobalParams.is_debug():
             print '[DEBUG] Check if line is triggering a notification: "'+line+'"'
         for config in self.configs:
@@ -61,16 +60,16 @@ class Configuration:
                     history_groups = []
                     if groups is not None and len(groups) > 0:
                         if history_pattern is not None and accumulated is not None:
-                            accumulated_one_line = self.strip_coloring('[NL]'.join(accumulated))
+                            accumulated_one_line = extra_functions.CommandHelper.strip_coloring('[NL]'.join(accumulated))
                             history_groups = re.findall(history_pattern, accumulated_one_line)
                         if glob.GlobalParams.is_debug():
                             print '[DEBUG] Pattern is matching: "'+pattern+'"'
-                        if 'lastTrigger' not in config or self.has_gracetime_passed(config['lastTrigger'], config['graceTime']):
+                        if 'lastTrigger' not in config or extra_functions.TimeHelper.has_time_passed(config['lastTrigger'], config['graceTime']):
                             run_count = 0 if 'runCount' not in config else config['runCount']
                             config['runCount'] = run_count+1
                             notification = config['notification'] if 'notification' in config else None
                             self.send_notification(notification, [groups] if isinstance(groups, basestring) else groups[0], [history_groups] if isinstance(history_groups, basestring) else (history_groups[0] if len(history_groups) > 0 else []), run_count)
-                            config['lastTrigger'] = int(time.time() * 1000)
+                            config['lastTrigger'] = extra_functions.TimeHelper.get_time()
                             return True
                         else:
                             if glob.GlobalParams.is_debug():
@@ -91,7 +90,7 @@ class Configuration:
                 value = notification[key]
                 if key == 'sound':
                     original_notification_sound = value
-                    notification_sound = self.get_notification_sound(value, runCount)
+                    notification_sound = Configuration.get_notification_sound(value, runCount)
                 matches = re.findall('\$([0-9]+)', value)
                 if matches is not None:
                     for match in matches:
@@ -117,50 +116,20 @@ class Configuration:
             elif self.is_linux_with_notify_send():
                 if notification_sound is not None:
                     # Check if system supports aplay
-                    aplay_supported = self.support_command(['aplay', '--version'])
+                    aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
                     if glob.GlobalParams.is_debug():
                         if not aplay_supported:
                             print '[DEBUG] Playing sounds together with the notification is not supported in your system'
                         else:
-                            self.run_command_async(['aplay', notification_sound])
+                            extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
                             print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
                 linux_notifier.notify_obj(notification)
             elif self.is_windows():
                 # TODO - Windows GNTP or notification through power shell?!
-                self.output_notification_unsupported()
+                Configuration.output_notification_unsupported()
             else:
-                self.output_notification_unsupported()
+                Configuration.output_notification_unsupported()
             notification['sound'] = original_notification_sound
-
-
-    def strip_coloring(self, line):
-        matches = re.findall('\[[0-9]+\w', line)
-        if matches is not None and isinstance(matches, basestring):
-            matches = [matches]
-        if matches is not None and len(matches) > 0:
-            for match in matches:
-                line = line.replace(match, '')
-        return line
-
-    def has_gracetime_passed(self, last_trigger, gracetime):
-        current_time = int(time.time() * 1000)
-        return current_time - gracetime >= last_trigger
-
-    def get_notification_sound(self, sound, run_count):
-        if sound is not None:
-            if sound.startswith('{cycle}'):
-                sound_list = sound[len('{cycle}'):].split(',')
-                if run_count >= len(sound_list):
-                    run_count = run_count % len(sound_list)
-                sound = sound_list[run_count]
-            elif sound.startswith('{random}'):
-                sound_list = sound[len('{random}'):].split(',')
-                sound = sound_list[random.randint(0, len(sound_list)-1)]
-        return sound
-
-    def output_notification_unsupported(self):
-        print 'Your operating system is unsupported for outputting notifications at the moment'
-        exit(0)
 
     def is_mac_10_8_plus(self):
         is_mac = self.is_mac()
@@ -186,7 +155,7 @@ class Configuration:
         is_linux = self.is_linux()
         if is_linux:
             # Check if the command is actually there
-            notify_send_available = self.support_command(['notify-send', '--version'])
+            notify_send_available = extra_functions.CommandHelper.support_command(['notify-send', '--version'])
             if notify_send_available:
                 return True
         return False
@@ -205,21 +174,20 @@ class Configuration:
             print '[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows)
         return is_system_windows
 
-    def support_command(self, command):
-        supported = True
-        commandName = command if isinstance(command, basestring) else command[0]
-        try:
-            self.run_command(command)
-            if glob.GlobalParams.is_debug():
-                print '[DEBUG] Checking if '+commandName+' is available on system > True'
-        except OSError:
-            supported = False
-            if glob.GlobalParams.is_debug():
-                print '[DEBUG] Checking if '+commandName+' is available on system > False'
-        return supported
+    @staticmethod
+    def output_notification_unsupported():
+        print 'Your operating system is unsupported for outputting notifications at the moment'
+        exit(0)
 
-    def run_command(self, command):
-        subprocess.call(command)
-
-    def run_command_async(self, command):
-        subprocess.Popen(command)
+    @staticmethod
+    def get_notification_sound(sound, run_count):
+        if sound is not None:
+            if sound.startswith('{cycle}'):
+                sound_list = sound[len('{cycle}'):].split(',')
+                if run_count >= len(sound_list):
+                    run_count = run_count % len(sound_list)
+                sound = sound_list[run_count]
+            elif sound.startswith('{random}'):
+                sound_list = sound[len('{random}'):].split(',')
+                sound = sound_list[random.randint(0, len(sound_list)-1)]
+        return sound

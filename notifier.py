@@ -64,8 +64,8 @@ def parse_configuration_contents(contents):
 
 
 def parse_configuration_file(configuration_file):
-    if extra_functions.ExtraFileMethods.does_file_exist(configuration_file):
-        contents = extra_functions.ExtraFileMethods.get_file_contents(configuration_file)
+    if extra_functions.FileHelper.does_file_exist(configuration_file):
+        contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
         return parsed_configuration
     else:

@@ -230,9 +230,9 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Extract methods (eg. configuration.py has a lot of methods not really related to configurations)
 - Fix support for growl (override parameter for choosing it over systems default)
-- Follow Python naming standards
+- Remove unused platform info in configuration
+- Move platform info to own Helper class
 
 **Mac OS X**
 
