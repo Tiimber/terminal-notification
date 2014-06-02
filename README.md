@@ -401,7 +401,7 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 - Submarine
 - Tink
 
-It's possible to add your own sounds to this setup, follow [this guide] [100] to add your own.
+It's possible to add your own sounds to this setup, follow [this guide] (resources/sounds/mac/README.md) to add your own.
 
 **Note!** - If you are using Growl for Mac or have set the override flag --mac-afplay, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
 
