@@ -439,7 +439,7 @@ License
 Do whatever you want with the sources, fork it out, put it on a golden chip, totally break it... or develop cool features and give them to me.
 
 
-[1]:https://bitbucket.org/rtapper/terminalnotifier
+[1]:https://bitbucket.org/rtapper/terminal-notification
 [2]:https://github.com/alloy/terminal-notifier
 [3]:http://www.growlforwindows.com/gfw/default.aspx
 [4]:http://growl.info/downloads
