@@ -281,7 +281,7 @@ For Windows, there seem to be some issues with sounder.exe not being recognized 
 python notifier.py --config resources/example_setup.txt --growl --win-sounder C:\\sounder.exe
 ```
 
-*BONUS*
+*BONUS - But not for Windows (atm)*
 
 If you feel like controlling the color of the output during runtime of this application, you can specify color as such:
 

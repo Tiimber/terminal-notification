@@ -127,8 +127,6 @@ if __name__ == "__main__":
     glob.GlobalParams.set_growl(args['growl'])
     glob.GlobalParams.set_only_sound(args['only_sound'])
     glob.GlobalParams.set_no_sound(False if args['only_sound'] else args['no_sound'])
-    if 'color' in args:
-        glob.GlobalParams.set_color(args['color'])
 
     # Set platform information
     glob.Platform.set_platform()
@@ -140,5 +138,8 @@ if __name__ == "__main__":
     # If overriding to use afplay on a mac
     if ('mac_afplay' in args and glob.Platform.is_mac()):
         glob.GlobalParams.set_afplay(args['mac_afplay'])
+
+    if 'color' in args and glob.Platform.is_windows():
+        glob.GlobalParams.set_color(args['color'])
 
     run(parse_configuration_file(args['config']))
