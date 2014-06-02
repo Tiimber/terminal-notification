@@ -139,7 +139,7 @@ if __name__ == "__main__":
     if ('mac_afplay' in args and glob.Platform.is_mac()):
         glob.GlobalParams.set_afplay(args['mac_afplay'])
 
-    if 'color' in args and glob.Platform.is_windows():
+    if 'color' in args and not glob.Platform.is_windows():
         glob.GlobalParams.set_color(args['color'])
 
     run(parse_configuration_file(args['config']))
