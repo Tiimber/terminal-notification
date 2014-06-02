@@ -64,11 +64,19 @@ def parse_configuration_contents(contents):
 
 
 def parse_configuration_file(configuration_file):
+    if glob.GlobalParams.is_debug():
+        print '[DEBUG] Checking if configuration file exists...'
     if extra_functions.FileHelper.does_file_exist(configuration_file):
+        if glob.GlobalParams.is_debug():
+            print '[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...'
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
+        if len(parsed_configuration.commands) == 0:
+            print 'ERROR Configuration file don\'t have any commands to run...'
+            exit(0)
         return parsed_configuration
     else:
+        print 'ERROR: The specified file don\'t exist or couldn\'t be opened'
         exit(0)
 
 
