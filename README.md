@@ -418,6 +418,7 @@ Future plans
 
 **General**
 
+- Move repository from Bitbucket to GitHub and change all links (that can) in this README.md to relative ones
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 
