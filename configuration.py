@@ -28,12 +28,12 @@ class Configuration:
 
     def analyze_quit(self):
         if glob.GlobalParams.is_debug():
-            print '[DEBUG] Application is exiting, checking if there is a {QUIT} configuration...'
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Application is exiting, checking if there is a {QUIT} configuration...')
         self.analyze_special('QUIT')
 
     def analyze_startup(self):
         if glob.GlobalParams.is_debug():
-            print '[DEBUG] Application is starting up, checking if there is a {STARTUP} configuration...'
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Application is starting up, checking if there is a {STARTUP} configuration...')
         # Register growl if it's requested
         if glob.GlobalParams.prefer_growl():
             Configuration.init_growl()
@@ -44,7 +44,7 @@ class Configuration:
         for config in self.configs:
             if config['name'] == action_label:
                 if glob.GlobalParams.is_debug():
-                    print '[DEBUG] '+action_label+' configuration found, will display notification if exists...'
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] '+action_label+' configuration found, will display notification if exists...')
                 groups = []
                 history_groups = []
                 notification = config['notification'] if 'notification' in config else None
@@ -53,7 +53,7 @@ class Configuration:
     def analyze(self, line, accumulated=None):
         line = extra_functions.CommandHelper.strip_coloring(line)
         if glob.GlobalParams.is_debug():
-            print '[DEBUG] Check if line is triggering a notification: "'+line+'"'
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Check if line is triggering a notification: "'+line+'"')
         for config in self.configs:
             if config['name'] != '{QUIT}' and config['name'] != '{STARTUP}':
                 pattern = config['pattern'] if 'pattern' in config else None
@@ -66,7 +66,7 @@ class Configuration:
                             accumulated_one_line = extra_functions.CommandHelper.strip_coloring('[NL]'.join(accumulated))
                             history_groups = re.findall(history_pattern, accumulated_one_line)
                         if glob.GlobalParams.is_debug():
-                            print '[DEBUG] Pattern is matching: "'+pattern+'"'
+                            print extra_functions.ColorOutput.get_colored('[DEBUG] Pattern is matching: "'+pattern+'"')
                         if 'lastTrigger' not in config or extra_functions.TimeHelper.has_time_passed(config['lastTrigger'], config['graceTime']):
                             run_count = 0 if 'runCount' not in config else config['runCount']
                             config['runCount'] = run_count+1
@@ -76,7 +76,7 @@ class Configuration:
                             return True
                         else:
                             if glob.GlobalParams.is_debug():
-                                print '[DEBUG] Gracetime haven\'t passed yet - will not triggering notification'
+                                print extra_functions.ColorOutput.get_colored('[DEBUG] Gracetime haven\'t passed yet - will not triggering notification')
         return False
 
     def send_notification(self, notification, groups, history_groups, run_count):
@@ -86,10 +86,10 @@ class Configuration:
             notification_sound = None
             original_notification_sound = None
             if glob.GlobalParams.is_debug():
-                print '[DEBUG] Notification found: '
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Notification found: ')
             for key in notification:
                 if glob.GlobalParams.is_debug():
-                    print '[DEBUG] key='+key
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] key='+key)
                 value = notification[key]
                 if key == 'sound':
                     original_notification_sound = value
@@ -109,17 +109,17 @@ class Configuration:
                             replace_value = history_groups[number-1]
                             value = value.replace('$H'+str(number), replace_value)
                 if glob.GlobalParams.is_debug():
-                    print '[DEBUG] value='+value
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] value='+value)
                 notification[key] = value
             if glob.GlobalParams.is_debug():
-                print '[DEBUG] Pushing notification: '+str(notification)
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Pushing notification: '+str(notification))
 
             # No sound option?
             notification['sound'] = notification_sound
             if glob.GlobalParams.is_no_sound():
                 notification['sound'] = '{none}'
                 if glob.GlobalParams.is_debug():
-                    print '[DEBUG] No sound will be played, as --no-sound have been set'
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] No sound will be played, as --no-sound have been set')
 
             # Growl ONLY if requested
             will_use_growl = False
@@ -129,9 +129,9 @@ class Configuration:
                 else:
                     will_use_growl = True
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] No notification will be displayed, as --only-sound have been set'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] No notification will be displayed, as --only-sound have been set')
                 if not will_use_growl:
-                    print 'ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead'
+                    print extra_functions.ColorOutput.get_colored('ERROR: You requested to use Growl for notification, but Growl failed to give notification. Will try to use standard service instead')
 
             # Play sound in external sound player
             if notification_sound is not None:
@@ -153,12 +153,12 @@ class Configuration:
                         Configuration.output_notification_unsupported()
                 else:
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] No notification will be displayed, as --only-sound have been set'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] No notification will be displayed, as --only-sound have been set')
             notification['sound'] = original_notification_sound
 
     @staticmethod
     def output_notification_unsupported():
-        print 'Your operating system is unsupported for outputting notifications at the moment'
+        print extra_functions.ColorOutput.get_colored('Your operating system is unsupported for outputting notifications at the moment')
         exit(0)
 
     @staticmethod
@@ -188,15 +188,15 @@ class Configuration:
         will_use_growl = Configuration.module_exists('gntp')
         if will_use_growl:
             if glob.GlobalParams.is_debug():
-                print '[DEBUG] User have requested to use Growl for notifications, will try and register application'
+                print extra_functions.ColorOutput.get_colored('[DEBUG] User have requested to use Growl for notifications, will try and register application')
             register_success = growl_notifier.GrowlNotifier.register()
             if not register_success:
-                print 'ERROR: You requested to use Growl for notification, but Growl failed to instantiate. Will try to use standard service instead'
+                print extra_functions.ColorOutput.get_colored('ERROR: You requested to use Growl for notification, but Growl failed to instantiate. Will try to use standard service instead')
                 glob.GlobalParams.set_growl(False)
             elif glob.GlobalParams.is_debug():
-                print '[DEBUG] User have requested to use Growl for notifications, will try and register application'
+                print extra_functions.ColorOutput.get_colored('[DEBUG] User have requested to use Growl for notifications, will try and register application')
         else:
-            print 'ERROR: Growl isn\'t available on your system. Will try to use standard service instead'
+            print extra_functions.ColorOutput.get_colored('ERROR: Growl isn\'t available on your system. Will try to use standard service instead')
             glob.GlobalParams.set_growl(False)
 
     @staticmethod
@@ -207,21 +207,21 @@ class Configuration:
                 aplay_supported = extra_functions.CommandHelper.support_command(['aplay', '--version'])
                 if not aplay_supported:
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Playing sounds together with the notification is not supported in your system')
                 else:
                     extra_functions.CommandHelper.run_command_async(['aplay', notification_sound])
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] Will try and play sound "'+notification_sound+'" through aplay'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Will try and play sound "'+notification_sound+'" through aplay')
             elif glob.Platform.is_windows():
                 # Check if system supports sounder
                 sounder_supported = extra_functions.CommandHelper.support_command([glob.GlobalParams.get_sounder()])
                 if not sounder_supported:
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Playing sounds together with the notification is not supported in your system')
                 else:
                     extra_functions.CommandHelper.run_command_async([glob.GlobalParams.get_sounder(), notification_sound])
                     if glob.GlobalParams.is_debug():
-                        print '[DEBUG] Will try and play sound "'+notification_sound+'" through sounder'
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Will try and play sound "'+notification_sound+'" through sounder')
             elif glob.Platform.is_mac():
                 if glob.GlobalParams.prefer_growl() or glob.GlobalParams.use_afplay():
                     if glob.GlobalParams.is_debug():
@@ -229,10 +229,10 @@ class Configuration:
                         afplay_supported = extra_functions.CommandHelper.support_command(['afplay', '--help'])
                         if not afplay_supported:
                             if glob.GlobalParams.is_debug():
-                                print '[DEBUG] Playing sounds together with the notification is not supported in your system'
+                                print extra_functions.ColorOutput.get_colored('[DEBUG] Playing sounds together with the notification is not supported in your system')
                         else:
                             extra_functions.CommandHelper.run_command_async(['afplay', notification_sound])
                             if glob.GlobalParams.is_debug():
-                                print '[DEBUG] Will try and play sound "'+notification_sound+'" through afplay'
+                                print extra_functions.ColorOutput.get_colored('[DEBUG] Will try and play sound "'+notification_sound+'" through afplay')
                 elif glob.GlobalParams.is_debug():
-                    print '[DEBUG] Mac will play sound through the standard Sound Effects'
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] Mac will play sound through the standard Sound Effects')

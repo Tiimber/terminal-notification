@@ -281,6 +281,16 @@ For Windows, there seem to be some issues with sounder.exe not being recognized 
 python notifier.py --config resources/example_setup.txt --growl --win-sounder C:\\sounder.exe
 ```
 
+*BONUS*
+
+If you feel like controlling the color of the output during runtime of this application, you can specify color as such:
+
+```
+python notifier.py --config resources/example_setup.txt --color green
+```
+
+Accepted values for color is **black**, **gray**, **white**, **red**, **green**, **yellow**, **blue**, **magenta** and **cyan**.
+
 
 Configuration
 -------------
@@ -408,7 +418,6 @@ Future plans
 
 **General**
 
-- Rainbow colored output
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 

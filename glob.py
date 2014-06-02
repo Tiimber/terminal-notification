@@ -10,6 +10,7 @@ class GlobalParams():
     no_sound = False
     mac_afplay = False
     win_sounder = None
+    color = None
 
     @staticmethod
     def set_debug(debug):
@@ -67,6 +68,14 @@ class GlobalParams():
     def get_sounder():
         return 'sounder.exe' if GlobalParams.win_sounder is None else GlobalParams.win_sounder
 
+    @staticmethod
+    def set_color(color):
+        GlobalParams.color = color
+
+    @staticmethod
+    def get_color():
+        return GlobalParams.color
+
 class Platform():
     platform = None
 
@@ -74,7 +83,7 @@ class Platform():
     def set_platform():
         Platform.platform = {'platformsystem': platform.system(), 'platformmacver': platform.mac_ver()}
         if GlobalParams.is_debug():
-            print '[DEBUG] platform information: '+str(Platform.platform)
+            print extra_functions.ColorOutput.get_colored('[DEBUG] platform information: '+str(Platform.platform))
 
     @staticmethod
     def is_mac_10_8_plus():
@@ -84,7 +93,7 @@ class Platform():
             mac_version_split = mac_version.split('.')
             is_mac_version_ok = (len(mac_version_split) >= 2 and int(mac_version_split[0]) == 10 and int(mac_version_split[1]) >= 8) or (len(mac_version_split) >= 1 and int(mac_version_split[0]) > 10)
             if GlobalParams.is_debug():
-                print '[DEBUG] Mac version "'+mac_version+'" is 10.8 or later > '+str(is_mac_version_ok)
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Mac version "'+mac_version+'" is 10.8 or later > '+str(is_mac_version_ok))
             if is_mac_version_ok:
                 return True
         return False
@@ -95,7 +104,7 @@ class Platform():
         platform_mac_ver = Platform.platform['platformmacver'][0]
         is_system_mac = platform_system.lower() == 'darwin' and len(platform_mac_ver) > 0
         if GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(is_system_mac)
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(is_system_mac))
         return is_system_mac
 
     @staticmethod
@@ -113,7 +122,7 @@ class Platform():
         platform_system = Platform.platform['platformsystem']
         is_system_linux = platform_system.lower() == 'linux'
         if GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(is_system_linux)
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(is_system_linux))
         return is_system_linux
 
     @staticmethod
@@ -121,11 +130,11 @@ class Platform():
         platform_system = Platform.platform['platformsystem']
         is_system_windows = platform_system.lower() == 'windows'
         if GlobalParams.is_debug():
-            print '[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows)
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows))
         return is_system_windows
 
     @staticmethod
-    def getCommandLineMergeForPlatform():
+    def get_command_line_merge_for_platform():
         if Platform.is_windows():
             return ' && '
         else:

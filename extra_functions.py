@@ -25,6 +25,7 @@ class FileHelper:
     def does_file_exist(path_and_file):
         return os.path.exists(path_and_file)
 
+
 class CommandHelper:
     @staticmethod
     def support_command(command):
@@ -33,22 +34,22 @@ class CommandHelper:
         try:
             CommandHelper.run_command(command)
             if glob.GlobalParams.is_debug():
-                print '[DEBUG] Checking if '+command_name+' is available on system > True'
+                print ColorOutput.get_colored('[DEBUG] Checking if ' + command_name + ' is available on system > True')
         except OSError:
             supported = False
             if glob.GlobalParams.is_debug():
-                print '[DEBUG] Checking if '+command_name+' is available on system > False'
+                print ColorOutput.get_colored('[DEBUG] Checking if ' + command_name + ' is available on system > False')
         return supported
 
     @staticmethod
     def run_command(command):
-        fh = open("NUL","w")
+        fh = open("NUL", "w")
         subprocess.call(command, stdout=fh, stderr=fh)
         fh.close()
 
     @staticmethod
     def run_command_async(command):
-        fh = open("NUL","w")
+        fh = open("NUL", "w")
         subprocess.Popen(command, stdout=fh, stderr=fh)
         fh.close()
 
@@ -62,6 +63,7 @@ class CommandHelper:
                 line = line.replace(match, '')
         return line
 
+
 class TimeHelper:
     @staticmethod
     def has_time_passed(last_trigger, passed_time):
@@ -71,3 +73,50 @@ class TimeHelper:
     @staticmethod
     def get_time():
         return int(time.time() * 1000)
+
+
+class ColorOutput:
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+
+    BLACK = '\033[30m'
+    GRAY = '\033[37m'
+    WHITE = '\033[97m'
+
+    END = '\033[0m'
+
+    RAINBOW_LIST = [RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN]
+
+    rainbow_color_offset = 0
+
+    @staticmethod
+    def get_colored(text):
+        if glob.GlobalParams.get_color() is not None:
+            color = glob.GlobalParams.get_color().lower()
+            text = CommandHelper.strip_coloring(text)
+            if color != 'rainbow':
+                color_prefix = ColorOutput.RED if color == 'red' else (ColorOutput.GREEN if color == 'green' else (
+                    ColorOutput.YELLOW if color == 'yellow' else (ColorOutput.BLUE if color == 'blue' else (
+                        ColorOutput.MAGENTA if color == 'magenta' else (
+                            ColorOutput.CYAN if color == 'cyan' else (
+                                ColorOutput.WHITE if color == 'white' else (
+                                    ColorOutput.GRAY if color == 'gray' else ColorOutput.BLACK)))))))
+                return color_prefix + text + ColorOutput.END
+            else:
+                output = ''
+                offset = ColorOutput.rainbow_color_offset % len(ColorOutput.RAINBOW_LIST)
+                for i in range(0, len(text) - 1, 1):
+                    if text[i] == ' ':
+                        offset += 1
+                        output += ' '
+                    else:
+                        output += ColorOutput.RAINBOW_LIST[(i - offset) % len(ColorOutput.RAINBOW_LIST)] + text[i]
+                        ColorOutput.rainbow_color_offset += 1
+                output += ColorOutput.END
+                return output
+        else:
+            return text

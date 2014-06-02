@@ -65,32 +65,32 @@ def parse_configuration_contents(contents):
 
 def parse_configuration_file(configuration_file):
     if glob.GlobalParams.is_debug():
-        print '[DEBUG] Checking if configuration file exists...'
+        print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if configuration file exists...')
     if extra_functions.FileHelper.does_file_exist(configuration_file):
         if glob.GlobalParams.is_debug():
-            print '[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...'
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...')
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
         if len(parsed_configuration.commands) == 0:
-            print 'ERROR Configuration file don\'t have any commands to run...'
+            print extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...')
             exit(0)
         return parsed_configuration
     else:
-        print 'ERROR: The specified file don\'t exist or couldn\'t be opened'
+        print extra_functions.ColorOutput.get_colored('ERROR: The specified file don\'t exist or couldn\'t be opened')
         exit(0)
 
 
 def run(parsed_configuration):
     parsed_configuration.analyze_startup()
-    merged_commands = glob.Platform.getCommandLineMergeForPlatform().join(parsed_configuration.commands)
+    merged_commands = glob.Platform.get_command_line_merge_for_platform().join(parsed_configuration.commands)
     process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
     if glob.GlobalParams.is_debug():
-        print '[DEBUG] Commands: '+merged_commands
+        print extra_functions.ColorOutput.get_colored('[DEBUG] Commands: '+merged_commands)
     accumulated_lines = []
     while True:
         nextline = process.stdout.readline().replace('\n', '')
         if not glob.GlobalParams.is_mute():
-            print nextline
+            print extra_functions.ColorOutput.get_colored(nextline)
         if nextline == '' and process.poll() is not None:
             parsed_configuration.analyze_quit()
             break
@@ -104,7 +104,7 @@ def run(parsed_configuration):
 
 
 def user_exited(signum, frame):
-    print 'User terminated script'
+    print extra_functions.ColorOutput.get_colored('User terminated script')
     exit(0)
 
 if __name__ == "__main__":
@@ -116,6 +116,7 @@ if __name__ == "__main__":
     parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False, default=False, action='store_true')
     parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False, default=False, action='store_true')
     parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
+    parser.add_argument('--color', help='Set color to use for all output', required=False, default=None, type=str)
     parser.add_argument('--mac-afplay', help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center', required=False, default=False, action='store_true')
     parser.add_argument('--win-sounder', help='If you\'re on Windows and sounder.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
     args = vars(parser.parse_args())
@@ -126,6 +127,8 @@ if __name__ == "__main__":
     glob.GlobalParams.set_growl(args['growl'])
     glob.GlobalParams.set_only_sound(args['only_sound'])
     glob.GlobalParams.set_no_sound(False if args['only_sound'] else args['no_sound'])
+    if 'color' in args:
+        glob.GlobalParams.set_color(args['color'])
 
     # Set platform information
     glob.Platform.set_platform()
