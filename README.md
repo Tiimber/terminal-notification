@@ -432,6 +432,10 @@ Future plans
 - Try to see if queueing issues for notifications can be fixed
 - Try to see if time of showing notifications can be fixed
 
+**Window**
+
+- Figure out how colors works in Windows
+
 Reservations
 ------------
 
