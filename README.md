@@ -13,30 +13,30 @@ When used, notifications will be displayed like this:
 
 Mac OS X - Notification Center:
 
-![Mac OS X Notification Center] [101]
+![Mac OS X Notification Center] (resources/screenshots/MacOSXNotificationCenter.png)
 
 Mac OS X - Growl:
 
-![Mac OS X Growl] [102]
+![Mac OS X Growl] (resources/screenshots/MacOSXGrowl.png)
 
 Ubuntu 14.04 - notify-send:
 
-![Ubuntu notify-send] [103]
+![Ubuntu notify-send] (resources/screenshots/UbuntuNotifySend.png)
 
 
 Ubuntu 14.04 - Growl:
 
-![Ubuntu Growl] [104]
+![Ubuntu Growl] (resources/screenshots/UbuntuGrowl.png)
 
 
 Windows 7 - notifu:
 
-![Windows notifu] [105]
+![Windows notifu] (resources/screenshots/WindowsNotifu.png)
 
 
 Windows 7 - Growl:
 
-![Windows Growl] [106]
+![Windows Growl] (resources/screenshots/WindowsGrowl.png)
 
 
 Mac OS X
@@ -418,7 +418,6 @@ Future plans
 
 **General**
 
-- Move repository from Bitbucket to GitHub and change all links (that can) in this README.md to relative ones
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 
@@ -461,13 +460,3 @@ Do whatever you want with the sources, fork it out, put it on a golden chip, tot
 [5]:http://mattn.github.io/growl-for-linux/
 [6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
 [7]:http://www.paralint.com/projects/notifu/download.html
-
-[//]: # (These should be relative and point towards the project, but bitbucket don't support it - will move to GitHub later)
-
-[100]:https://bitbucket.org/rtapper/terminal-notification/src/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/sounds/mac/README.md?at=master
-[101]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/MacOSXNotificationCenter.png?token=d5fcff323574121090ed2f853d8a7b250118da62
-[102]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/MacOSXGrowl.png?token=35d692100abfb2139cf792eab3b05a8c09fb2325
-[103]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/UbuntuNotifySend.png?token=14d9155dcf6e9fe376605afd24bf1fdbf8fa9c06
-[104]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/UbuntuGrowl.png?token=a73561eec1d941c9199503918bc90425079853f3
-[105]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/WindowsNotifu.png?token=d2df0b09c5b452dda0d37a740b2b7948f626df30
-[106]:https://bytebucket.org/rtapper/terminal-notification/raw/ad5e7fe35eae7a1bc14f03979a59316c38ce641b/resources/screenshots/WindowsGrowl.png?token=a1ba8da012d8e0476859a5ef64c9cf757691805c
