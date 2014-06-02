@@ -409,7 +409,6 @@ Future plans
 **General**
 
 - Rainbow colored output
-- Handle empty command lines gracefully
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 

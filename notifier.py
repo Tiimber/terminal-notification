@@ -14,7 +14,7 @@ def parse_configuration_contents(contents):
     config_data = None
     for line in lines:
         line = line.strip()
-        if line is None or line[0:1] == '#':
+        if line is None or len(line) == 0 or line[0:1] == '#':
             continue
         elif line.startswith('[COMMANDS]'):
             is_commands = True
