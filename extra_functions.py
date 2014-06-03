@@ -107,7 +107,7 @@ class ColorOutput:
                                     ColorOutput.GRAY if color == 'gray' else ColorOutput.BLACK)))))))
                 return color_prefix + text + ColorOutput.END
             else:
-				text = CommandHelper.strip_coloring(text)
+                text = CommandHelper.strip_coloring(text)
                 output = ''
                 offset = ColorOutput.rainbow_color_offset % len(ColorOutput.RAINBOW_LIST)
                 for i in range(0, len(text) - 1, 1):
