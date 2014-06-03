@@ -4,6 +4,7 @@ import extra_functions
 import glob
 import growl_notifier
 import linux_notifier
+import notifier
 import osx_notifier
 
 # GNTP might not be installed
@@ -159,7 +160,7 @@ class Configuration:
     @staticmethod
     def output_notification_unsupported():
         print extra_functions.ColorOutput.get_colored('Your operating system is unsupported for outputting notifications at the moment')
-        exit(0)
+        notifier.exit_notifier()
 
     @staticmethod
     def get_notification_sound(sound, run_count):

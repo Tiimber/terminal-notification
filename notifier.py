@@ -73,11 +73,11 @@ def parse_configuration_file(configuration_file):
         parsed_configuration = parse_configuration_contents(contents)
         if len(parsed_configuration.commands) == 0:
             print extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...')
-            exit(0)
+            exit_notifier()
         return parsed_configuration
     else:
         print extra_functions.ColorOutput.get_colored('ERROR: The specified file don\'t exist or couldn\'t be opened')
-        exit(0)
+        exit_notifier()
 
 
 def run(parsed_configuration):
@@ -100,12 +100,16 @@ def run(parsed_configuration):
                 accumulated_lines = []
             else:
                 accumulated_lines.append(nextline)
-    pass
+
+
+def exit_notifier():
+    extra_functions.FileHelper.remove_file("NUL")
+    exit(0)
 
 
 def user_exited(signum, frame):
     print extra_functions.ColorOutput.get_colored('User terminated script')
-    exit(0)
+    exit_notifier()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, user_exited)
@@ -143,3 +147,4 @@ if __name__ == "__main__":
         glob.GlobalParams.set_color(args['color'])
 
     run(parse_configuration_file(args['config']))
+    exit_notifier()

@@ -25,6 +25,10 @@ class FileHelper:
     def does_file_exist(path_and_file):
         return os.path.exists(path_and_file)
 
+    @staticmethod
+    def remove_file(path_and_file):
+        os.remove(path_and_file)
+
 
 class CommandHelper:
     @staticmethod

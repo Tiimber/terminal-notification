@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.3
+1.4 Alpha
 
 Installation
 ------------
@@ -421,6 +421,8 @@ Future plans
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 - Check if color can be applied before platform is decided (currently gives output before color is set in debug mode)
+- Implement hanging detection
+> - Remove tmp file "NUL"
 
 **Mac OS X**
 
@@ -434,7 +436,7 @@ Future plans
 
 **Window**
 
-- Figure out how colors works in Windows
+- Figure out how colored output works in Windows
 
 Reservations
 ------------
