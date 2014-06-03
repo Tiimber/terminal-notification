@@ -27,7 +27,7 @@
 [CONFIGURATION:{HANGING}]
     [PATTERN]{if:2}(Start)
     [TIMEOUT]8000
-    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 7 seconds[SOUND]Sosumi
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 8 seconds[SOUND]Sosumi
 [/CONFIGURATION:{HANGING}]
 
 # Detection of hanging scripts

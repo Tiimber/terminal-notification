@@ -363,7 +363,7 @@ All of the NOTIFICATION fields can use values from the capturing groups in both 
 
 ---
 
-There is also two more special CONFIGURATIONs:
+There is also three additional, special CONFIGURATIONs:
 
 ```
 [CONFIGURATION:{STARTUP}]
@@ -375,7 +375,58 @@ There is also two more special CONFIGURATIONs:
 [/CONFIGURATION:{QUIT}]
 ```
 
-These are simply put special configurations which only triggers before the commands are started and after commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for this one.
+These are simply put special configurations which only triggers before the commands are started and after commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for these ones.
+
+```
+[CONFIGURATION:{HANGING}]
+    [PATTERN]{ifnot:1}(Start)
+    [TIMEOUT]8000
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 8 seconds[SOUND]Sosumi
+[/CONFIGURATION:{HANGING}]
+```
+
+These kind of configurations may be used to give a message when nothing have outputted for a certain time. The setup on this one is a bit complex, so bare with me here. First of all, you may have as many of this configuration as you like.
+
+The parts you can have inside of this one is:
+
+- **NOTIFICATION** - Exactly same syntax as the above mentioned configurations
+- **TIMEOUT** - If nothing have outputted after this amount of milliseconds, 1/1000 of a second (8000 = 8s), this configuration will be triggered.
+- **PATTERN** - *OPTIONAL* - If no pattern are given, the only criteria will be the timeout for this notification to trigger. If entered, the following is the format:
+
+```
+[ {[ [ IF / IF NOT ]: ][ NUMBER OF LINES BACK IN THE OUTPUT ]} ]PATTERN
+```
+
+Some examples:
+
+```
+1. (Hello)
+2. {if}(Hello)
+3. {if:0}(Hello)
+4. {0}(Hello)
+
+5. {ifnot}(Hello)
+6. {ifnot:0}(Hello)
+
+7. {if:3}(Old line)
+8. {3}(Old line)
+
+9. {ifnot:3)(New line)
+```
+
+All of lines 1-4 means the exact same thing: **If** the **latest** outputted line matches the regex pattern **(Hello)**, then trigger this notification.
+
+That is due to 'if' and '0' being the default values for *condition* and *lines back in history*.
+
+Lines 5 and 6 also mean the same thing: **If** the **latest** outputted value does **not** match the regex pattern **(Hello)**, then trigger this notification.
+
+In this case, only *lines back in history* can be ommited, since the last one will be checked.
+
+Just like below, lines 7 and 8 have the same meaning as each other: **If** the **third last** outputted line match the regex pattern **(Old line)**, then trigger this notification.
+
+Line 9 have the meaning: **If** the **third last** outputted line does **not** match the regex pattern **(New line)**, then trigger this notification.
+
+
 
 Sounds
 ------
@@ -418,20 +469,9 @@ Future plans
 
 **General**
 
+- When application have hanged or quit, make it possible to re-run the script automatically
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-
-> - Document this:
-> [CONFIGURATION:{HANGING}]
->     [PATTERN]{if:2}(Start)
->     [TIMEOUT]8000
->     [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 7 seconds[SOUND]Sosumi
-> [/CONFIGURATION:{HANGING}]
-
-> - Make hanging detection also handle exception cases
-> - Implement hanging detection
-> - Remove tmp file "NUL"
-> - Fix so that rainbow don't skip outputting last character in all output
 
 **Mac OS X**
 

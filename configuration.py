@@ -61,14 +61,19 @@ class Configuration:
         return hanging_times
 
     def analyze_hanging_with_timeout(self, threshold, last_lines):
+        if glob.GlobalParams.is_debug():
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Scanning for HANGING configurations that should trigger after '+str(threshold)+'ms...')
         for config in self.configs:
             if config['name'] == '{HANGING}' and threshold == config['timeout']:
+                if glob.GlobalParams.is_debug():
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] Found configuration: '+str(config))
                 notify_hanging = True
                 if 'pattern' in config:
                     notify_hanging = False
                     # Check if pattern is applicable on the specified line
                     pattern = config['pattern']
                     line_number_to_analyze = 0
+                    is_if = True
                     if pattern.startswith('{'):
                         condition_part = pattern[:pattern.find('}')+1]
                         pattern = pattern[len(condition_part):]
@@ -80,17 +85,17 @@ class Configuration:
                         except ValueError:
                             line_number_to_analyze = 0
 
-                        line_to_analyze = None if len(last_lines) <= line_number_to_analyze else last_lines[line_number_to_analyze]
+                    line_to_analyze = None if len(last_lines) <= line_number_to_analyze else last_lines[line_number_to_analyze]
 
+                    if glob.GlobalParams.is_debug():
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Hanging ' + ('if' if is_if else 'if not') + ' "'+pattern+'" in line: '+str(line_number_to_analyze) + ' "'+str(line_to_analyze)+'"')
+
+                    matches = None if line_to_analyze is None else re.findall(pattern, line_to_analyze)
+                    if (is_if and (matches is not None and len(matches) > 0)) or (not is_if and (matches is None or len(matches) == 0)):
+                        notify_hanging = True
+                    else:
                         if glob.GlobalParams.is_debug():
-                            print extra_functions.ColorOutput.get_colored('[DEBUG] Hanging ' + ('if' if is_if else 'if not') + ' "'+pattern+'" in line: '+str(line_number_to_analyze) + ' "'+str(line_to_analyze)+'"')
-
-                        matches = None if line_to_analyze is None else re.findall(pattern, line_to_analyze)
-                        if (is_if and (matches is not None and len(matches) > 0)) or (not is_if and (matches is None or len(matches) == 0)):
-                            notify_hanging = True
-                        else:
-                            if glob.GlobalParams.is_debug():
-                                print extra_functions.ColorOutput.get_colored('[DEBUG] HANGING configuration did not meet the pattern, will not display notification...')
+                            print extra_functions.ColorOutput.get_colored('[DEBUG] HANGING configuration did not meet the pattern, will not display notification...')
 
                 if notify_hanging:
                     if glob.GlobalParams.is_debug():
