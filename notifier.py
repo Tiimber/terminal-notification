@@ -4,7 +4,8 @@ import configuration
 from subprocess import Popen, PIPE, STDOUT
 import signal
 import glob
-
+import thread
+from time import sleep
 
 def parse_configuration_contents(contents):
     return_configuration = configuration.Configuration()
@@ -42,6 +43,9 @@ def parse_configuration_contents(contents):
             elif line.startswith('[GRACETIME]'):
                 gracetime = int(line[len('[GRACETIME]'):])
                 config_data['graceTime'] = gracetime
+            elif line.startswith('[TIMEOUT]'):
+                timeout = int(line[len('[TIMEOUT]'):])
+                config_data['timeout'] = timeout
             elif line.startswith('[NOTIFICATION]'):
                 line = line[len('[NOTIFICATION]'):]
                 config_data['notification'] = {}
@@ -87,8 +91,19 @@ def run(parsed_configuration):
     if glob.GlobalParams.is_debug():
         print extra_functions.ColorOutput.get_colored('[DEBUG] Commands: '+merged_commands)
     accumulated_lines = []
+
+    # Starting, make sure it's not considered as hanging already
+    glob.Hang.update_last_time()
+    # Start thread for checking for hanging scripts
+    thread.start_new(function, (parsed_configuration,))
+
     while True:
         nextline = process.stdout.readline().replace('\n', '')
+
+        # If we get output - it hasn't hung yet
+        glob.Hang.update_last_time()
+        glob.Hang.add_line(nextline)
+
         if not glob.GlobalParams.is_mute():
             print extra_functions.ColorOutput.get_colored(nextline)
         if nextline == '' and process.poll() is not None:
@@ -100,6 +115,28 @@ def run(parsed_configuration):
                 accumulated_lines = []
             else:
                 accumulated_lines.append(nextline)
+
+
+def function(parsed_configuration):
+    # Collect configuration times for hanging scripts
+    hanging_times = parsed_configuration.get_hanging_times()
+    if len(hanging_times) > 0:
+        if glob.GlobalParams.is_debug():
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Time thresholds for hanging configurations: '+str(hanging_times))
+
+        last_elapsed = glob.Hang.get_elapsed()
+        while True:
+            elapsed = glob.Hang.get_elapsed()
+
+            for threshold in hanging_times:
+                if last_elapsed <= threshold <= elapsed:
+                    parsed_configuration.analyze_hanging_with_timeout(threshold, glob.Hang.get_lines())
+
+            sleep(0.05)
+            last_elapsed = elapsed
+    else:
+        if glob.GlobalParams.is_debug():
+            print extra_functions.ColorOutput.get_colored('[DEBUG] No hanging detection needed since there were no configurations found for it')
 
 
 def exit_notifier():
@@ -135,6 +172,15 @@ if __name__ == "__main__":
     # Set platform information
     glob.Platform.set_platform()
 
+    # Colored output
+    if 'color' in args and not glob.Platform.is_windows():
+        glob.GlobalParams.set_color(args['color'])
+
+    # Output platform debug
+    if glob.GlobalParams.is_debug():
+        print extra_functions.ColorOutput.get_colored('[DEBUG] platform information: '+str(glob.Platform.get_platform()))
+
+
     # If overriding sounder.exe position
     if 'win_sounder' in args and glob.Platform.is_windows():
         glob.GlobalParams.set_sounder(args['win_sounder'])
@@ -142,9 +188,6 @@ if __name__ == "__main__":
     # If overriding to use afplay on a mac
     if ('mac_afplay' in args and glob.Platform.is_mac()):
         glob.GlobalParams.set_afplay(args['mac_afplay'])
-
-    if 'color' in args and not glob.Platform.is_windows():
-        glob.GlobalParams.set_color(args['color'])
 
     run(parse_configuration_file(args['config']))
     exit_notifier()

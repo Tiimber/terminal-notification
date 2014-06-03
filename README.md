@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.4 Alpha
+1.4
 
 Installation
 ------------
@@ -420,9 +420,18 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
-- Check if color can be applied before platform is decided (currently gives output before color is set in debug mode)
-- Implement hanging detection
+
+> - Document this:
+> [CONFIGURATION:{HANGING}]
+>     [PATTERN]{if:2}(Start)
+>     [TIMEOUT]8000
+>     [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 7 seconds[SOUND]Sosumi
+> [/CONFIGURATION:{HANGING}]
+
+> - Make hanging detection also handle exception cases
+> - Implement hanging detection
 > - Remove tmp file "NUL"
+> - Fix so that rainbow don't skip outputting last character in all output
 
 **Mac OS X**
 

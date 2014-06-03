@@ -82,8 +82,11 @@ class Platform():
     @staticmethod
     def set_platform():
         Platform.platform = {'platformsystem': platform.system(), 'platformmacver': platform.mac_ver()}
-        if GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] platform information: '+str(Platform.platform))
+
+
+    @staticmethod
+    def get_platform():
+        return Platform.platform
 
     @staticmethod
     def is_mac_10_8_plus():
@@ -139,3 +142,28 @@ class Platform():
             return ' && '
         else:
             return ' ; '
+
+class Hang():
+    last_line_time = None
+    last_lines = []
+    # Make sure we don't go on storing old lines forever, it also makes hanging detection slow
+    number_of_lines_cap = 100
+
+    @staticmethod
+    def update_last_time():
+        Hang.last_line_time = extra_functions.TimeHelper.get_time()
+
+    @staticmethod
+    def get_elapsed():
+        now = extra_functions.TimeHelper.get_time()
+        return now - Hang.last_line_time
+
+    @staticmethod
+    def add_line(line):
+        Hang.last_lines.insert(0, line)
+        if len(Hang.last_lines) > Hang.number_of_lines_cap:
+            Hang.last_lines = Hang.last_lines[:Hang.number_of_lines_cap]
+
+    @staticmethod
+    def get_lines():
+        return Hang.last_lines

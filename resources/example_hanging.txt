@@ -1,0 +1,37 @@
+# First some command line instructions
+[COMMANDS]
+    echo "Start"
+    sleep 2
+    pwd
+    sleep 15
+    pwd
+[/COMMANDS]
+
+# Startup configuration
+[CONFIGURATION:{STARTUP}]
+    [NOTIFICATION][TITLE]START[MESSAGE]Started[SOUND]Glass
+[/CONFIGURATION:{STARTUP}]
+
+# Terminated configuration
+[CONFIGURATION:{QUIT}]
+    [NOTIFICATION][TITLE]QUIT[MESSAGE]Shut down[SOUND]Glass
+[/CONFIGURATION:{QUIT}]
+
+# Detection of hanging scripts
+[CONFIGURATION:{HANGING}]
+    [TIMEOUT]5000
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 5 seconds[SOUND]Sosumi
+[/CONFIGURATION:{HANGING}]
+
+# Detection of hanging scripts
+[CONFIGURATION:{HANGING}]
+    [PATTERN]{if:2}(Start)
+    [TIMEOUT]8000
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 7 seconds[SOUND]Sosumi
+[/CONFIGURATION:{HANGING}]
+
+# Detection of hanging scripts
+[CONFIGURATION:{HANGING}]
+    [TIMEOUT]12000
+    [NOTIFICATION][TITLE]Yes, app definitely hangs![MESSAGE]The application haven't responded in 12 seconds[SOUND]Sosumi
+[/CONFIGURATION:{HANGING}]
