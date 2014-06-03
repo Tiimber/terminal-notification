@@ -451,8 +451,9 @@ Please note that I've only tested this on a limited set of systems and combinati
 License
 -------
 
-Do whatever you want with the sources, fork it out, put it on a golden chip, totally break it... or develop cool features and give them to me.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
+For full license see [LICENSE.txt] (LICENSE.txt)
 
 [1]:https://bitbucket.org/rtapper/terminal-notification
 [2]:https://github.com/alloy/terminal-notifier
