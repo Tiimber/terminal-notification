@@ -55,7 +55,7 @@ class CommandHelper:
 
     @staticmethod
     def strip_coloring(line):
-        matches = re.findall('\[[0-9]+\w', line)
+        matches = re.findall('\[[0-9]{1-2}m?', line)
         if matches is not None and isinstance(matches, basestring):
             matches = [matches]
         if matches is not None and len(matches) > 0:
@@ -107,6 +107,7 @@ class ColorOutput:
                                     ColorOutput.GRAY if color == 'gray' else ColorOutput.BLACK)))))))
                 return color_prefix + text + ColorOutput.END
             else:
+				text = CommandHelper.strip_coloring(text)
                 output = ''
                 offset = ColorOutput.rainbow_color_offset % len(ColorOutput.RAINBOW_LIST)
                 for i in range(0, len(text) - 1, 1):
