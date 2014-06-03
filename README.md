@@ -420,6 +420,7 @@ Future plans
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
+- Check if color can be applied before platform is decided (currently gives output before color is set in debug mode)
 
 **Mac OS X**
 
