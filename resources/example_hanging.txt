@@ -3,7 +3,8 @@
     echo "Start"
     sleep 2
     pwd
-    sleep 15
+    sleep 10
+    exit 1
     pwd
 [/COMMANDS]
 
@@ -15,23 +16,26 @@
 # Terminated configuration
 [CONFIGURATION:{QUIT}]
     [NOTIFICATION][TITLE]QUIT[MESSAGE]Shut down[SOUND]Glass
+    [RESTART]True
+    [EXITCODE]{not}0
 [/CONFIGURATION:{QUIT}]
 
 # Detection of hanging scripts
 [CONFIGURATION:{HANGING}]
     [TIMEOUT]5000
-    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 5 seconds[SOUND]Sosumi
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application hasn't responded in 5 seconds[SOUND]Sosumi
 [/CONFIGURATION:{HANGING}]
 
 # Detection of hanging scripts
 [CONFIGURATION:{HANGING}]
     [PATTERN]{if:2}(Start)
     [TIMEOUT]8000
-    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 8 seconds[SOUND]Sosumi
+    [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application hasn't responded in 8 seconds[SOUND]Sosumi
 [/CONFIGURATION:{HANGING}]
 
-# Detection of hanging scripts
-[CONFIGURATION:{HANGING}]
-    [TIMEOUT]12000
-    [NOTIFICATION][TITLE]Yes, app definitely hangs![MESSAGE]The application haven't responded in 12 seconds[SOUND]Sosumi
-[/CONFIGURATION:{HANGING}]
+# Detection of hanging scripts - if this one is enabled, restart will be made on code hanging instead of crashing
+#[CONFIGURATION:{HANGING}]
+#    [TIMEOUT]9000
+#    [NOTIFICATION][TITLE]Yes, app definitely hangs![MESSAGE]Application hasn't responded in 9s, restarting script.[SOUND]Sosumi
+#    [RESTART]True
+#[/CONFIGURATION:{HANGING}]

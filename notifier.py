@@ -7,6 +7,9 @@ import glob
 import thread
 from time import sleep
 
+process = None
+need_restart = True
+
 def parse_configuration_contents(contents):
     return_configuration = configuration.Configuration()
     lines = contents.split('\n')
@@ -38,6 +41,8 @@ def parse_configuration_contents(contents):
         elif is_config:
             if line.startswith('[PATTERN]'):
                 config_data['pattern'] = line[len('[PATTERN]'):]
+            if line.startswith('[EXITCODE]'):
+                config_data['exitcode'] = line[len('[EXITCODE]'):]
             if line.startswith('[HISTORYPATTERN]'):
                 config_data['historyPattern'] = line[len('[HISTORYPATTERN]'):]
             elif line.startswith('[GRACETIME]'):
@@ -46,6 +51,8 @@ def parse_configuration_contents(contents):
             elif line.startswith('[TIMEOUT]'):
                 timeout = int(line[len('[TIMEOUT]'):])
                 config_data['timeout'] = timeout
+            elif line.startswith('[RESTART]'):
+                config_data['restart'] = True if line[len('[RESTART]'):].lower() == 'true' else False
             elif line.startswith('[NOTIFICATION]'):
                 line = line[len('[NOTIFICATION]'):]
                 config_data['notification'] = {}
@@ -87,34 +94,56 @@ def parse_configuration_file(configuration_file):
 def run(parsed_configuration):
     parsed_configuration.analyze_startup()
     merged_commands = glob.Platform.get_command_line_merge_for_platform().join(parsed_configuration.commands)
-    process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-    if glob.GlobalParams.is_debug():
-        print extra_functions.ColorOutput.get_colored('[DEBUG] Commands: '+merged_commands)
-    accumulated_lines = []
+    global process, need_restart
+    while need_restart:
+        need_restart = False
+        process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
+        if glob.GlobalParams.is_debug():
+            print extra_functions.ColorOutput.get_colored('[DEBUG] Commands: '+merged_commands)
+        accumulated_lines = []
 
-    # Starting, make sure it's not considered as hanging already
-    glob.Hang.update_last_time()
-    # Start thread for checking for hanging scripts
-    thread.start_new(function, (parsed_configuration,))
-
-    while True:
-        nextline = process.stdout.readline().replace('\n', '')
-
-        # If we get output - it hasn't hung yet
+        # Starting, make sure it's not considered as hanging already
         glob.Hang.update_last_time()
-        glob.Hang.add_line(nextline)
+        # Start thread for checking for hanging scripts
+        thread.start_new(function, (parsed_configuration,))
 
-        if not glob.GlobalParams.is_mute():
-            print extra_functions.ColorOutput.get_colored(nextline)
-        if nextline == '' and process.poll() is not None:
-            parsed_configuration.analyze_quit()
-            break
-        else:
-            notification_sent = parsed_configuration.analyze(nextline, accumulated_lines)
-            if notification_sent:
-                accumulated_lines = []
+        while True:
+            nextline = process.stdout.readline().replace('\n', '')
+
+            # If we get output - it hasn't hung yet
+            glob.Hang.update_last_time()
+            glob.Hang.add_line(nextline)
+
+            if not glob.GlobalParams.is_mute():
+                print extra_functions.ColorOutput.get_colored(nextline)
+            process_poll = process.poll()
+            if nextline == '' and process_poll is not None:
+                if glob.GlobalParams.is_debug():
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] Process exit code: '+str(process_poll))
+                if need_restart:
+                    break
+                else:
+                    need_restart = parsed_configuration.analyze_quit(process_poll)
+                    break
             else:
-                accumulated_lines.append(nextline)
+                notification_sent = parsed_configuration.analyze(nextline, accumulated_lines)
+                if notification_sent:
+                    accumulated_lines = []
+                else:
+                    accumulated_lines.append(nextline)
+
+        if need_restart:
+            print 'Restart of process was requested!'
+
+
+def kill_process():
+    global process
+    process.kill()
+
+def restart_process():
+    global process, need_restart
+    need_restart = True
+    process.kill()
 
 
 def function(parsed_configuration):
@@ -130,7 +159,9 @@ def function(parsed_configuration):
 
             for threshold in hanging_times:
                 if last_elapsed <= threshold <= elapsed:
-                    parsed_configuration.analyze_hanging_with_timeout(threshold, glob.Hang.get_lines())
+                    restart = parsed_configuration.analyze_hanging_with_timeout(threshold, glob.Hang.get_lines())
+                    if restart:
+                        restart_process()
 
             sleep(0.05)
             last_elapsed = elapsed
@@ -146,6 +177,7 @@ def exit_notifier():
 
 def user_exited(signum, frame):
     print extra_functions.ColorOutput.get_colored('User terminated script')
+    kill_process()
     exit_notifier()
 
 if __name__ == "__main__":

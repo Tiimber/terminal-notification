@@ -27,10 +27,10 @@ class Configuration:
     def add_command(self, command):
         self.commands.append(command)
 
-    def analyze_quit(self):
+    def analyze_quit(self, exitcode):
         if glob.GlobalParams.is_debug():
             print extra_functions.ColorOutput.get_colored('[DEBUG] Application is exiting, checking if there is a {QUIT} configuration...')
-        self.analyze_special('QUIT')
+        return self.analyze_special('QUIT', exitcode)
 
     def analyze_startup(self):
         if glob.GlobalParams.is_debug():
@@ -40,7 +40,7 @@ class Configuration:
             Configuration.init_growl()
         self.analyze_special('STARTUP')
 
-    def analyze_special(self, action):
+    def analyze_special(self, action, exitcode=None):
         action_label = '{' + action + '}'
         for config in self.configs:
             if config['name'] == action_label:
@@ -49,7 +49,20 @@ class Configuration:
                 groups = []
                 history_groups = []
                 notification = config['notification'] if 'notification' in config else None
-                self.send_notification(notification, groups, history_groups, 0)
+                on_exitcode_val = config['exitcode'] if 'exitcode' in config else None
+                if_exitcode = False if on_exitcode_val is not None and on_exitcode_val.startswith('{not}') else True
+                on_exitcode = 0 if on_exitcode_val is None else (int(on_exitcode_val) if not '}' in on_exitcode_val else int(on_exitcode_val[on_exitcode_val.find('}')+1:]))
+                exitcode_match = on_exitcode_val is None or (on_exitcode == exitcode) == if_exitcode
+
+                if on_exitcode_val is not None and glob.GlobalParams.is_debug():
+                    print extra_functions.ColorOutput.get_colored('[DEBUG] Trigger notification if ' + ('not ' if not if_exitcode else ' ') + str(exitcode) + ' == ' + str(on_exitcode))
+                    if exitcode_match:
+                        print extra_functions.ColorOutput.get_colored('[DEBUG] Exit code condition matched, will trigger this notification')
+
+                if exitcode_match:
+                    self.send_notification(notification, groups, history_groups, 0)
+                    return 'restart' in config and config['restart']
+        return False
 
     def get_hanging_times(self):
         hanging_times = []
@@ -104,6 +117,9 @@ class Configuration:
                     history_groups = []
                     notification = config['notification'] if 'notification' in config else None
                     self.send_notification(notification, groups, history_groups, 0)
+                    # Ask the thread to kill the running process and restart it
+                    return 'restart' in config and config['restart']
+        return False
 
     def analyze(self, line, accumulated=None):
         line = extra_functions.CommandHelper.strip_coloring(line)
