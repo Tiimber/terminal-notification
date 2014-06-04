@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.4
+1.5
 
 Installation
 ------------
@@ -369,18 +369,28 @@ There is also three additional, special CONFIGURATIONs:
 [CONFIGURATION:{STARTUP}]
     [NOTIFICATION][TITLE]START[MESSAGE]Application has started[SOUND]Pop
 [/CONFIGURATION:{STARTUP}]
+```
 
+This is simply put a special configurations which only triggers before the commands are started. There are no patterns, historyPatterns or graceTime settings for this one.
+
+```
 [CONFIGURATION:{QUIT}]
+    [EXITCODE]{not}0
+    [RESTART]True
     [NOTIFICATION][TITLE]QUIT[MESSAGE]All commands have terminated[SOUND]Basso
 [/CONFIGURATION:{QUIT}]
 ```
 
-These are simply put special configurations which only triggers before the commands are started and after commands have finished running, no matter if successful or interrupted. There are no patterns, historyPatterns or graceTime settings for these ones.
+Just like the above one, this is configurations which only triggers when the commands execution have been finished. The big difference towards the startup configuration is these two available fields:
+
+- **EXITCODE** - *OPTIONAL* - Will only trigger if the exitcode is or is not equal to the specified exit code. If {not} is put at the beginning, it will negate the error code check, otherwise it will only check for equality - If not entered, default behaviour is to always trigger this notification
+- **RESTART** - *OPTIONAL* - Set this to True in order to restart the chain of the commands all over (eg. upon detecting a crash) - If not given, no restart will be made
 
 ```
 [CONFIGURATION:{HANGING}]
     [PATTERN]{ifnot:1}(Start)
     [TIMEOUT]8000
+    [RESTART]True
     [NOTIFICATION][TITLE]Hanging app?[MESSAGE]The application haven't responded in 8 seconds[SOUND]Sosumi
 [/CONFIGURATION:{HANGING}]
 ```
@@ -391,6 +401,7 @@ The parts you can have inside of this one is:
 
 - **NOTIFICATION** - Exactly same syntax as the above mentioned configurations
 - **TIMEOUT** - If nothing have outputted after this amount of milliseconds, 1/1000 of a second (8000 = 8s), this configuration will be triggered.
+- **RESTART** - *OPTIONAL* - Same as description for {QUIT}
 - **PATTERN** - *OPTIONAL* - If no pattern are given, the only criteria will be the timeout for this notification to trigger. If entered, the following is the format:
 
 ```
@@ -469,7 +480,6 @@ Future plans
 
 **General**
 
-- When application have hanged or quit, make it possible to re-run the script automatically
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 
