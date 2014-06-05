@@ -72,6 +72,8 @@ class GlobalParams():
     def set_color(color):
         color_supported = True
         if Platform.is_windows():
+            if GlobalParams.is_debug():
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Trying to use color parameter on Windows - will check if colorama is installed')
             # Only supported in windows if colorama is installed...
             try:
                 import colorama
@@ -80,6 +82,12 @@ class GlobalParams():
                 color_supported = False
         if color_supported:
             GlobalParams.color = color
+
+        if Platform.is_windows() and GlobalParams.is_debug():
+            if color_supported:
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Colorama is installed and working correctly - congratulations, you know have colored output')
+            else:
+                print extra_functions.ColorOutput.get_colored('[DEBUG] Colorama couldn\'t be found in your system, you will not be able to use the benefits of the color parameter')
 
     @staticmethod
     def unset_color():

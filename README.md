@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.5
+1.6
 
 Installation
 ------------
@@ -163,6 +163,12 @@ If you are lacking aplay in your system, I can't really help you. What I know is
 If notifu isn't installed, download it [here] [7]. You will also need to add the path of it to your path environment variable.
 
 If sounder.exe isn't installed, download it [here] [6]. You will also need to add the path of it to your path environment variable.
+
+In order for color output to work for Windows, a handy python-tool is required, called colorama. To install it on your system, follow the instructions to install pip just below, then run the following command as Administrator in a command prompt:
+
+```
+pip install colorama
+```
 
 ---
 
@@ -281,7 +287,7 @@ For Windows, there seem to be some issues with sounder.exe not being recognized 
 python notifier.py --config resources/example_setup.txt --growl --win-sounder C:\\sounder.exe
 ```
 
-*BONUS - But not for Windows (atm)*
+*BONUS (Windows need additional installation for this to work)*
 
 If you feel like controlling the color of the output during runtime of this application, you can specify color as such:
 
@@ -492,12 +498,6 @@ Future plans
 
 - Try to see if queueing issues for notifications can be fixed
 - Try to see if time of showing notifications can be fixed
-
-**Window**
-
-- Figure out how colored output works in Windows
-
--- pip install colorama
 
 Reservations
 ------------

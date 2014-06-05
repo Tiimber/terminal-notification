@@ -172,6 +172,7 @@ def function(parsed_configuration):
 
 def exit_notifier():
     extra_functions.FileHelper.remove_file("NUL")
+    glob.GlobalParams.unset_color()
     exit(0)
 
 
