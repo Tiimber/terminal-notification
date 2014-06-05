@@ -72,8 +72,7 @@ class GlobalParams():
     def set_color(color):
         color_supported = True
         if Platform.is_windows():
-            if GlobalParams.is_debug():
-                print extra_functions.ColorOutput.get_colored('[DEBUG] Trying to use color parameter on Windows - will check if colorama is installed')
+            Debug.debug('[DEBUG] Trying to use color parameter on Windows - will check if colorama is installed')
             # Only supported in windows if colorama is installed...
             try:
                 import colorama
@@ -83,15 +82,16 @@ class GlobalParams():
         if color_supported:
             GlobalParams.color = color
 
-        if Platform.is_windows() and GlobalParams.is_debug():
+        if Platform.is_windows():
             if color_supported:
-                print extra_functions.ColorOutput.get_colored('[DEBUG] Colorama is installed and working correctly - congratulations, you know have colored output')
+                Debug.debug('[DEBUG] Colorama is installed and working correctly - congratulations, you know have colored output')
             else:
-                print extra_functions.ColorOutput.get_colored('[DEBUG] Colorama couldn\'t be found in your system, you will not be able to use the benefits of the color parameter')
+                Debug.debug('[DEBUG] Colorama couldn\'t be found in your system, you will not be able to use the benefits of the color parameter')
 
     @staticmethod
     def unset_color():
         if Platform.is_windows() and GlobalParams.color is not None:
+            Debug.debug('[DEBUG] Unregistering colorama for colored output in console')
             try:
                 import colorama
                 colorama.deinit()
@@ -121,8 +121,7 @@ class Platform():
             mac_version = Platform.platform['platformmacver'][0]
             mac_version_split = mac_version.split('.')
             is_mac_version_ok = (len(mac_version_split) >= 2 and int(mac_version_split[0]) == 10 and int(mac_version_split[1]) >= 8) or (len(mac_version_split) >= 1 and int(mac_version_split[0]) > 10)
-            if GlobalParams.is_debug():
-                print extra_functions.ColorOutput.get_colored('[DEBUG] Mac version "'+mac_version+'" is 10.8 or later > '+str(is_mac_version_ok))
+            Debug.debug('[DEBUG] Mac version "'+mac_version+'" is 10.8 or later > '+str(is_mac_version_ok))
             if is_mac_version_ok:
                 return True
         return False
@@ -132,8 +131,7 @@ class Platform():
         platform_system = Platform.platform['platformsystem']
         platform_mac_ver = Platform.platform['platformmacver'][0]
         is_system_mac = platform_system.lower() == 'darwin' and len(platform_mac_ver) > 0
-        if GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(is_system_mac))
+        Debug.debug('[DEBUG] Checking if "'+ platform_system +'" with version "'+platform_mac_ver+'" is Mac OS > '+str(is_system_mac))
         return is_system_mac
 
     @staticmethod
@@ -150,16 +148,14 @@ class Platform():
     def is_linux():
         platform_system = Platform.platform['platformsystem']
         is_system_linux = platform_system.lower() == 'linux'
-        if GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(is_system_linux))
+        Debug.debug('[DEBUG] Checking if "'+ platform_system +'" is Linux > '+str(is_system_linux))
         return is_system_linux
 
     @staticmethod
     def is_windows():
         platform_system = Platform.platform['platformsystem']
         is_system_windows = platform_system.lower() == 'windows'
-        if GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows))
+        Debug.debug('[DEBUG] Checking if "'+ platform_system +'" is Windows > '+str(is_system_windows))
         return is_system_windows
 
     @staticmethod
@@ -193,3 +189,9 @@ class Hang():
     @staticmethod
     def get_lines():
         return Hang.last_lines
+
+class Debug():
+    @staticmethod
+    def debug(text):
+        if GlobalParams.is_debug():
+            print extra_functions.ColorOutput.get_colored(text)
