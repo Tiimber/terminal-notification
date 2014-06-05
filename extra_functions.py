@@ -60,7 +60,7 @@ class CommandHelper:
 
     @staticmethod
     def strip_coloring(line):
-        matches = re.findall('\[[0-9]{1,2}m?', line)
+        matches = re.findall('\033?\[[0-9]{1,2}m?', line)
         if matches is not None and isinstance(matches, basestring):
             matches = [matches]
         if matches is not None and len(matches) > 0:
