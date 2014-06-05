@@ -497,6 +497,8 @@ Future plans
 
 - Figure out how colored output works in Windows
 
+-- pip install colorama
+
 Reservations
 ------------
 

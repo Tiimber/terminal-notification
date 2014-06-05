@@ -70,7 +70,25 @@ class GlobalParams():
 
     @staticmethod
     def set_color(color):
-        GlobalParams.color = color
+        color_supported = True
+        if Platform.is_windows():
+            # Only supported in windows if colorama is installed...
+            try:
+                import colorama
+                colorama.init()
+            except ImportError:
+                color_supported = False
+        if color_supported:
+            GlobalParams.color = color
+
+    @staticmethod
+    def unset_color():
+        if Platform.is_windows() and GlobalParams.color is not None:
+            try:
+                import colorama
+                colorama.deinit()
+            except ImportError:
+                pass
 
     @staticmethod
     def get_color():
