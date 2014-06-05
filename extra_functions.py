@@ -38,12 +38,10 @@ class CommandHelper:
         command_name = command if isinstance(command, basestring) else command[0]
         try:
             CommandHelper.run_command(command)
-            if glob.GlobalParams.is_debug():
-                print ColorOutput.get_colored('[DEBUG] Checking if ' + command_name + ' is available on system > True')
+            glob.Debug.debug('[DEBUG] Checking if ' + command_name + ' is available on system > True')
         except OSError:
             supported = False
-            if glob.GlobalParams.is_debug():
-                print ColorOutput.get_colored('[DEBUG] Checking if ' + command_name + ' is available on system > False')
+            glob.Debug.debug('[DEBUG] Checking if ' + command_name + ' is available on system > False')
         return supported
 
     @staticmethod

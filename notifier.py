@@ -75,11 +75,9 @@ def parse_configuration_contents(contents):
 
 
 def parse_configuration_file(configuration_file):
-    if glob.GlobalParams.is_debug():
-        print extra_functions.ColorOutput.get_colored('[DEBUG] Checking if configuration file exists...')
+    glob.Debug.debug('[DEBUG] Checking if configuration file exists...')
     if extra_functions.FileHelper.does_file_exist(configuration_file):
-        if glob.GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...')
+        glob.Debug.debug('[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...')
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
         if len(parsed_configuration.commands) == 0:
@@ -98,8 +96,7 @@ def run(parsed_configuration):
     while need_restart:
         need_restart = False
         process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-        if glob.GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Commands: '+merged_commands)
+        glob.Debug.debug('[DEBUG] Commands: '+merged_commands)
         accumulated_lines = []
 
         # Starting, make sure it's not considered as hanging already
@@ -118,8 +115,7 @@ def run(parsed_configuration):
                 print extra_functions.ColorOutput.get_colored(nextline)
             process_poll = process.poll()
             if nextline == '' and process_poll is not None:
-                if glob.GlobalParams.is_debug():
-                    print extra_functions.ColorOutput.get_colored('[DEBUG] Process exit code: '+str(process_poll))
+                glob.Debug.debug('[DEBUG] Process exit code: '+str(process_poll))
                 if need_restart:
                     break
                 else:
@@ -150,8 +146,7 @@ def function(parsed_configuration):
     # Collect configuration times for hanging scripts
     hanging_times = parsed_configuration.get_hanging_times()
     if len(hanging_times) > 0:
-        if glob.GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] Time thresholds for hanging configurations: '+str(hanging_times))
+        glob.Debug.debug('[DEBUG] Time thresholds for hanging configurations: '+str(hanging_times))
 
         last_elapsed = glob.Hang.get_elapsed()
         while True:
@@ -166,12 +161,12 @@ def function(parsed_configuration):
             sleep(0.05)
             last_elapsed = elapsed
     else:
-        if glob.GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored('[DEBUG] No hanging detection needed since there were no configurations found for it')
+        glob.Debug.debug('[DEBUG] No hanging detection needed since there were no configurations found for it')
 
 
 def exit_notifier():
     extra_functions.FileHelper.remove_file("NUL")
+    glob.GlobalParams.unset_color()
     exit(0)
 
 
@@ -205,12 +200,11 @@ if __name__ == "__main__":
     glob.Platform.set_platform()
 
     # Colored output
-    if 'color' in args and not glob.Platform.is_windows():
+    if 'color' in args:
         glob.GlobalParams.set_color(args['color'])
 
     # Output platform debug
-    if glob.GlobalParams.is_debug():
-        print extra_functions.ColorOutput.get_colored('[DEBUG] platform information: '+str(glob.Platform.get_platform()))
+    glob.Debug.debug('[DEBUG] platform information: '+str(glob.Platform.get_platform()))
 
 
     # If overriding sounder.exe position
