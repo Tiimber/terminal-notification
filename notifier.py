@@ -205,7 +205,7 @@ if __name__ == "__main__":
     glob.Platform.set_platform()
 
     # Colored output
-    if 'color' in args and not glob.Platform.is_windows():
+    if 'color' in args:
         glob.GlobalParams.set_color(args['color'])
 
     # Output platform debug
