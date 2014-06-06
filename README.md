@@ -506,6 +506,7 @@ Please note that I've only tested this on a limited set of systems and combinati
 
 - Mac OS X 10.9.3 with Notification Center
 - Mac OS X 10.9.3 with Growl and afplay
+- Mac OS X 10.8.5 with Notification Center
 - Ubuntu 14.04 with notify-send and aplay
 - Ubuntu 14.04 with Growl and aplay
 - Windows 7 with notifu and sounder.exe
