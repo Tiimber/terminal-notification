@@ -509,6 +509,9 @@ Please note that I've only tested this on a limited set of systems and combinati
 - Mac OS X 10.8.5 with Notification Center
 - Ubuntu 14.04 with notify-send and aplay
 - Ubuntu 14.04 with Growl and aplay
+- Fedora 20 with notify-send and aplay
+- Linux Mint 17 "Qiana" with notify-send and aplay
+- Linux Mint 17 "Qiana" with Growl and aplay
 - Windows 7 with notifu and sounder.exe
 - Windows 7 with Growl, GNTP and sounder.exe
 
