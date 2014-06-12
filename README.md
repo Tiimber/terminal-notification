@@ -55,7 +55,7 @@ All notifications are sent out using Mac OS Notification Center, and you can spe
 Project requirements:
 
 - Mac OS X (10.8 or later)
-- Python 2.7
+- Python 2.7 or 3.4
 - [terminal-notifier] [2] (Installation instructions are included below)
 
 Linux
@@ -74,7 +74,7 @@ All notifications will be sent out using notify-send, and you can specify the fo
 Project requirements:
 
 - Linux system with notify-send installed
-- Python 2.7
+- Python 2.7 or 3.4
 - aplay (for sounds)
 
 Windows
@@ -94,7 +94,7 @@ All notifications will be sent out using notifu, and you can specify the followi
 Project requirements:
 
 - Windows system with [notifu] [7] installed
-- Python 2.7
+- Python 2.7 or 3.4
 - [sounder.exe] [6] (for sounds)
 
 Growl
@@ -486,7 +486,6 @@ Future plans
 
 **General**
 
-- Make it compatible with Python 3.3
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 
