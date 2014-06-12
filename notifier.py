@@ -117,7 +117,9 @@ def run(parsed_configuration):
         thread.start_new(function, (parsed_configuration,))
 
         while True:
-            nextline = process.stdout.readline().replace('\n', '')
+            readline = process.stdout.readline()
+            readline = readline.decode('utf-8')
+            nextline = readline.replace('\n', '')
 
             # If we get output - it hasn't hung yet
             glob.Hang.update_last_time()
