@@ -5,8 +5,18 @@ import configuration
 from subprocess import Popen, PIPE, STDOUT
 import signal
 import glob
-import thread
 from time import sleep
+
+try:
+    import thread
+except ImportError:
+    pass
+
+try:
+    import _thread as thread
+except ImportError:
+    pass
+
 
 process = None
 need_restart = True
