@@ -130,7 +130,7 @@ class Configuration:
                             run_count = 0 if 'runCount' not in config else config['runCount']
                             config['runCount'] = run_count+1
                             notification = config['notification'] if 'notification' in config else None
-                            self.send_notification(notification, [groups] if isinstance(groups, basestring) else groups[0], [history_groups] if isinstance(history_groups, basestring) else (history_groups[0] if len(history_groups) > 0 else []), run_count)
+                            self.send_notification(notification, [groups] if extra_functions.Py3Helper.own_isinstance_string(groups) else groups[0], [history_groups] if extra_functions.Py3Helper.own_isinstance_string(history_groups) else (history_groups[0] if len(history_groups) > 0 else []), run_count)
                             config['lastTrigger'] = extra_functions.TimeHelper.get_time()
                             return True
                         else:
@@ -138,8 +138,8 @@ class Configuration:
         return False
 
     def send_notification(self, notification, groups, history_groups, run_count):
-        groups = [groups] if isinstance(groups, basestring) else groups
-        history_groups = [history_groups] if isinstance(history_groups, basestring) else history_groups
+        groups = [groups] if extra_functions.Py3Helper.own_isinstance_string(groups) else groups
+        history_groups = [history_groups] if extra_functions.Py3Helper.own_isinstance_string(history_groups) else history_groups
         if notification is not None:
             notification_sound = None
             original_notification_sound = None
