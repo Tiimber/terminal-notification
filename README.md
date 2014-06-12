@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.6
+1.7
 
 Installation
 ------------
