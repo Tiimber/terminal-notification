@@ -5,7 +5,7 @@ Terminal Notification
 
 *Currently supporting Mac OS X 10.8+, Windows and most Linux variants with more or less native notifications*
 
-*There is also support for older systems or additional ones by using Growl (but this normally requires a bit more manual install)*
+*There is also support for older or additional systems by using Growl (but this normally requires a bit more manual install)*
 
 ---
 
@@ -486,6 +486,7 @@ Future plans
 
 **General**
 
+- Make it compatible with Python 3.3
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 

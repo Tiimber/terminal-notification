@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import extra_functions
 import configuration
@@ -81,11 +82,11 @@ def parse_configuration_file(configuration_file):
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
         if len(parsed_configuration.commands) == 0:
-            print extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...')
+            print(extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...'))
             exit_notifier()
         return parsed_configuration
     else:
-        print extra_functions.ColorOutput.get_colored('ERROR: The specified file don\'t exist or couldn\'t be opened')
+        print(extra_functions.ColorOutput.get_colored('ERROR: The specified file don\'t exist or couldn\'t be opened'))
         exit_notifier()
 
 
@@ -112,7 +113,7 @@ def run(parsed_configuration):
             glob.Hang.add_line(nextline)
 
             if not glob.GlobalParams.is_mute():
-                print extra_functions.ColorOutput.get_colored(nextline)
+                print(extra_functions.ColorOutput.get_colored(nextline))
             process_poll = process.poll()
             if nextline == '' and process_poll is not None:
                 glob.Debug.debug('[DEBUG] Process exit code: '+str(process_poll))
@@ -129,7 +130,7 @@ def run(parsed_configuration):
                     accumulated_lines.append(nextline)
 
         if need_restart:
-            print 'Restart of process was requested!'
+            print('Restart of process was requested!')
 
 
 def kill_process():
@@ -171,7 +172,7 @@ def exit_notifier():
 
 
 def user_exited(signum, frame):
-    print extra_functions.ColorOutput.get_colored('User terminated script')
+    print(extra_functions.ColorOutput.get_colored('User terminated script'))
     kill_process()
     exit_notifier()
 

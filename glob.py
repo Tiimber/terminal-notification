@@ -1,3 +1,4 @@
+from __future__ import print_function
 import platform
 import extra_functions
 
@@ -194,4 +195,4 @@ class Debug():
     @staticmethod
     def debug(text):
         if GlobalParams.is_debug():
-            print extra_functions.ColorOutput.get_colored(text)
+            print(extra_functions.ColorOutput.get_colored(text))
