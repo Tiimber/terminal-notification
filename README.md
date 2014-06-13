@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.6
+1.8
 
 Installation
 ------------
@@ -485,6 +485,10 @@ Future plans
 ------------
 
 **General**
+
+- Implement support for loading complete zip-packages
+- Implement support for loading zip-packages directly from HTTP
+- Implement support for defining settings in the config files
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
