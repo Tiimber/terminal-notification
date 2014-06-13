@@ -22,10 +22,12 @@ try:
     # For Python 3.0 and later
     from urllib.request import urlopen
     from urllib.request import HTTPError
+    is_python_3 = True
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen
     from urllib2 import HTTPError
+    is_python_3 = False
 
 try:
     import thread
@@ -163,15 +165,20 @@ def parse_configuration_file(configuration_file):
         try:
             decided_config = False
             # Read zip-file
-            remotezip = urlopen(configuration_file)
-            remotezip_read = remotezip.read()
-            zipinmemory = io.StringIO(str(remotezip_read))
+            zip = None
+            if is_python_3:
+                zip = zipfile.ZipFile(configuration_file, 'r')
+            else:
+                remotezip = urlopen(configuration_file)
+                remotezip_read = remotezip.read()
+                zipinmemory = io.StringIO(remotezip_read)
+
+                zip = zipfile.ZipFile(zipinmemory, 'r')
 
             # Create tmp directory with these files
             glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
             extra_functions.FileHelper.create_directory(runtime_tmp_id)
 
-            zip = zipfile.ZipFile(zipinmemory, 'r')
             for fn in zip.namelist():
                 binary_contents = zip.read(fn)
                 extra_functions.FileHelper.write_bytes_to_file(runtime_tmp_id + '/' + fn, binary_contents)
