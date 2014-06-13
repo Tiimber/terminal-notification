@@ -7,6 +7,10 @@ from subprocess import Popen, PIPE, STDOUT
 import signal
 import glob
 from time import sleep
+from random import randint
+import urllib2
+import cStringIO
+import zipfile
 
 try:
     import thread
@@ -21,16 +25,56 @@ except ImportError:
 
 process = None
 need_restart = True
+runtime_tmp_id = 'tmp_'+str(extra_functions.TimeHelper.get_time())+'_'+str(randint(100000, 999999))
+
+
+def override_settings(line):
+    glob.Debug.debug('[DEBUG] Requested setting from configuration file: '+str(line))
+    is_not = False
+    if line.startswith('!'):
+        is_not = True
+        line = line[1:].strip()
+
+    set_bool_val = not is_not
+    if line == '--debug':
+        glob.GlobalParams.set_debug(set_bool_val)
+    elif line == '--mute':
+        glob.GlobalParams.set_mute(set_bool_val)
+    elif line == '--growl':
+        glob.GlobalParams.set_growl(set_bool_val)
+    elif line == '--only_sound':
+        glob.GlobalParams.set_only_sound(set_bool_val)
+    elif line == '--no_sound':
+        glob.GlobalParams.set_no_sound(set_bool_val)
+    elif line == '--mac_afplay':
+        glob.GlobalParams.set_afplay(set_bool_val)
+    elif line.startswith('--color'):
+        if is_not or '=' not in line:
+            glob.GlobalParams.unset_color()
+        else:
+            color = line[line.find('=')+1:]
+            glob.GlobalParams.set_color(color)
+
 
 def parse_configuration_contents(contents):
     return_configuration = configuration.Configuration()
     lines = contents.split('\n')
+    is_settings = False
     is_commands = False
     is_config = False
     config_data = None
     for line in lines:
         line = line.strip()
         if line is None or len(line) == 0 or line[0:1] == '#':
+            continue
+        elif line.startswith('[SETTINGS]'):
+            is_settings = True
+            continue
+        elif line.startswith('[/SETTINGS]'):
+            is_settings = False
+            continue
+        elif is_settings:
+            override_settings(line)
             continue
         elif line.startswith('[COMMANDS]'):
             is_commands = True
@@ -75,6 +119,12 @@ def parse_configuration_contents(contents):
                         notification_name_lower = notification_name.lower()
                         line = line[len('['+notification_name+']'):]
                         value = line
+
+                        # Resolve sounds packaged in zip to the temporary folder
+                        if notification_name_lower == 'sound':
+                            if 'zip:' in value:
+                                value = value.replace('zip:', runtime_tmp_id + '/')
+
                         next_param_start = value.find('[')
                         if next_param_start != -1:
                             value = value[0:next_param_start]
@@ -87,7 +137,33 @@ def parse_configuration_contents(contents):
 
 
 def parse_configuration_file(configuration_file):
-    glob.Debug.debug('[DEBUG] Checking if configuration file exists...')
+    if configuration_file.endswith('.zip'):
+        glob.Debug.debug('[DEBUG] Zip package detected as config, will try and extract it temporarily...')
+        if not configuration_file.startswith('http') and not configuration_file.startswith('file://'):
+            configuration_file = 'file://'+configuration_file
+
+        glob.Debug.debug('[DEBUG] Opening and parsing configuration file in zip "'+configuration_file+'"...')
+        try:
+            # Read zip-file
+            remotezip = urllib2.urlopen(configuration_file)
+            zipinmemory = cStringIO.StringIO(remotezip.read())
+
+            # Create tmp directory with these files
+            glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "'+runtime_tmp_id+'"')
+            extra_functions.FileHelper.create_directory(runtime_tmp_id)
+
+            zip = zipfile.ZipFile(zipinmemory)
+            for fn in zip.namelist():
+                binary_contents = zip.read(fn)
+                extra_functions.FileHelper.write_bytes_to_file(runtime_tmp_id+'/'+fn, binary_contents)
+
+                if fn.replace('.txt', '.zip') in configuration_file:
+                    configuration_file = runtime_tmp_id+'/'+fn
+        except urllib2.HTTPError:
+            print(extra_functions.ColorOutput.get_colored('ERROR Configuration file couldn\'t load...'))
+            exit_notifier()
+
+    glob.Debug.debug('[DEBUG] Checking if configuration file "'+configuration_file+'" exists...')
     if extra_functions.FileHelper.does_file_exist(configuration_file):
         glob.Debug.debug('[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...')
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
@@ -179,7 +255,13 @@ def function(parsed_configuration):
 
 
 def exit_notifier():
+    # Remove temporary stderror and stdoutput file
     extra_functions.FileHelper.remove_file("NUL")
+
+    # Remove tmp directory with with zip contents
+    glob.Debug.debug('[DEBUG] Removing temporary folder for zip-contents: "'+runtime_tmp_id+'"')
+    extra_functions.FileHelper.remove_directory(runtime_tmp_id)
+
     glob.GlobalParams.unset_color()
     exit(0)
 
@@ -200,7 +282,6 @@ if __name__ == "__main__":
     parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
     parser.add_argument('--color', help='Set color to use for all output', required=False, default=None, type=str)
     parser.add_argument('--mac-afplay', help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center', required=False, default=False, action='store_true')
-    parser.add_argument('--win-sounder', help='If you\'re on Windows and sounder.exe isn\'t automatically found, enter the full path to it here', required=False, type=str)
     args = vars(parser.parse_args())
 
     # Set debug and mute params
@@ -219,11 +300,6 @@ if __name__ == "__main__":
 
     # Output platform debug
     glob.Debug.debug('[DEBUG] platform information: '+str(glob.Platform.get_platform()))
-
-
-    # If overriding sounder.exe position
-    if 'win_sounder' in args and glob.Platform.is_windows():
-        glob.GlobalParams.set_sounder(args['win_sounder'])
 
     # If overriding to use afplay on a mac
     if ('mac_afplay' in args and glob.Platform.is_mac()):

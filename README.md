@@ -119,7 +119,7 @@ Project requirements:
 Version
 -------
 
-1.8
+2.0
 
 Installation
 ------------
@@ -278,14 +278,6 @@ python notifier.py --config resources/example.txt --mac-afplay
 ```
 
 Of course, this will mean that you will have to enter the relative or full path to the sound instead of using the shorthands available in the system.
-
-*Windows Only*
-
-For Windows, there seem to be some issues with sounder.exe not being recognized automatically, even if put on the environment path. To solve this issue, you may enter the full search path to this executable:
-
-```
-python notifier.py --config resources/example_setup.txt --growl --win-sounder C:\\sounder.exe
-```
 
 *BONUS (Windows need additional installation for this to work)*
 
@@ -486,9 +478,21 @@ Future plans
 
 **General**
 
-- Implement support for loading complete zip-packages
-- Implement support for loading zip-packages directly from HTTP
-- Implement support for defining settings in the config files
+(- Implement support for loading complete zip-packages)
+(- Implement support for loading zip-packages directly from HTTP)
+(- Fix so that soundfiles inside of zip-packages can be played)
+(- Implement support for defining settings in the config files, eg. automatically use external player for mac)
+- Implement support for file to direct user to different configurations depending on platform
+(- Fix Unicode changes that appeared with the support for Python 3.4)
+- Document:
+    How to set settings in config file
+    How to define zip sounds
+    How to define zip file as config
+    How config inside of zip-file needs to be named
+(- Remove --win-sounder (not needed))
+- Add parameter for NOT allowing of bundled settings
+- Fix bug when embedded sounds in zip-package, tmp folder may be removed before playing of the sound for QUIT-configuration
+
 
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
