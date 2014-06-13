@@ -21,7 +21,7 @@ except ImportError:
 try:
     # For Python 3.0 and later
     from urllib.request import urlopen
-    from urllib.fetch import fetch
+    from urllib.request import fetch
     from urllib.request import HTTPError
 except ImportError:
     # Fall back to Python 2's urllib2
