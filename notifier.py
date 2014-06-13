@@ -11,11 +11,12 @@ from random import randint
 import zipfile
 
 try:
-    # For Python 3.0 and later
-    import io.StringIO as cStringIO
+    import cStringIO as io
 except ImportError:
-    # Python 2.x
-    import cStringIO
+    try:
+        import StringIO as io
+    except ImportError:
+        import io
 
 try:
     # For Python 3.0 and later
@@ -163,7 +164,7 @@ def parse_configuration_file(configuration_file):
             decided_config = False
             # Read zip-file
             remotezip = urlopen(configuration_file)
-            zipinmemory = cStringIO.StringIO(remotezip.read())
+            zipinmemory = io.StringIO(remotezip.read())
 
             # Create tmp directory with these files
             glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
