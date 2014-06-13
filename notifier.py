@@ -8,8 +8,14 @@ import signal
 import glob
 from time import sleep
 from random import randint
-import cStringIO
 import zipfile
+
+try:
+    # For Python 3.0 and later
+    import io.StringIO as cStringIO
+except ImportError:
+    # Python 2.x
+    import cStringIO
 
 try:
     # For Python 3.0 and later
