@@ -165,7 +165,7 @@ def parse_configuration_file(configuration_file):
             # Read zip-file
             remotezip = urlopen(configuration_file)
             remotezip_read = remotezip.read()
-            zipinmemory = io.StringIO(remotezip_read)
+            zipinmemory = io.StringIO(str(remotezip_read))
 
             # Create tmp directory with these files
             glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
