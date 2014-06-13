@@ -35,7 +35,7 @@ class CommandHelper:
     @staticmethod
     def support_command(command):
         supported = True
-        command_name = command if isinstance(command, basestring) else command[0]
+        command_name = command if Py3Helper.own_isinstance_string(command) else command[0]
         try:
             CommandHelper.run_command(command)
             glob.Debug.debug('[DEBUG] Checking if ' + command_name + ' is available on system > True')
@@ -59,13 +59,12 @@ class CommandHelper:
     @staticmethod
     def strip_coloring(line):
         matches = re.findall('\033?\[[0-9]{1,2}m?', line)
-        if matches is not None and isinstance(matches, basestring):
+        if matches is not None and Py3Helper.own_isinstance_string(matches):
             matches = [matches]
         if matches is not None and len(matches) > 0:
             for match in matches:
                 line = line.replace(match, '')
         return line
-
 
 class TimeHelper:
     @staticmethod
@@ -123,3 +122,12 @@ class ColorOutput:
                 return output
         else:
             return text
+
+class Py3Helper:
+    @staticmethod
+    def own_isinstance_string(obj):
+        try:
+          basestring
+        except NameError:
+          basestring = str
+        return isinstance(obj, basestring)
