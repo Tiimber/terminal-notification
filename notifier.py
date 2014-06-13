@@ -22,38 +22,40 @@ try:
 except ImportError:
     pass
 
-
 process = None
 need_restart = True
-runtime_tmp_id = 'tmp_'+str(extra_functions.TimeHelper.get_time())+'_'+str(randint(100000, 999999))
+runtime_tmp_id = 'tmp_' + str(extra_functions.TimeHelper.get_time()) + '_' + str(randint(100000, 999999))
 
 
 def override_settings(line):
-    glob.Debug.debug('[DEBUG] Requested setting from configuration file: '+str(line))
-    is_not = False
-    if line.startswith('!'):
-        is_not = True
-        line = line[1:].strip()
+    if glob.GlobalParams.is_no_override_settings():
+        glob.Debug.debug('[DEBUG] Configuration file was denied to override setting: ' + str(line))
+    else:
+        glob.Debug.debug('[DEBUG] Requested setting from configuration file: ' + str(line))
+        is_not = False
+        if line.startswith('!'):
+            is_not = True
+            line = line[1:].strip()
 
-    set_bool_val = not is_not
-    if line == '--debug':
-        glob.GlobalParams.set_debug(set_bool_val)
-    elif line == '--mute':
-        glob.GlobalParams.set_mute(set_bool_val)
-    elif line == '--growl':
-        glob.GlobalParams.set_growl(set_bool_val)
-    elif line == '--only_sound':
-        glob.GlobalParams.set_only_sound(set_bool_val)
-    elif line == '--no_sound':
-        glob.GlobalParams.set_no_sound(set_bool_val)
-    elif line == '--mac_afplay':
-        glob.GlobalParams.set_afplay(set_bool_val)
-    elif line.startswith('--color'):
-        if is_not or '=' not in line:
-            glob.GlobalParams.unset_color()
-        else:
-            color = line[line.find('=')+1:]
-            glob.GlobalParams.set_color(color)
+        set_bool_val = not is_not
+        if line == '--debug':
+            glob.GlobalParams.set_debug(set_bool_val)
+        elif line == '--mute':
+            glob.GlobalParams.set_mute(set_bool_val)
+        elif line == '--growl':
+            glob.GlobalParams.set_growl(set_bool_val)
+        elif line == '--only_sound':
+            glob.GlobalParams.set_only_sound(set_bool_val)
+        elif line == '--no_sound':
+            glob.GlobalParams.set_no_sound(set_bool_val)
+        elif line == '--mac_afplay':
+            glob.GlobalParams.set_afplay(set_bool_val)
+        elif line.startswith('--color'):
+            if is_not or '=' not in line:
+                glob.GlobalParams.unset_color()
+            else:
+                color = line[line.find('=') + 1:]
+                glob.GlobalParams.set_color(color)
 
 
 def parse_configuration_contents(contents):
@@ -117,7 +119,7 @@ def parse_configuration_contents(contents):
                     if line.startswith('['):
                         notification_name = line[1:line.find(']')]
                         notification_name_lower = notification_name.lower()
-                        line = line[len('['+notification_name+']'):]
+                        line = line[len('[' + notification_name + ']'):]
                         value = line
 
                         # Resolve sounds packaged in zip to the temporary folder
@@ -140,41 +142,67 @@ def parse_configuration_file(configuration_file):
     if configuration_file.endswith('.zip'):
         glob.Debug.debug('[DEBUG] Zip package detected as config, will try and extract it temporarily...')
         if not configuration_file.startswith('http') and not configuration_file.startswith('file://'):
-            configuration_file = 'file://'+configuration_file
+            configuration_file = 'file://' + configuration_file
 
-        glob.Debug.debug('[DEBUG] Opening and parsing configuration file in zip "'+configuration_file+'"...')
+        glob.Debug.debug('[DEBUG] Opening and parsing configuration file in zip "' + configuration_file + '"...')
         try:
+            decided_config = False
             # Read zip-file
             remotezip = urllib2.urlopen(configuration_file)
             zipinmemory = cStringIO.StringIO(remotezip.read())
 
             # Create tmp directory with these files
-            glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "'+runtime_tmp_id+'"')
+            glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
             extra_functions.FileHelper.create_directory(runtime_tmp_id)
 
             zip = zipfile.ZipFile(zipinmemory)
             for fn in zip.namelist():
                 binary_contents = zip.read(fn)
-                extra_functions.FileHelper.write_bytes_to_file(runtime_tmp_id+'/'+fn, binary_contents)
+                extra_functions.FileHelper.write_bytes_to_file(runtime_tmp_id + '/' + fn, binary_contents)
 
-                if fn.replace('.txt', '.zip') in configuration_file:
-                    configuration_file = runtime_tmp_id+'/'+fn
+                if fn.endswith('platform-route.txt'):
+                    configuration_file = get_configuration_in_route(
+                        extra_functions.FileHelper.get_file_contents(runtime_tmp_id + '/' + fn))
+                    decided_config = True
+                elif not decided_config and fn.replace('.txt', '.zip') in configuration_file:
+                    configuration_file = runtime_tmp_id + '/' + fn
+
+            return parse_configuration_file(configuration_file)
         except urllib2.HTTPError:
             print(extra_functions.ColorOutput.get_colored('ERROR Configuration file couldn\'t load...'))
             exit_notifier()
 
-    glob.Debug.debug('[DEBUG] Checking if configuration file "'+configuration_file+'" exists...')
+    glob.Debug.debug('[DEBUG] Checking if configuration file "' + configuration_file + '" exists...')
     if extra_functions.FileHelper.does_file_exist(configuration_file):
-        glob.Debug.debug('[DEBUG] Opening and parsing configuration file "'+configuration_file+'"...')
+        glob.Debug.debug('[DEBUG] Opening and parsing configuration file "' + configuration_file + '"...')
         contents = extra_functions.FileHelper.get_file_contents(configuration_file)
         parsed_configuration = parse_configuration_contents(contents)
         if len(parsed_configuration.commands) == 0:
-            print(extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...'))
+            print(
+                extra_functions.ColorOutput.get_colored('ERROR Configuration file don\'t have any commands to run...'))
             exit_notifier()
         return parsed_configuration
     else:
         print(extra_functions.ColorOutput.get_colored('ERROR: The specified file don\'t exist or couldn\'t be opened'))
         exit_notifier()
+
+
+def get_configuration_in_route(contents):
+    configuration_file_for_system = ''
+    lines = str(contents).split('\n')
+    for line in lines:
+        if line.find(':') != -1:
+            config_platform = line[0:line.find(':')]
+            config_file = line[len(config_platform) + 1:]
+            glob.Debug.debug(
+                '[DEBUG] Configuration file for platform "' + config_platform + '" is "' + config_file + '"')
+            if (config_platform == 'mac' and glob.Platform.is_mac()) or (
+                config_platform == 'lin' and glob.Platform.is_linux()) or (
+                config_platform == 'win' and glob.Platform.is_windows()):
+                glob.Debug.debug('[DEBUG] Will use configuration file "' + config_file + '"')
+                configuration_file_for_system = config_file.replace('zip:', runtime_tmp_id + '/')
+                break
+    return configuration_file_for_system
 
 
 def run(parsed_configuration):
@@ -184,7 +212,7 @@ def run(parsed_configuration):
     while need_restart:
         need_restart = False
         process = Popen(merged_commands, stdout=PIPE, stderr=STDOUT, stdin=PIPE, shell=True)
-        glob.Debug.debug('[DEBUG] Commands: '+merged_commands)
+        glob.Debug.debug('[DEBUG] Commands: ' + merged_commands)
         accumulated_lines = []
 
         # Starting, make sure it's not considered as hanging already
@@ -205,7 +233,7 @@ def run(parsed_configuration):
                 print(extra_functions.ColorOutput.get_colored(nextline))
             process_poll = process.poll()
             if nextline == '' and process_poll is not None:
-                glob.Debug.debug('[DEBUG] Process exit code: '+str(process_poll))
+                glob.Debug.debug('[DEBUG] Process exit code: ' + str(process_poll))
                 if need_restart:
                     break
                 else:
@@ -220,11 +248,16 @@ def run(parsed_configuration):
 
         if need_restart:
             print('Restart of process was requested!')
+        else:
+            if extra_functions.FileHelper.does_file_exist(runtime_tmp_id):
+                # Sleep a little while before exiting - to allow possible playing of quit-sound
+                sleep(0.01)
 
 
 def kill_process():
     global process
     process.kill()
+
 
 def restart_process():
     global process, need_restart
@@ -236,7 +269,7 @@ def function(parsed_configuration):
     # Collect configuration times for hanging scripts
     hanging_times = parsed_configuration.get_hanging_times()
     if len(hanging_times) > 0:
-        glob.Debug.debug('[DEBUG] Time thresholds for hanging configurations: '+str(hanging_times))
+        glob.Debug.debug('[DEBUG] Time thresholds for hanging configurations: ' + str(hanging_times))
 
         last_elapsed = glob.Hang.get_elapsed()
         while True:
@@ -259,7 +292,7 @@ def exit_notifier():
     extra_functions.FileHelper.remove_file("NUL")
 
     # Remove tmp directory with with zip contents
-    glob.Debug.debug('[DEBUG] Removing temporary folder for zip-contents: "'+runtime_tmp_id+'"')
+    glob.Debug.debug('[DEBUG] Removing temporary folder for zip-contents: "' + runtime_tmp_id + '"')
     extra_functions.FileHelper.remove_directory(runtime_tmp_id)
 
     glob.GlobalParams.unset_color()
@@ -271,20 +304,30 @@ def user_exited(signum, frame):
     kill_process()
     exit_notifier()
 
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, user_exited)
-    parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
+    parser = argparse.ArgumentParser(
+        description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
     parser.add_argument('--debug', help='Debug output', required=False, default=False, action='store_true')
     parser.add_argument('--mute', help='Mute normal output', required=False, default=False, action='store_true')
-    parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False, default=False, action='store_true')
-    parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False, default=False, action='store_true')
-    parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
+    parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False,
+                        default=False, action='store_true')
+    parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False,
+                        default=False, action='store_true')
+    parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False,
+                        action='store_true')
     parser.add_argument('--color', help='Set color to use for all output', required=False, default=None, type=str)
-    parser.add_argument('--mac-afplay', help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center', required=False, default=False, action='store_true')
+    parser.add_argument('--mac-afplay',
+                        help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center',
+                        required=False, default=False, action='store_true')
+    parser.add_argument('--no-override-settings', help='Do not allow any bundled settings', required=False,
+                        default=False, action='store_true')
     args = vars(parser.parse_args())
 
-    # Set debug and mute params
+    # Set global params
+    glob.GlobalParams.set_no_override_settings(args['no_override_settings'])
     glob.GlobalParams.set_debug(args['debug'])
     glob.GlobalParams.set_mute(args['mute'])
     glob.GlobalParams.set_growl(args['growl'])
@@ -299,7 +342,7 @@ if __name__ == "__main__":
         glob.GlobalParams.set_color(args['color'])
 
     # Output platform debug
-    glob.Debug.debug('[DEBUG] platform information: '+str(glob.Platform.get_platform()))
+    glob.Debug.debug('[DEBUG] platform information: ' + str(glob.Platform.get_platform()))
 
     # If overriding to use afplay on a mac
     if ('mac_afplay' in args and glob.Platform.is_mac()):

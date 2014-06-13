@@ -482,16 +482,18 @@ Future plans
 (- Implement support for loading zip-packages directly from HTTP)
 (- Fix so that soundfiles inside of zip-packages can be played)
 (- Implement support for defining settings in the config files, eg. automatically use external player for mac)
-- Implement support for file to direct user to different configurations depending on platform
 (- Fix Unicode changes that appeared with the support for Python 3.4)
+(- Remove --win-sounder (not needed))
+(- Add parameter for NOT allowing of bundled settings)
+(- Fix bug when embedded sounds in zip-package, tmp folder may be removed before playing of the sound for QUIT-configuration)
+(- Implement support for file to direct user to different configurations depending on platform)
 - Document:
     How to set settings in config file
     How to define zip sounds
     How to define zip file as config
     How config inside of zip-file needs to be named
-(- Remove --win-sounder (not needed))
-- Add parameter for NOT allowing of bundled settings
-- Fix bug when embedded sounds in zip-package, tmp folder may be removed before playing of the sound for QUIT-configuration
+    How to override configuration settings
+    How to make multi-platform packages by creating a platform-route.txt
 
 
 - Fix so that groups isn't needed in patterns
