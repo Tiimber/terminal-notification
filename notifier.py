@@ -164,7 +164,11 @@ def parse_configuration_file(configuration_file):
             decided_config = False
             # Read zip-file
             remotezip = urlopen(configuration_file)
-            zipinmemory = io.StringIO(remotezip.read())
+            remotezip_read = remotezip.read()
+            if extra_functions.Py3Helper.own_isinstance_string(remotezip_read):
+                zipinmemory = io.StringIO(remotezip_read)
+            else:
+                zipinmemory = remotezip_read
 
             # Create tmp directory with these files
             glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
