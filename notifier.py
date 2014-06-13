@@ -167,7 +167,11 @@ def parse_configuration_file(configuration_file):
             # Read zip-file
             zip = None
             if is_python_3:
-                zip = zipfile.ZipFile(configuration_file, 'r')
+                remotezip = urlopen(configuration_file)
+                remotezip_read = remotezip.read()
+                zipinmemory = io.BytesIO(remotezip_read)
+
+                zip = zipfile.ZipFile(zipinmemory, 'r')
             else:
                 remotezip = urlopen(configuration_file)
                 remotezip_read = remotezip.read()
