@@ -8,9 +8,17 @@ import signal
 import glob
 from time import sleep
 from random import randint
-import urllib2
 import cStringIO
 import zipfile
+
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+    from urllib.request import HTTPError
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
 
 try:
     import thread
@@ -148,7 +156,7 @@ def parse_configuration_file(configuration_file):
         try:
             decided_config = False
             # Read zip-file
-            remotezip = urllib2.urlopen(configuration_file)
+            remotezip = urlopen(configuration_file)
             zipinmemory = cStringIO.StringIO(remotezip.read())
 
             # Create tmp directory with these files
@@ -168,7 +176,7 @@ def parse_configuration_file(configuration_file):
                     configuration_file = runtime_tmp_id + '/' + fn
 
             return parse_configuration_file(configuration_file)
-        except urllib2.HTTPError:
+        except HTTPError:
             print(extra_functions.ColorOutput.get_colored('ERROR Configuration file couldn\'t load...'))
             exit_notifier()
 
