@@ -22,12 +22,10 @@ try:
     # For Python 3.0 and later
     from urllib.request import urlopen
     from urllib.request import HTTPError
-    from urllib import request as fetch
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen
     from urllib2 import HTTPError
-    fetch = None
 
 try:
     import thread
@@ -165,7 +163,7 @@ def parse_configuration_file(configuration_file):
         try:
             decided_config = False
             # Read zip-file
-            remotezip = fetch(configuration_file) if fetch is not None else urlopen(configuration_file)
+            remotezip = urlopen(configuration_file)
             remotezip_read = remotezip.read()
             zipinmemory = io.StringIO(remotezip_read)
 
