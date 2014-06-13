@@ -21,11 +21,13 @@ except ImportError:
 try:
     # For Python 3.0 and later
     from urllib.request import urlopen
+    from urllib.fetch import fetch
     from urllib.request import HTTPError
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen
     from urllib2 import HTTPError
+    fetch = None
 
 try:
     import thread
@@ -163,18 +165,15 @@ def parse_configuration_file(configuration_file):
         try:
             decided_config = False
             # Read zip-file
-            remotezip = urlopen(configuration_file)
+            remotezip = fetch(configuration_file) if fetch is not None else urlopen(configuration_file)
             remotezip_read = remotezip.read()
-            if extra_functions.Py3Helper.own_isinstance_string(remotezip_read):
-                zipinmemory = io.StringIO(remotezip_read)
-            else:
-                zipinmemory = remotezip_read
+            zipinmemory = io.StringIO(remotezip_read)
 
             # Create tmp directory with these files
             glob.Debug.debug('[DEBUG] Creating temporary folder for zip-contents: "' + runtime_tmp_id + '"')
             extra_functions.FileHelper.create_directory(runtime_tmp_id)
 
-            zip = zipfile.ZipFile(zipinmemory)
+            zip = zipfile.ZipFile(zipinmemory, 'r')
             for fn in zip.namelist():
                 binary_contents = zip.read(fn)
                 extra_functions.FileHelper.write_bytes_to_file(runtime_tmp_id + '/' + fn, binary_contents)
