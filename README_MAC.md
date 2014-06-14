@@ -3,50 +3,26 @@ Terminal Notification
 
 [**Project home**] [1]
 
-[**Mac OS X Only README**] (README_MAC.md)
+**This is the Mac OS X Only Guide - for other platforms, see: [README] (README.md)**
 
-[**Linux Only README**] (README_LINUX.md)
+*Supporting Mac OS X 10.8 with native notifications through Notification Center*
 
-[**Windows Only README**] (README_WINDOWS.md)
-
-*Currently supporting Mac OS X 10.8+, Windows and most Linux variants with more or less native notifications*
-
-*There is also support for older or additional systems by using Growl (but this normally requires a bit more manual install)*
+*There is also support for older systems by using Growl (but this normally requires a bit more manual install)*
 
 ---
 
 When used, notifications will be displayed like this:
 
-Mac OS X - Notification Center:
+Notification Center:
 
 ![Mac OS X Notification Center] (resources/screenshots/MacOSXNotificationCenter.png)
 
-Mac OS X - Growl:
+Growl:
 
 ![Mac OS X Growl] (resources/screenshots/MacOSXGrowl.png)
 
-Ubuntu 14.04 - notify-send:
-
-![Ubuntu notify-send] (resources/screenshots/UbuntuNotifySend.png)
-
-
-Ubuntu 14.04 - Growl:
-
-![Ubuntu Growl] (resources/screenshots/UbuntuGrowl.png)
-
-
-Windows 7 - notifu:
-
-![Windows notifu] (resources/screenshots/WindowsNotifu.png)
-
-
-Windows 7 - Growl:
-
-![Windows Growl] (resources/screenshots/WindowsGrowl.png)
-
-
-Mac OS X
---------
+Notification Center
+-------------------
 
 This project aims to be a highly configurable notification handler for any terminal commands in Mac OS X (10.8+).
 
@@ -64,49 +40,10 @@ Project requirements:
 - Python 2.7 or 3.4
 - [terminal-notifier] [2] (Installation instructions are included below)
 
-Linux
------
-
-This project supports most Linux flavours, where notify-send and the ALSA drivers are installed (bundled with many distributions).
-
-All notifications will be sent out using notify-send, and you can specify the following:
-
-- What pattern to listen for in the output
-- Configure title and message (including using above mentioned regexp variables)
-- Choose what sound to play with the message
-- Set a max frequency for messages of each type
-- Send notifications on startup and termination
-
-Project requirements:
-
-- Linux system with notify-send installed
-- Python 2.7 or 3.4
-- aplay (for sounds)
-
-Windows
--------
-
-This project supports Windows, if you have installed notifu on it. For playing sounds, supported application is sounder.exe.
-
-All notifications will be sent out using notifu, and you can specify the following:
-
-- What pattern to listen for in the output
-- Configure title and message (including using above mentioned regexp variables)
-- Choose what sound to play with the message
-- Set a max frequency for messages of each type
-- Send notifications on startup and termination
-- Choose how long the notification can be visible
-
-Project requirements:
-
-- Windows system with [notifu] [7] installed
-- Python 2.7 or 3.4
-- [sounder.exe] [6] (for sounds)
-
 Growl
 -----
 
-With Growl, you get the benefit of being able to see the notifications on all systems that have support for Growl. However there are a few requirements, which may be a bit complex to setup, and it will not end up in as tight integration as the system default implementations. For playing sounds, there is a requirement of an additional external sound player.
+With Growl, you get the benefit of being able to see the notifications on all systems that have support for Growl. However there are a few requirements, which may be a bit complex to setup, and it will not end up in as tight integration as the system default implementations. For playing sounds, there is a requirement of an additional external sound player, which luckily is bundled with Mac OS X.
 
 All notifications will be sent out over the gntp protocol, and you can specify the following:
 
@@ -134,9 +71,6 @@ Installation
 
 First you need to clone this project. If you haven't already, visit [Project home] [1] and follow instructions for how to clone the project.
 
----
-
-*For Mac OS X*
 
 **Install terminal-notifier**
 
@@ -152,85 +86,21 @@ brew install terminal-notifier
 
 ---
 
-*For Linux*
-
-If notify-send isn't installed, install it with your favourite package manager, eg:
-
-```
-sudo apt-get install notify-osd
-```
-
-If you are lacking aplay in your system, I can't really help you. What I know is that it's bundled with ALSA sound card drivers. So google it, and if you figure it out, send instructions to me and I will add them. I haven't used a flavour of Linux that don't bundle it yet.
-
----
-
-*For Windows*
-
-If notifu isn't installed, download it [here] [7]. You will also need to add the path of it to your path environment variable.
-
-If sounder.exe isn't installed, download it [here] [6]. You will also need to add the path of it to your path environment variable.
-
-In order for color output to work for Windows, a handy python-tool is required, called colorama. To install it on your system, follow the instructions to install pip just below, then run the following command as Administrator in a command prompt:
-
-```
-pip install colorama
-```
-
----
-
 *For Growl implementation*
 
-Download and install Growl for [Windows] [3], [Mac] [4] or [Linux] [5]
+Download and install Growl for [Mac] [4].
 
-Download and install GNTP for your system, instructions based on system.
-
----
-
-*For Windows*
-
-If you are having troubles doing this, for Windows the suggested solution is to do the following:
-
-- Run this in a terminal (it will install pip):
-
-```
-python -c "exec('try: from urllib2 import urlopen \nexcept: from urllib.request import urlopen');f=urlopen('https://raw.github.com/pypa/pip/master/contrib/get-pip.py').read();exec(f)"
-```
-
-- Add pip to your path (environment variable). It will be put in a subfolder to Python itself. Search for pip.exe among your files to find it.
-
----
-
-*For Linux*
-
-Use your package manager to install pip, eg:
-
-```
-sudo apt-get install python-pip
-```
-
---- 
-
-*For Mac OS X*
-
-Use easy_install to install pip, it should be bundled with Python:
+Download and install GNTP for your system, by using easy_install to first install pip, it should be bundled with Python:
 
 ```
 sudo easy_install pip
 ```
 
----
-
-*For all systems*
-
 Now we just need to install gntp through pip:
 
 ```
-pip install gntp
+sudo pip install gntp
 ```
-
-You will need to run this command as administrator, for Mac OS X and Linux it means prefixing the command with sudo and for Windows by opening the command prompt as Administrator.
-
----
 
 Usage
 -----
@@ -269,11 +139,11 @@ Will use Growl to display notifications
 
 --mac-afplay
 
-On Mac OS X, use external sound player to play sounds instead of the built in sound effects. This means that all sounds must be a relative path to where the sound file is located
+Use external sound player to play sounds instead of the built in sound effects. This means that all sounds must be a relative path to where the sound file is located
 
 --color COLOR
 
-Here you may specify a color to use for all the console output. Replace COLOR with one of the following values: **black**, **gray**, **white**, **red**, **green**, **yellow**, **blue**, **magenta**, **cyan** and last but not least **rainbow**. *For Windows, you will need to install colorama for this one to work, see information above*
+Here you may specify a color to use for all the console output. Replace COLOR with one of the following values: **black**, **gray**, **white**, **red**, **green**, **yellow**, **blue**, **magenta**, **cyan** and last but not least **rainbow**
 
 --no-override-settings
 
@@ -347,15 +217,13 @@ Some explanations for each part:
 
 - **TITLE** - The title to display in the notification
 
-- **SUBTITLE** - The subtitle to display in the notification - *MAC ONLY* - If entered in a Linux system or when using Growl, it will be appended to the title
+- **SUBTITLE** - The subtitle to display in the notification - Will be merged with the title if using Growl
 
 - **MESSAGE** - The text to display in the notification
 
-- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - *MAC ONLY* - Will not work at all for Linux or Growl
+- **GROUP** - A group ID for the notification. Is supposed to be limited to one per ID, but seems to have no effect (known bug) - Will not work at all for Growl
 
-- **TIME** - If entered, the notification will be requested to be removed after this amount of milliseconds - *LINUX AND WINDOWS ONLY* - Will be ignored for Mac OS X and Growl
-
-- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. For Linux systems, all sounds that can be played with aplay is supported, and have to be written with the full path. If you're using windows, this application have integrated support with [sounder.exe] [6], and the sounds have to be written with the full path.
+- **SOUND** - The sound to play when the notification is shown. A list of default available sounds for Mac OS X is listed below. More sounds may be added to this list. You may also use afplay to play any sounds not built in with Mac OS X, by giving the --mac-afplay flag in the settings for the configuration.
 
 If you want to have a range of sounds to either play in order of appearance or randomly, these can be specified as such:
 
@@ -447,8 +315,6 @@ Line 9 have the meaning: **If** the **third last** outputted line does **not** m
 Sounds
 ------
 
-**Mac OS X**
-
 *Note!* - These sounds described here are only for Notification Center and if you haven't set the override flag for --mac-afplay. See below for this override flag and Growl variant of sound play.
 
 For the NOTIFICATION > SOUND, these should be the names on the sounds bundled with Mac OS X. Too see the names available for your computer, open System Preferences > Sound > Sound Effects. The names of the sounds there are also available for this application. The list of my computer is as follows:
@@ -471,14 +337,6 @@ For the NOTIFICATION > SOUND, these should be the names on the sounds bundled wi
 It's possible to add your own sounds to this setup, follow [this guide] (resources/sounds/mac/README.md) to add your own.
 
 **Note!** - If you are using Growl for Mac or have set the override flag --mac-afplay, the sounds will be played with afplay, which is bundled with Mac OS X 10.5+. The sounds bundled with this project should work. They are not entered with the short names mentioned above, but with the relative or full path to the file.
-
-**Linux**
-
-For the NOTIFICATION > SOUND, these sounds should be sounds that can play with aplay (all sounds bundled with this project should work). They are entered with the relative or full path to the file.
-
-**Windows**
-
-For the NOTIFICATION > SOUND, these sounds should be sounds that can play with sounder.exe (all sounds bundled with this project should work). They are entered with the relative or full path to the file.
 
 Zip Packages
 ------------
@@ -531,24 +389,6 @@ Future plans
 
 **General**
 
-(- Implement support for loading complete zip-packages)
-(- Implement support for loading zip-packages directly from HTTP)
-(- Fix so that soundfiles inside of zip-packages can be played)
-(- Implement support for defining settings in the config files, eg. automatically use external player for mac)
-(- Fix Unicode changes that appeared with the support for Python 3.4)
-(- Remove --win-sounder (not needed))
-(- Add parameter for NOT allowing of bundled settings)
-(- Fix bug when embedded sounds in zip-package, tmp folder may be removed before playing of the sound for QUIT-configuration)
-(- Implement support for file to direct user to different configurations depending on platform)
-(- Document:)
-(    How to define zip file as config)
-(    How to define zip sounds)
-(    How config inside of zip-file needs to be named)
-(    How to override configuration settings)
-(    How to set settings in config file)
-(    How to make multi-platform packages by creating a platform-route.txt)
-
-- Create an interactive guide
 - Fix so that groups isn't needed in patterns
 - More configuration options, eg. choose which configuration should apply to what command
 
@@ -557,26 +397,14 @@ Future plans
 - Figure out why group ID isn't working for the notifications
 - Figure out if it's possible to configure how long time to show notifications
 
-**Linux**
-
-- Try to see if queueing issues for notifications can be fixed
-- Try to see if time of showing notifications can be fixed
-
 Reservations
 ------------
 
-Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations are:
+Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations for Mac OS X are:
 
 - Mac OS X 10.9.3 with Notification Center
 - Mac OS X 10.9.3 with Growl and afplay
 - Mac OS X 10.8.5 with Notification Center
-- Ubuntu 14.04 with notify-send and aplay
-- Ubuntu 14.04 with Growl and aplay
-- Fedora 20 with notify-send and aplay
-- Linux Mint 17 "Qiana" with notify-send and aplay
-- Linux Mint 17 "Qiana" with Growl and aplay
-- Windows 7 with notifu and sounder.exe
-- Windows 7 with Growl, GNTP and sounder.exe
 
 License
 -------
@@ -587,8 +415,4 @@ For full license see [LICENSE.txt] (LICENSE.txt)
 
 [1]:https://bitbucket.org/rtapper/terminal-notification
 [2]:https://github.com/alloy/terminal-notifier
-[3]:http://www.growlforwindows.com/gfw/default.aspx
 [4]:http://growl.info/downloads
-[5]:http://mattn.github.io/growl-for-linux/
-[6]:http://www.elifulkerson.com/projects/commandline-wav-player.php
-[7]:http://www.paralint.com/projects/notifu/download.html

@@ -2,12 +2,12 @@ import subprocess
 
 
 def notify_obj(notify_object):
-    title = notify_object['title'] if 'title' in notify_object else None
-    subtitle = notify_object['subtitle'] if 'subtitle' in notify_object else None
-    message = notify_object['message'] if 'message' in notify_object else None
-    sound = notify_object['sound'] if 'sound' in notify_object else None
-    group = notify_object['group'] if 'group' in notify_object else None
-    remove = notify_object['remove'] if 'remove' in notify_object else None
+    title = str(notify_object['title']) if 'title' in notify_object else None
+    subtitle = str(notify_object['subtitle']) if 'subtitle' in notify_object else None
+    message = str(notify_object['message']) if 'message' in notify_object else None
+    sound = str(notify_object['sound']) if 'sound' in notify_object else None
+    group = str(notify_object['group']) if 'group' in notify_object else None
+    remove = str(notify_object['remove']) if 'remove' in notify_object else None
     notify(title=title, subtitle=subtitle, message=message, sound=sound, group=group, remove=remove)
 
 

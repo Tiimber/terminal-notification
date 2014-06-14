@@ -3,6 +3,7 @@ import time
 import glob
 import os
 import subprocess
+import shutil
 
 __author__ = 'Robbin Tapper'
 
@@ -30,6 +31,23 @@ class FileHelper:
         if FileHelper.does_file_exist(path_and_file):
             os.remove(path_and_file)
 
+    @staticmethod
+    def create_directory(path):
+        if not FileHelper.does_file_exist(path):
+            os.mkdir(path)
+
+    @staticmethod
+    def remove_directory(path):
+        if FileHelper.does_file_exist(path):
+            shutil.rmtree(path)
+
+    @staticmethod
+    def write_bytes_to_file(path_and_file, binary_contents):
+        if len(binary_contents) > 0:
+            new_file = open(path_and_file, "wb")
+            new_file.write(bytearray(binary_contents))
+        elif path_and_file.endswith('/'):
+            FileHelper.create_directory(path_and_file)
 
 class CommandHelper:
     @staticmethod
@@ -127,7 +145,6 @@ class Py3Helper:
     @staticmethod
     def own_isinstance_string(obj):
         try:
-          basestring
+            return isinstance(obj, basestring)
         except NameError:
-          basestring = str
-        return isinstance(obj, basestring)
+            return isinstance(obj, str)

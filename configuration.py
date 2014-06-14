@@ -187,7 +187,7 @@ class Configuration:
 
             # Play sound in external sound player
             if notification_sound is not None:
-                Configuration.play_sound(notification['sound'])
+                Configuration.play_sound(str(notification['sound']))
 
             # If not requested growl or if failed - run default for system
             if not will_use_growl:

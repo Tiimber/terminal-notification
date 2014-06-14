@@ -4,6 +4,7 @@ import extra_functions
 
 
 class GlobalParams():
+    no_override_settings = False
     debug = False
     mute = False
     growl = False
@@ -12,6 +13,15 @@ class GlobalParams():
     mac_afplay = False
     win_sounder = None
     color = None
+
+
+    @staticmethod
+    def set_no_override_settings(no_override_settings):
+        GlobalParams.no_override_settings = no_override_settings
+
+    @staticmethod
+    def is_no_override_settings():
+        return GlobalParams.no_override_settings
 
     @staticmethod
     def set_debug(debug):

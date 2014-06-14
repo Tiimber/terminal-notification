@@ -23,13 +23,13 @@ class GrowlNotifier():
     @staticmethod
     def notify_obj(notify_object):
         if GrowlNotifier.growl is not None:
-            title = notify_object['title'] if 'title' in notify_object else None
-            subtitle = notify_object['subtitle'] if 'subtitle' in notify_object else None
+            title = str(notify_object['title']) if 'title' in notify_object else None
+            subtitle = str(notify_object['subtitle']) if 'subtitle' in notify_object else None
             if title is not None and subtitle is not None:
                 title = title + ' / ' + subtitle
             elif subtitle is not None:
                 title = subtitle
-            message = notify_object['message'] if 'message' in notify_object else None
+            message = str(notify_object['message']) if 'message' in notify_object else None
             return GrowlNotifier.notify(title=title, message=message)
         else:
             return False
