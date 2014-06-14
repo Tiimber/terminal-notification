@@ -278,7 +278,7 @@ def run(parsed_configuration):
         else:
             if extra_functions.FileHelper.does_file_exist(runtime_tmp_id):
                 # Sleep a little while before exiting - to allow possible playing of quit-sound
-                sleep(0.01)
+                sleep(2)
 
 
 def kill_process():
