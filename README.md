@@ -231,63 +231,47 @@ Usage
 
 **Run Custom Terminal Notification**
 
-Enter the folder of the project in a terminal, then run
+Enter the folder of the project in a terminal, then the shortest way to start the application is as such:
 
 ```
-python notifier.py --config resources/example_setup.txt
+python notifier.py --config resources/example.txt
 ```
 
-This will run with the included example, which is just as stated, an example configuration.
+The config file may be either a local configuration file with the file suffix .txt or a zip-package. The zip-package may be either a local file on your hard-drive or one distributed on the Internet. There are some specific rules to follow if you use the zip-packages, which is explained in a section below.
 
-To run with a lot of debug outputting:
+The rest of the parameters to the application can be defined in two ways. The first way is to put them inside of the configuration file itself, which will be described later in this file. The other way is to add them as arguments when starting the application. The following parameters are available:
 
-```
-python notifier.py --config resources/example_setup.txt --debug
-```
+--debug
 
-If you desire to not mirror the standard console output, run with the mute option:
+Will output a lot of debug text, which may help eg. when trying to setup configurations on your own
 
-```
-python notifier.py --config resources/example_setup.txt --mute
-```
+--mute
 
-If you don't want sounds to play (Mac OS X will eg. play a default sound if none is entered in configuration):
+This option will make sure to not output the standard console output
 
-```
-python notifier.py --config resources/example_setup.txt --no-sound
-```
+--no-sound
 
-If you are of the opposite kind you might only want the sounds to play, no notifications *Not in Mac OS X*:
+Use this one to not play any sounds for the notifications (some systems may still play a system default sound instead)
 
-```
-python notifier.py --config resources/example_setup.txt --only-sound
-```
+--only-sound
 
-If you would like to force the notifications to use growl, run with this option:
+This one will only play the sound, and make sure to not display any notifications. *For Mac OS X, this only applies if using Growl - sound without notification is not supported for Notification Center*
 
-```
-python notifier.py --config resources/example_setup.txt --growl
-```
+--growl
 
-*Mac Only*
+Will use Growl to display notifications 
 
-Even if you're using Notification Center for displaying notifications, you might want to use the external sound player (afplay). Do this by running with this option:
+--mac-afplay
 
-```
-python notifier.py --config resources/example.txt --mac-afplay
-```
+On Mac OS X, use external sound player to play sounds instead of the built in sound effects. This means that all sounds must be a relative path to where the sound file is located
 
-Of course, this will mean that you will have to enter the relative or full path to the sound instead of using the shorthands available in the system.
+--color COLOR
 
-*BONUS (Windows need additional installation for this to work)*
+Here you may specify a color to use for all the console output. Replace COLOR with one of the following values: **black**, **gray**, **white**, **red**, **green**, **yellow**, **blue**, **magenta**, **cyan** and last but not least **rainbow**. *For Windows, you will need to install colorama for this one to work, see information above*
 
-If you feel like controlling the color of the output during runtime of this application, you can specify color as such:
+--no-override-settings
 
-```
-python notifier.py --config resources/example_setup.txt --color green
-```
-
-Accepted values for color is **black**, **gray**, **white**, **red**, **green**, **yellow**, **blue**, **magenta** and **cyan**.
+Normally, settings written inside of a configuration takes priority over ones entered manually, use this option to not accept any of the settings in the configuration file
 
 
 Configuration
@@ -295,8 +279,25 @@ Configuration
 
 There are two major types of blocks that can be configured:
 
+- SETTINGS
 - COMMANDS
 - CONFIGURATION:
+
+---
+
+SETTINGS is a list of settings that will apply during runtime, unless the *--no-override-settings* was entered manually when starting the application, other than that, these are the same parameters. Each setting should be on it's own line, and to negate the value of it, simply prefix it with an exclamation mark (!).
+
+```
+[SETTINGS]
+    !--growl
+    !--mac-afplay
+    --color green
+    --debug
+    !--mute
+[/SETTINGS]
+```
+
+The above list of settings means roughly: *Do not use Growl for notifications, don't use external sound player to play notification sounds. Color all output in green text, use debug mode and also make sure to not mute the script output*
 
 ---
 
@@ -317,7 +318,7 @@ if many COMMANDS-blocks are entered, the last one will be used.
 
 ---
 
-CONFIGURATION: takes a name directly after the colon (still unused, but is planned for). This one have a bit more complex setup, so let's start by looking at an example:
+CONFIGURATION: takes a name directly after the colon (three names are reserved, the others are still unused, but is planned for the future). This one have a bit more complex setup, so let's start by looking at an example:
 
 ```
 [CONFIGURATION:HELLOWORLD]
@@ -473,6 +474,52 @@ For the NOTIFICATION > SOUND, these sounds should be sounds that can play with a
 
 For the NOTIFICATION > SOUND, these sounds should be sounds that can play with sounder.exe (all sounds bundled with this project should work). They are entered with the relative or full path to the file.
 
+Zip Packages
+------------
+
+Zip Packages was implemented for one reason; to be able to share configurations without needing to manually keep a configuration up to date. A Zip Package also have the benefit that you may bundle sounds and multiple configurations (one for each of the three supported Operating Systems). If you only need one configuration, the simplest file structure in the ZIP-file is as follows:
+
+```
+example.zip
+-example.txt 
+```
+
+In this case the application will automatically load the .txt-file with the same name as the .zip-package, as the configuration.
+
+If you would like to have different configurations depending on platform, do like this:
+ 
+```
+example.zip
+-platform-route.txt
+-configuration-macosx.txt
+-configuration-linux.txt
+-configuration-windows.txt
+```
+
+The file *platform-route.txt* will be used to decide the configuration file to use for the current Operating System, and the contents of the file in this case would be:
+
+```
+mac:zip:configuration-macosx.txt
+lin:zip:configuration-linux.txt
+win:zip:configuration-windows.txt
+```
+
+The first part is the short name of the Operating System; **mac**, **lin** or **win**, followed by a colon. The second part, **zip:** just tells the application that the file is embedded within the Zip Package, and what the filename it has inside it.
+
+Let's say you want to bundle a wave-file within the package, looking like this:
+
+```
+example.zip
+-example.txt
+-mySound.wav
+```
+
+In order to define this sound in the configuration, simply put **zip:** before the definition of the sound file for the NOTIFICATION, as such:
+
+```
+[NOTIFICATION][TITLE]Title[MESSAGE]Message[SOUND]zip:mySound.wav
+```
+
 Future plans
 ------------
 
@@ -487,13 +534,15 @@ Future plans
 (- Add parameter for NOT allowing of bundled settings)
 (- Fix bug when embedded sounds in zip-package, tmp folder may be removed before playing of the sound for QUIT-configuration)
 (- Implement support for file to direct user to different configurations depending on platform)
-- Document:
-    How to set settings in config file
-    How to define zip sounds
-    How to define zip file as config
-    How config inside of zip-file needs to be named
-    How to override configuration settings
-    How to make multi-platform packages by creating a platform-route.txt
+(- Document:)
+(    How to define zip file as config)
+(    How to define zip sounds)
+(    How config inside of zip-file needs to be named)
+(    How to override configuration settings)
+(    How to set settings in config file)
+(    How to make multi-platform packages by creating a platform-route.txt)
+
+- Create an interactive guide
 
 
 - Fix so that groups isn't needed in patterns

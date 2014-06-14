@@ -334,23 +334,16 @@ def user_exited(signum, frame):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, user_exited)
-    parser = argparse.ArgumentParser(
-        description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
+    parser = argparse.ArgumentParser(description='Run terminal commands in Mac OS X (10.8+) and get notifications on certain scenarios.')
     parser.add_argument('--config', help='Target configuration', required=True, type=str)
     parser.add_argument('--debug', help='Debug output', required=False, default=False, action='store_true')
     parser.add_argument('--mute', help='Mute normal output', required=False, default=False, action='store_true')
-    parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False,
-                        default=False, action='store_true')
-    parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False,
-                        default=False, action='store_true')
-    parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False,
-                        action='store_true')
+    parser.add_argument('--only-sound', help='Only play sounds, don\'t display notifications', required=False, default=False, action='store_true')
+    parser.add_argument('--no-sound', help='Mute all sounds, can\'t be used if --only-sound is used', required=False, default=False, action='store_true')
+    parser.add_argument('--growl', help='Use growl rather than system default', required=False, default=False, action='store_true')
     parser.add_argument('--color', help='Set color to use for all output', required=False, default=None, type=str)
-    parser.add_argument('--mac-afplay',
-                        help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center',
-                        required=False, default=False, action='store_true')
-    parser.add_argument('--no-override-settings', help='Do not allow any bundled settings', required=False,
-                        default=False, action='store_true')
+    parser.add_argument('--mac-afplay', help='Override to use afplay (takes files instead of system sounds) to play sounds even if using Notification Center', required=False, default=False, action='store_true')
+    parser.add_argument('--no-override-settings', help='Do not allow any bundled settings', required=False, default=False, action='store_true')
     args = vars(parser.parse_args())
 
     # Set global params
