@@ -137,7 +137,11 @@ class Configuration:
                             glob.Debug.debug('[DEBUG] Gracetime haven\'t passed yet - will not triggering notification')
         return False
 
-    def send_notification(self, notification, groups, history_groups, run_count):
+    def send_notification(self, original_notification, groups, history_groups, run_count):
+        notification = {}
+        for key in original_notification:
+            notification[key] = original_notification[key]
+
         groups = [groups] if extra_functions.Py3Helper.own_isinstance_string(groups) else groups
         history_groups = [history_groups] if extra_functions.Py3Helper.own_isinstance_string(history_groups) else history_groups
         if notification is not None:
