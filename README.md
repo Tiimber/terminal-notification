@@ -550,6 +550,7 @@ Reservations
 
 Please note that I've only tested this on a limited set of systems and combinations. If you want support for more systems or features, please ask and I might be able to help out. Known working combinations are:
 
+- Mac OS X 10.10 with Notification Center
 - Mac OS X 10.9.3 with Notification Center
 - Mac OS X 10.9.3 with Growl and afplay
 - Mac OS X 10.8.5 with Notification Center
